@@ -7,16 +7,21 @@
 % input: 不同组采集到的数据
 % output: 不同组的位姿文件，按照输入的名字进行保存
 %-------------------------------------------------------------------------%
-name='61_4_2';
+name='70_4_1';
 fpath=['./1102/',name,'/data.log'];
 M=load(fpath);
+coord_path=['./test1102/trocar/Tcamera_trocar_data_',name,'.mat'];
+t=load(coord_path);
+Tcamera_trocar=t.Tcamera_trocar;
 block_size=100;
 Tcamera_marker=zeros(4,4,block_size);
+Ttrocar_marker=zeros(4,4,block_size);
 for i =1:block_size
     P_tem_1=M(i*2-1,[1 2 3]);
     P_tem_2=M(i*2,[1 2 3]);
     if(P_tem_1(3)<50||P_tem_2(3)<50)
         Tcamera_marker(:,:,i)=eye(4);
+        Ttrocar_marker(:,:,i)=Tcamera_marker(:,:,i);
         continue;
     end
     z=(P_tem_2-P_tem_1)/norm(P_tem_2-P_tem_1);
@@ -29,8 +34,9 @@ for i =1:block_size
     P=reshape(P_tem_1,[3 1]);
     Tcamera_marker(1:3,4,i)=P;
     Tcamera_marker(4,4,i)=1;
+    Ttrocar_marker(:,:,i)=inv(Tcamera_trocar)*Tcamera_marker(:,:,i);
 end
-fname=['./test1102/pose/Tcamera_marker_data_',name];
-save(fname,'Tcamera_trocar');
+fname=['./test1102/pose/Ttrocar_marker_data_',name];
+save(fname,'Ttrocar_marker');
 
 
