@@ -119,15 +119,16 @@ z_4=P_4(3,:)+p_z(round(Length*ratio)+1)*ones(1,100);
 
 P_snake=[p_x;p_y;p_z];%all points
 
-hold on;
-hc=plot3(p_x,p_y,p_z,'k','linewidth',1);
+% hold on;
+hc=[];
+% hc=plot3(p_x,p_y,p_z,'k','linewidth',1);
 h1=[];h2=[];h3=[];h4=[];hb=[];he=[];
-% h1=plot3(s_x1,s_y1,s_z1,'r','linewidth',1);
-% h2=plot3(s_x2,s_y2,s_z2,'r','linewidth',1);
-% h3=plot3(s_x3,s_y3,s_z3,'r','linewidth',1);
-% h4=plot3(s_x4,s_y4,s_z4,'r','linewidth',1);
-% hb=patch(x_0,y_0,z_0,'r','FaceAlpha',0.3);
-% he=patch(x_4,y_4,z_4,'r','FaceAlpha',0.3);
+% % h1=plot3(s_x1,s_y1,s_z1,'r','linewidth',1);
+% % h2=plot3(s_x2,s_y2,s_z2,'r','linewidth',1);
+% % h3=plot3(s_x3,s_y3,s_z3,'r','linewidth',1);
+% % h4=plot3(s_x4,s_y4,s_z4,'r','linewidth',1);
+% % hb=patch(x_0,y_0,z_0,'r','FaceAlpha',0.3);
+% % he=patch(x_4,y_4,z_4,'r','FaceAlpha',0.3);
 
 Posi_2=[p_x(round(Length*ratio)+1) p_y(round(Length*ratio)+1) p_z(round(Length*ratio)+1)]';
 Ori_2=Ori_base*Rcb*Rbend*Rcb';

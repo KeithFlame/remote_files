@@ -1,4 +1,4 @@
-function [qa]=calcActuation_dual(config,using_new_kinematics)
+function [qa]=calcActuation_dual(config,structure_para,using_new_kinematics)
 %---------constant curvature model for unloaded robot--------------------%
 % calculating actuation lengths from curvatures
 % ----Info
@@ -7,7 +7,15 @@ function [qa]=calcActuation_dual(config,using_new_kinematics)
 % Ver c2.1
 % input config = [phi l theta1s delta1 theta2 delta2], using OLD delta
 %-------------------------------------------------------------------------%
-if(nargin == 1)
+L1=structure_para(1);
+Lr=structure_para(2);
+L2=structure_para(3);
+Lg=structure_para(4);
+zeta=structure_para(5);
+Lstem=structure_para(8);
+K1=structure_para(6);
+K2=structure_para(7);
+if(nargin == 2)
     using_new_kinematics = 1;
 end
     e1=[1 0 0]';e2=[0 1 0]';e3=[0 0 1]';
@@ -20,13 +28,13 @@ end
     MP.rho2=2.7e-3;%Rod pithc circle radius seg2
     MP.rho3=12e-3;%prox pitch circle radius (both seg2 and actuation)
     MP.alpha = MP.rho3/MP.rho2;
-    MP.L1=102.861e-3;%Robot seg1 length
-    MP.L2=19.4e-3;%Robot seg2 length
+    MP.L1=L1*1e-3;%Robot seg1 length
+    MP.L2=L2*1e-3;%Robot seg2 length
     MP.L3=18e-3;%Robot prox length
     MP.Lc=200e-3;%robot cannula length
-    MP.L=383.9463e-3;%Robot stem length
-    MP.Lr=9.0514e-3;%Robot rigid seg length
-    MP.Lg=21.984e-3;%Robot gipper length
+    MP.L=Lstem*1e-3;%Robot stem length
+    MP.Lr=Lr*1e-3;%Robot rigid seg length
+    MP.Lg=Lg*1e-3;%Robot gipper length
     MP.r11=[1 0 0]'*MP.rho1;MP.r12=[0 1 0]'*MP.rho1;MP.r13=[-1 0 0]'*MP.rho1;MP.r14=[0 -1 0]'*MP.rho1;
     MP.r21=[cos(21/180*pi) sin(21/180*pi) 0]'*MP.rho2;
     MP.r22=[cos(37/180*pi) sin(37/180*pi) 0]'*MP.rho2;
@@ -62,7 +70,7 @@ end
     MP.Kb1=diag([MP.E*MP.I1 MP.E*MP.I1 2*MP.G*MP.I1]);
     MP.Kb2=diag([MP.E*MP.I2 MP.E*MP.I2 2*MP.G*MP.I2]);
     MP.Kb3=diag([MP.E*MP.I3 MP.E*MP.I3 2*MP.G*MP.I3]);
-    MP.zeta =0.1311;
+    MP.zeta =zeta;
     MP.offset_zero = -1.962e-3;
     MP.bend_in_trocar = 7.2778e-3;
     
@@ -82,7 +90,7 @@ delta2 = -config(6);
 u1 = theta1/l1*[cos(delta1+pi/2) sin(delta1+pi/2) 0]';
 u2 = theta2/MP.L2*[cos(delta2+pi/2) sin(delta2+pi/2) 0]';
 
-k1=4.4183;k2=0.9636;
+k1=K1;k2=K2;
 if(using_new_kinematics==1)
     k_seg1=1;
     k_seg2=1;
