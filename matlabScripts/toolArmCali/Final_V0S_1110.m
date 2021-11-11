@@ -72,16 +72,14 @@ for i = 1:iterTimes
     optTimes=0;
     a=rand(1,size(xhmax,2)).*(xhmax-xhmin)+xhmin;
     initVal(i,:)=a;
-    optimal_path=['../systemCali/test1102/optimal_res_',serials,'.mat'];
-    t=load(optimal_path);
-    optimal_res=t.optimal_res;
-    a=optimal_res(1:11);
-    a=[optimal_res(2) optimal_res(4) optimal_res(6)...
-        optimal_res(7)*10 optimal_res(9)*10 optimal_res(10) optimal_res(11)...
-         optimal_res(1)/10  optimal_res(5)*10];
-%     a=[9.3627   18.2216    5.4263    7.161   0   -1.7208   -9.8961  9.72010 0.950];
-% a=[9.8953   19.5123    4.4183    9.6356   -7.4540   -1.0799   -9.8943];
-% a=[ 9.5050   19.8021    6.3449    4.8088   -0.3591   -7.4382  -13.8489];
+%     optimal_path=['../systemCali/test1102/optimal_res_',serials,'.mat'];
+%     t=load(optimal_path);
+%     optimal_res=t.optimal_res;
+%     a=optimal_res(1:11);
+%     a=[optimal_res(2) optimal_res(4) optimal_res(6)...
+%         optimal_res(7)*10 optimal_res(9)*10 optimal_res(10) optimal_res(11)...
+%          optimal_res(1)/10  optimal_res(5)*10];
+
     [xh,yh,exitflag] = fmincon('costFuncVari_Final45_V0S_1110',a,[],[],[],[],xhmin,xhmax,[],options); %,options
 
     rV=residualVal;
@@ -107,8 +105,8 @@ XH11=finalVal1(po,:);
 XH1_7=XH11;
 %% 优化L1和ζ
 % % if(isSimplified==1)
-% %     xhmax_v3=[10.2 2 ]; %200];
-% %     xhmin_v3=[ 9.52 0.1];% 160];
+% %     xhmax_v3=[10.4 2 ]; %200];
+% %     xhmin_v3=[ 9.72 0.1];% 160];
 % % else
 % %     xhmax_v3=[85 2];
 % %     xhmin_v3=[ 75 0.1];
@@ -142,9 +140,9 @@ xN(4)=XH(2);
 xN(5)=xh2(2)/10;
 xN(6)=XH(3);xN(7)=XH(4)/10;
 xN(8)=Lsteam_Lr-XH(1);
-xN(9)=XH(5)/10;
+xN(9)=0*XH(5)/10;
 xN(10)=XH(6);
 xN(11)=XH(7);
 optimal_res=xN;
-fname=['../systemCali/test1102/optimal_res_',serials];
+fname=['../systemCali/test1102/optimal_res_nogamma1_',serials];
 save(fname,'optimal_res');

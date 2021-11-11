@@ -22,20 +22,24 @@ if(options==0)
     t=load(optimal_path);
     optimal_res=t.optimal_res;
     structure_para=optimal_res(1:11);
+elseif(options==2)
+    optimal_path=['./test1102/optimal_res_nogamma1_',name,'.mat'];
+    t=load(optimal_path);
+    optimal_res=t.optimal_res;
+    structure_para=optimal_res(1:11);
 end
 
 psi=Psi_actual(1:6,:)';
 N=length(Psi_actual);
 
 seg_len = structure_para(1:4)'*1e-3;
+bend_in_trocar = -structure_para(11)*1e-3;
+offset_zero = structure_para(10)*1e-3;
 
-bend_in_trocar = 11.45*1e-3;
-offset_zero = -2.5*1e-3;
-
-if(options==0)
-    bend_in_trocar = -structure_para(11)*1e-3;
-    offset_zero = structure_para(10)*1e-3;
-end
+% if(options==0)
+%     bend_in_trocar = -structure_para(11)*1e-3;
+%     offset_zero = structure_para(10)*1e-3;
+% end
 
 
 
@@ -87,7 +91,7 @@ if(T_m_tr(3,4,j)~=0)
 %     PlotAxis(0.01,inv(T_ch_tr));%trocar world frame    
 %     PlotCircle(5.0e-3,[0 0 0],[0 0 1]);
 %     PlotAxis(0.005,Tg(1:4,1:4,j));%actual target 
-    if(options==0)
+    if(options~=1)
         psi_ = [psi_(1) psi_(2) psi_(3) -psi_(4) psi_(5) -psi_(6)]';
         config=calcConfiguration(qa(:,j),psi_,structure_para,1);
         psi_=config;

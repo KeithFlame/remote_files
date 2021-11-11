@@ -11,15 +11,15 @@ global residualVal;
 global xN_init;
 xN=zeros(1,10);
 
-xN(1)=x(8)*10;
+xN(1)=x(8)*10; %99.2;%
 xN(2)=x(1);
 xN(3)=19.4;
 xN(4)=x(2);
-xN(5)=x(9)/10;
+xN(5)=x(9)/10; %0.1;%
 xN(6)=x(3);  
 xN(7)=x(4)/10;
 xN(8)=391.5-x(1);
-xN(9)=x(5)/10;
+xN(9)=0*x(5)/10;
 xN(10)=x(7);
 
 
@@ -37,7 +37,7 @@ block_size=size(endoPsi_ini,1);
 
 se=zeros(block_size,1);
 for i=1:block_size
-    if(Tst2tip_ini(3,4,i)~=0)
+    if(Tst2tip_ini(3,4,i)~=0) %(endoPsi_ini(i,2)+L1x-dttc)<xN(1)&&
         se(i)=i;
     end
 end
@@ -62,9 +62,9 @@ for i =1:size(Tst2tip,3)
     
     temEndoPsi=endoPsi(i,:);
 
-    endoU=fromPsi2Curvature(temEndoPsi,x0N);
+%     endoU=fromPsi2Curvature(temEndoPsi,x0N);
     
-    endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);
+%     endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);
     endoQ=Qa_used(i,:);
 %         max(abs(endoQ1([1:4 end-3:end])-endoQ([1:4 end-3:end])))
     temEndoPsi(2)=temEndoPsi(2)+L1x-dttc;
@@ -93,7 +93,7 @@ for i =1:size(Tst2tip,3)
 
 end
 
-t=norm(sum(dp1));
+% t=norm(sum(dp1));
 t2=sum(dp)+sum(dAngle);
 t3=t2/iter;
 

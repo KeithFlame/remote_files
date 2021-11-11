@@ -1,0 +1,16 @@
+name='33';
+fpath=['./test1102/optimal_res_',name,'_1.mat'];
+t=load(fpath);
+res1=t.optimal_res;
+fpath=['./test1102/optimal_res_',name,'_2.mat'];
+t=load(fpath);
+res2=t.optimal_res;
+fpath=['./test1102/optimal_res_',name,'_4.mat'];
+t=load(fpath);
+res4=t.optimal_res;
+fpath='./test1102/optimal_res.mat';
+t=load(fpath);
+res0=t.optimal_res(4,2:12);
+res=[res0;res1;res2;res4];
+res(:,8)=[];
+res(:,3)=[];
