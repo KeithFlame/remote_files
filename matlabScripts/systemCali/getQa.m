@@ -6,7 +6,7 @@
 % Ver c1.0
 % 
 %-------------------------------------------------------------------------%
-name ='70_4';
+name ='33_1';
 
 split_name = regexp(name, '_', 'split');
 optimal_path='./test1102/optimal_res.mat';

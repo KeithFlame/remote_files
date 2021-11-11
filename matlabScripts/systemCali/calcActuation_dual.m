@@ -15,6 +15,8 @@ zeta=structure_para(5);
 Lstem=structure_para(8);
 K1=structure_para(6);
 K2=structure_para(7);
+offset_zero=structure_para(10);
+bend_in_trocar=-structure_para(11);
 if(nargin == 2)
     using_new_kinematics = 1;
 end
@@ -71,8 +73,8 @@ end
     MP.Kb2=diag([MP.E*MP.I2 MP.E*MP.I2 2*MP.G*MP.I2]);
     MP.Kb3=diag([MP.E*MP.I3 MP.E*MP.I3 2*MP.G*MP.I3]);
     MP.zeta =zeta;
-    MP.offset_zero = -1.962e-3;
-    MP.bend_in_trocar = 7.2778e-3;
+    MP.offset_zero = offset_zero*1e-3;
+    MP.bend_in_trocar = bend_in_trocar*1e-3;
     
 l=config(2);
 if(l-MP.L2-MP.Lr+MP.bend_in_trocar+MP.offset_zero>MP.L1)

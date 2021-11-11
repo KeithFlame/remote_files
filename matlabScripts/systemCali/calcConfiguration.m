@@ -1,12 +1,24 @@
-function [config]=calcConfiguration(qa,config_in,using_new_kinematics)
+function [config]=calcConfiguration(qa,config_in,structure_para,using_new_kinematics)
 %---------constant curvature model for unloaded robot--------------------%
 % calculating actuation lengths from curvatures, for Liuxu's arm
 %----Info
 % By Yuyang Chen
+% modified Keith W. 20211110
 % Date 20201106
 % Ver c2.1
 %-------------------------------------------------------------------------%
-if(nargin == 2)
+
+L1=structure_para(1);
+Lr=structure_para(2);
+L2=structure_para(3);
+Lg=structure_para(4);
+zeta=structure_para(5);
+Lstem=structure_para(8);
+K1=structure_para(6);
+K2=structure_para(7);
+offset_zero=structure_para(10);
+bend_in_trocar=-structure_para(11);
+if(nargin == 3)
     using_new_kinematics=1;
 end
     e1=[1 0 0]';e2=[0 1 0]';e3=[0 0 1]';
@@ -19,14 +31,13 @@ end
     MP.rho2=2.7e-3;%Rod pithc circle radius seg2
     MP.rho3=12e-3;%prox pitch circle radius (both seg2 and actuation)
     MP.alpha = MP.rho3/MP.rho2;
-    MP.L=383.9463e-3;%Robot stem length
-    MP.L1=103.009e-3;%Robot seg1 length
-    MP.L2=19.4e-3;%Robot seg2 length
+    MP.L1=L1*1e-3;%Robot seg1 length
+    MP.L2=L2*1e-3;%Robot seg2 length
     MP.L3=18e-3;%Robot prox length
     MP.Lc=200e-3;%robot cannula length
-    MP.Lr=9.7714e-3;%Robot rigid seg length
-    MP.Lg=15e-3;%Robot gipper length
-
+    MP.L=Lstem*1e-3;%Robot stem length
+    MP.Lr=Lr*1e-3;%Robot rigid seg length
+    MP.Lg=Lg*1e-3;%Robot gipper length
     MP.r11=[1 0 0]'*MP.rho1;MP.r12=[0 1 0]'*MP.rho1;MP.r13=[-1 0 0]'*MP.rho1;MP.r14=[0 -1 0]'*MP.rho1;
     MP.r21=[cos(21/180*pi) sin(21/180*pi) 0]'*MP.rho2;
     MP.r22=[cos(37/180*pi) sin(37/180*pi) 0]'*MP.rho2;
@@ -54,27 +65,29 @@ end
     MP.I1=pi*MP.d1^4/64;MP.A1=pi*MP.d1^2/4;
     MP.I2=pi*MP.d2^4/64;MP.A2=pi*MP.d2^2/4;
     MP.I3=pi*MP.d3^4/64;MP.A3=pi*MP.d3^2/4;
-    MP.G=MP.E/2/(1+MP.mu);MP.J1=2*MP.I1;MP.J2=2*MP.I2;MP.J3=2*MP.I3;
+    MP.G=MP.E/2/(1+MP.mu);
+    MP.J1=2*MP.I1;MP.J2=2*MP.I2;MP.J3=2*MP.I3;
     MP.Ke1=diag([MP.G*MP.A1 MP.G*MP.A1 MP.A1*MP.E]);
     MP.Ke2=diag([MP.G*MP.A2 MP.G*MP.A2 MP.A2*MP.E]);
     MP.Ke3=diag([MP.G*MP.A3 MP.G*MP.A3 MP.A3*MP.E]);
     MP.Kb1=diag([MP.E*MP.I1 MP.E*MP.I1 2*MP.G*MP.I1]);
     MP.Kb2=diag([MP.E*MP.I2 MP.E*MP.I2 2*MP.G*MP.I2]);
     MP.Kb3=diag([MP.E*MP.I3 MP.E*MP.I3 2*MP.G*MP.I3]);
-    MP.zeta =0.14642;
+    MP.zeta =zeta;
+    MP.offset_zero = offset_zero*1e-3;
+    MP.bend_in_trocar = bend_in_trocar*1e-3;
 
 
-bend_in_trocar = 13.2358e-3;
-offset_zero = -6.5564e-3;
-k1=4.4183;
-k2=0.48088;
+
+k1=K1;
+k2=K2;
 config=config_in;
-l=config(1)/1000;%
-if(l+bend_in_trocar+offset_zero>MP.L1)
+l=config(2)-MP.L2-MP.Lr;%
+if(l+MP.bend_in_trocar+MP.offset_zero>MP.L1)
     l1 = MP.L1;
-    ls = l+bend_in_trocar+offset_zero-MP.L1;
+    ls = l+MP.bend_in_trocar+MP.offset_zero-MP.L1;
 else
-    l1 = l+bend_in_trocar+offset_zero;
+    l1 = l+MP.bend_in_trocar+MP.offset_zero;
     ls = 0;
 end
 if(using_new_kinematics == 1)
@@ -112,7 +125,7 @@ K(7:9,4:6)=MP.alpha*(16*MP.Kb2 + k2*MP.Kb1);
 K(7:9,7:9)=4*MP.Kb3+16*MP.Kb2;
     %%qa_extend=[qa(3:4);-qa(3:4);zeros(16,1);qa(5:6);-qa(5:6)];
 if(length(qa)==24)
-    qa_extend = qa/1000;
+    qa_extend = qa;
 end
 if(using_new_kinematics == 1)
     u=pinv(dGamma-Ell*pinv(Theta)*K)*qa_extend;

@@ -1,17 +1,28 @@
-function [pos_err,dir_err]=testConfigErr(name)
+function [pos_err,dir_err]=testConfigErr(name,options)
 % name='33_4_2';
+if (nargin==1)
+    options=1;
+end
 split_name = regexp(name, '_', 'split');
-optimal_path='./test1102/optimal_res.mat';
 pose_path=['./test1102/pose/Ttrocar_marker_data_',name,'.mat'];
 psi_path=['./test1102/psi/Psi_actual_',name,'.mat'];
 t=load(pose_path);
 T_m_tr=t.Ttrocar_marker;
 t=load(psi_path);
 Psi_actual=t.Psi;
+
+optimal_path='./test1102/optimal_res.mat';
 t=load(optimal_path);
 optimal_res=t.optimal_res;
 [~,po]=min(abs(optimal_res(:,1)-str2double(char(split_name(1)))));
-structure_para=optimal_res(po,2:12);
+structure_para2=optimal_res(po,2:12);
+structure_para=structure_para2;
+if(options==0)
+    optimal_path=['./test1102/optimal_res_',name,'.mat'];
+    t=load(optimal_path);
+    optimal_res=t.optimal_res;
+    structure_para=optimal_res(1:11);
+end
 
 psi=Psi_actual(1:6,:)';
 N=length(Psi_actual);
@@ -62,17 +73,16 @@ if(T_m_tr(3,4,j)~=0)
     Tg(1:4,1:4,j) = T_ch_tr\T_m_tr(1:4,1:4,j);
     %[theta_trocar,len_trocar]=calcThetaInTrocar(psi_,seg_len,zeta,bend_in_trocar,offset_zero);
 
-    qa(:,j) = calcActuation_dual(psi_, structure_para,1);
-    %--------plot------------%
-%         PlotAxis(0.01,eye(4));%trocar base considering tau
-%         PlotAxis(0.01,inv(T_ch_tr));%trocar world frame    
-%         PlotCircle(5.0e-3,[0 0 0],[0 0 1]);
-%         PlotAxis(0.005,Tg(1:4,1:4,j));%actual target   
+    qa(:,j) = calcActuation_dual(psi_, structure_para2,1);
+    if(options==0)
+        psi_ = [psi_(1) psi_(2) psi_(3) -psi_(4) psi_(5) -psi_(6)]';
+        config=calcConfiguration(qa(:,j),psi_,structure_para,1);
+        psi_=config;
+        psi_ = [psi_(1)+structure_para(9) psi_(2) psi_(3) -psi_(4) psi_(5) -psi_(6)]';
+    end
+  
         [Tall]=PlotSnake_trocar(psi_, seg_len, zeta, 0, 0, bend_in_trocar,offset_zero);  
         Tg_(1:4,1:4,j) = Tall.T_tipg;
-%         PlotAxis(0.005,Tg_(1:4,1:4,j));%theoretical target
-%         axis equal
-%         grid on
 
     pos_err(i) = norm(Tg_(1:3,4,j)-Tg(1:3,4,j))*1000;
     dir_err(i) = norm(acos(Tg_(1:3,3,j)'*Tg(1:3,3,j)))/pi*180;

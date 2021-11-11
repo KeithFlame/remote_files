@@ -8,6 +8,7 @@ global Tst2tip_ini;
 global endoPsi_ini;
 global qa_actual;
 global XH1_7;
+global xN_init;
 
 global OptSerial;
 global optTimes;
@@ -16,7 +17,7 @@ residualVal=zeros(3000,1);
 optTimes=0;
 
 serials='33_1';
-[Tst2tip_ini,endoPsi_ini,qa_actual]=getTandConfigV2_1110(serials);
+[Tst2tip_ini,endoPsi_ini,qa_actual,xN_init]=getTandConfigV2_1110(serials);
 isSimplified=1;
 
     
@@ -38,8 +39,8 @@ options.OptimalityTolerance=5e-6;
 
 xN=zeros(1,10);
 if(isSimplified==1)  
-    xhmax=[   10        21.0     8        12         80*pi/18  5 0];% 5 2];% -70 20 200];  
-    xhmin=[   9         10        1     1.0           -60*pi/18 -10 -20];%-5 -15 ];%-99 -20 160]; 
+    xhmax=[   10        22.0     7        12         80*pi/18  5 0 10.4 2];
+    xhmin=[   9         10        1     1.0           -60*pi/18 -10 -20 9.71 0.1]; 
     xh0=[     10.0    19.4    20     5            10         -pi/0.4  0 -5 ];  %9.92
     xN(1)=99.2;
     Lsteam_Lr=391.5;
@@ -71,7 +72,14 @@ for i = 1:iterTimes
     optTimes=0;
     a=rand(1,size(xhmax,2)).*(xhmax-xhmin)+xhmin;
     initVal(i,:)=a;
-%     a=[9.8887   19.4662    4.4775   10.2047   -7.4370   -1.1160   -9.8937];
+    optimal_path=['../systemCali/test1102/optimal_res_',serials,'.mat'];
+    t=load(optimal_path);
+    optimal_res=t.optimal_res;
+    a=optimal_res(1:11);
+    a=[optimal_res(2) optimal_res(4) optimal_res(6)...
+        optimal_res(7)*10 optimal_res(9)*10 optimal_res(10) optimal_res(11)...
+         optimal_res(1)/10  optimal_res(5)*10];
+%     a=[9.3627   18.2216    5.4263    7.161   0   -1.7208   -9.8961  9.72010 0.950];
 % a=[9.8953   19.5123    4.4183    9.6356   -7.4540   -1.0799   -9.8943];
 % a=[ 9.5050   19.8021    6.3449    4.8088   -0.3591   -7.4382  -13.8489];
     [xh,yh,exitflag] = fmincon('costFuncVari_Final45_V0S_1110',a,[],[],[],[],xhmin,xhmax,[],options); %,options
@@ -79,7 +87,7 @@ for i = 1:iterTimes
     rV=residualVal;
     oS=OptSerial;
     rV(all(rV==0,2))=[];
-    oS(rV>rV(end)*1.003,:)=[];
+    oS(rV>rV(end)*1.000003,:)=[];
     oS=sortrows(oS,7,'ascend');
     oS(all(oS==0,2),:)=[];
     finalVal(i,:)=oS(end,:);
@@ -98,41 +106,45 @@ XH11=finalVal1(po,:);
 
 XH1_7=XH11;
 %% 优化L1和ζ
-if(isSimplified==1)
-    xhmax_v3=[10.2 2 ]; %200];
-    xhmin_v3=[ 9.52 0.1];% 160];
-else
-    xhmax_v3=[85 2];
-    xhmin_v3=[ 75 0.1];
-end
-iterTimes=3;
-initVal_L1_zeta=zeros(iterTimes,size(xhmax_v3,2));
-finalVal_L1_zeta=zeros(iterTimes,size(xhmax_v3,2));
-rVal_L1_zeta=zeros(iterTimes,1);
-exitFlag_L1_zeta=zeros(iterTimes,1);
-tic;
-for i = 1:iterTimes
-    a=rand(1,size(xhmax_v3,2)).*(xhmax_v3-xhmin_v3)+xhmin_v3;
-    initVal_L1_zeta(i,:)=a;
-%     a=[ 10.0795    0.1004];
-[xh2,yh2,exitflag] = fmincon('costFuncVari_Final23_V0S_1110',a,[],[],[],[],xhmin_v3,xhmax_v3,[],options); %,options
-    finalVal_L1_zeta(i,:)=xh2;
-    rVal_L1_zeta(i)=yh2;
-    exitFlag_L1_zeta(i)=exitflag;
-    
-end
+% % if(isSimplified==1)
+% %     xhmax_v3=[10.2 2 ]; %200];
+% %     xhmin_v3=[ 9.52 0.1];% 160];
+% % else
+% %     xhmax_v3=[85 2];
+% %     xhmin_v3=[ 75 0.1];
+% % end
+% % iterTimes=3;
+% % initVal_L1_zeta=zeros(iterTimes,size(xhmax_v3,2));
+% % finalVal_L1_zeta=zeros(iterTimes,size(xhmax_v3,2));
+% % rVal_L1_zeta=zeros(iterTimes,1);
+% % exitFlag_L1_zeta=zeros(iterTimes,1);
+% % tic;
+% % for i = 1:iterTimes
+% %     a=rand(1,size(xhmax_v3,2)).*(xhmax_v3-xhmin_v3)+xhmin_v3;
+% %     initVal_L1_zeta(i,:)=a;
+% % %     a=[ 10.0795    0.1004];
+% % [xh2,yh2,exitflag] = fmincon('costFuncVari_Final23_V0S_1110',a,[],[],[],[],xhmin_v3,xhmax_v3,[],options); %,options
+% %     finalVal_L1_zeta(i,:)=xh2;
+% %     rVal_L1_zeta(i)=yh2;
+% %     exitFlag_L1_zeta(i)=exitflag;
+% %     
+% % end
 
 %%
 
-% xh2=[XH11(9) XH11(8)];
+xh2=[XH11(8) XH11(9)];
 XH=XH11;
-xN=zeros(1,10);
+xN=zeros(1,11);
 xN(1)=xh2(1)*10;
 xN(2)=XH(1);
 xN(3)=19.4;
 xN(4)=XH(2);
 xN(5)=xh2(2)/10;
 xN(6)=XH(3);xN(7)=XH(4)/10;
-xN(8)=Lsteam_Lr-XH(1)-XH(6)+xNh(1)-xh2(1)*10;
+xN(8)=Lsteam_Lr-XH(1);
 xN(9)=XH(5)/10;
-xN(10)=XH(7);
+xN(10)=XH(6);
+xN(11)=XH(7);
+optimal_res=xN;
+fname=['../systemCali/test1102/optimal_res_',serials];
+save(fname,'optimal_res');
