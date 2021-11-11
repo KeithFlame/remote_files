@@ -16,7 +16,7 @@ global residualVal;
 residualVal=zeros(3000,1);
 optTimes=0;
 
-serials='33_1';
+serials='70_4';
 [Tst2tip_ini,endoPsi_ini,qa_actual,xN_init]=getTandConfigV2_1110(serials);
 isSimplified=1;
 

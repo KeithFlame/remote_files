@@ -29,8 +29,17 @@ N=length(Psi_actual);
 
 seg_len = structure_para(1:4)'*1e-3;
 
-bend_in_trocar = -structure_para(11)*1e-3;
-offset_zero = structure_para(10)*1e-3;
+bend_in_trocar = 11.45*1e-3;
+offset_zero = -2.5*1e-3;
+
+if(options==0)
+    bend_in_trocar = -structure_para(11)*1e-3;
+    offset_zero = structure_para(10)*1e-3;
+end
+
+
+
+
 zeta = structure_para(5);
 %% trocar channel positions
  pc1= [0.0  -7.85  0.0 ]'*1e-3;
@@ -74,16 +83,24 @@ if(T_m_tr(3,4,j)~=0)
     %[theta_trocar,len_trocar]=calcThetaInTrocar(psi_,seg_len,zeta,bend_in_trocar,offset_zero);
 
     qa(:,j) = calcActuation_dual(psi_, structure_para2,1);
+%     PlotAxis(0.01,eye(4));%trocar base considering tau
+%     PlotAxis(0.01,inv(T_ch_tr));%trocar world frame    
+%     PlotCircle(5.0e-3,[0 0 0],[0 0 1]);
+%     PlotAxis(0.005,Tg(1:4,1:4,j));%actual target 
     if(options==0)
         psi_ = [psi_(1) psi_(2) psi_(3) -psi_(4) psi_(5) -psi_(6)]';
         config=calcConfiguration(qa(:,j),psi_,structure_para,1);
         psi_=config;
         psi_ = [psi_(1)+structure_para(9) psi_(2) psi_(3) -psi_(4) psi_(5) -psi_(6)]';
+        
     end
   
         [Tall]=PlotSnake_trocar(psi_, seg_len, zeta, 0, 0, bend_in_trocar,offset_zero);  
         Tg_(1:4,1:4,j) = Tall.T_tipg;
-
+%         PlotAxis(0.005,Tg_(1:4,1:4,j));%theoretical target
+%         axis equal
+%         grid on
+% %         cla;
     pos_err(i) = norm(Tg_(1:3,4,j)-Tg(1:3,4,j))*1000;
     dir_err(i) = norm(acos(Tg_(1:3,3,j)'*Tg(1:3,3,j)))/pi*180;
     i=i+1;

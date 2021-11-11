@@ -143,9 +143,9 @@ Ori_2=Ori_base*Rcb*Rbend*Rcb';
     t_z2=c*Ori_2(2,3)+Posi_2(2);
     t_z3=c*Ori_2(3,3)+Posi_2(3);
     
-    %plot3(t_x1,t_x2,t_x3,'m-','LineWidth',2);
-    %plot3(t_y1,t_y2,t_y3,'b-','LineWidth',2);
-    %plot3(t_z1,t_z2,t_z3,'k-','LineWidth',2);
+%     plot3(t_x1,t_x2,t_x3,'m-','LineWidth',2);
+%     plot3(t_y1,t_y2,t_y3,'b-','LineWidth',2);
+%     plot3(t_z1,t_z2,t_z3,'k-','LineWidth',2);
 T_base = [Ori_2 Posi_2; 0 0 0 1];
 h=[hc h1 h2 h3 h4 hb he];
 end
