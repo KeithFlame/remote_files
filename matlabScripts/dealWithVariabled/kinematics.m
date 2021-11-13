@@ -35,9 +35,9 @@ elseif(l<Lg+L2)
         sinD2*cosD2*(cosT2-1) (cosD2)^2*(1-cosT2)+cosT2 sinD2*sinT2 sinD2*(1-cosT2)/k2
         -cosD2*sinT2 -sinD2*sinT2 cosT2 sinT2/k2
         0 0 0 1];
-    s5=[cosD2*(1-cos(scaler*THETA2))/k2;
-        sinD2*(1-cos(scaler*THETA2))/k2;
-        sin(scaler*THETA2)/k2;
+    s5=[cosD2*(1-cos(scaler*theta2))/k2;
+        sinD2*(1-cos(scaler*theta2))/k2;
+        sin(scaler*theta2)/k2;
         ones(1,length(scaler))];%Seg2 
     T6(3,4)=Lg;
     s6=[0 0;0 0;0 Lg];
