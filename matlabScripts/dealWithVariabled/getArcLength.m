@@ -18,12 +18,22 @@ function [lt,ddt,theta_t]=getArcLength(psi,seg_i)
         l_out=lf-Lr-L2-Lg;
         l_in=L1-l_out;
         r_L=max([r_L1, r_Lstem]);
+        r_L_curve=r_L1;
     elseif(seg_i==2)
         [r_L1, ~, r_Lr, ~, r_L2, L2, ~, Lg,r_trocar, r_Lstem]=getToolArmStructureParameter;
         [~, lf, ~, ~, theta, ~]=getPsi(psi);
         l_out=lf-Lg;
         l_in=L2-l_out;
         r_L=max([r_L1, r_Lr, r_L2, r_Lstem]);
+        r_L_curve=r_L2;
+    end
+
+    %% if theta == 0
+    if(theta==0)
+        lt=l_in;
+        ddt=0;
+        theta_t=0;
+        return;
     end
     %% if C2、C4
     if(l_in<0)
@@ -34,12 +44,12 @@ function [lt,ddt,theta_t]=getArcLength(psi,seg_i)
     end
     %% if C1、C3
     r_curvature_target=l_in/theta;
-    dt=2*r_trocar - r_L-r_L2;
+    dt=2*r_trocar - r_L-r_L_curve;
     d=l_in;
-    r_curvature_actual_limit=r_L2+(d*d+dt*dt)/2/d;
+    r_curvature_actual_limit=r_L_curve+(d*d+dt*dt)/2/d;
     if(r_curvature_actual_limit>r_curvature_target)
         % 靠边桀了
-        theta_t=atan(dt/d);
+        theta_t=atan(dt/d)*2;
         lt=r_curvature_actual_limit*theta_t;
         ddt=dt;
     else
@@ -50,7 +60,7 @@ function [lt,ddt,theta_t]=getArcLength(psi,seg_i)
         else
             theta_=theta;
         end
-        ddt=r_trocar - r_L2+(r_trocar - r_L)*0.5*(1-cos(theta_/thetai*pi));
+        ddt=r_trocar - r_L_curve+(r_trocar - r_L)*0.5*(1-cos(theta_/thetai*pi));
         theta_t=asin(d/r_curvature_target);
         lt=r_curvature_target*theta_t;
     end
