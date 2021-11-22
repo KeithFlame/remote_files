@@ -6,7 +6,15 @@ function K= getK(structure_para)
 % Ver. 1.0
 % output1: stiffness
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+%% 
+persistent K_res;
+if(~isempty(K_res)&&nargin==0)
+    K=K_res;
+    return;
+end
+
 %% used para
+
 zeta=structure_para(100);
 k1=structure_para(100);
 k2=structure_para(100);
@@ -41,5 +49,6 @@ K1=K2_Ls*pR;
 K=eye(size(K1,1)+size(K2,1));
 K(1:size(K1,1),1:size(K1,1))=K1;
 K(size(K1,1)+1:end,size(K1,1)+1:end)=K2;
+K_res=K;
 end
 

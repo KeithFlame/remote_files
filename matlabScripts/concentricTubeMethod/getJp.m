@@ -9,6 +9,12 @@ function Jp=getJp(u,P,R,ds)
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 %% para
+persistent Jp_per;
+if(nargin==0&&~isempty(Jp_per))
+    Jp=Jp_per;
+    return;
+end
+
 block_size=size(u,1);
 Jp=zeros(block_size,block_size);
 for i = 1:block_size/3
@@ -20,6 +26,8 @@ for i = 1:block_size/3
     %% get Jpi
     Jpi=getJpi(ui,pi,Ri,dsi);
     Jp(i:i+2,i:i+2)=Jpi;
+end
+Jp_per=Jp;
 end
 
 

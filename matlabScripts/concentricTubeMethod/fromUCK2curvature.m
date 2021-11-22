@@ -19,7 +19,7 @@ end
 %% step 2 计算初始曲率与猜测曲率之间的差异
 % g=K(u1-u2)
 U0=getU0;
-g=K(U-U0);
+g=getg(U0);
 %% step 3 计算雅克比
 % Jp
 columns_num=size(U,1)/3;
@@ -33,7 +33,7 @@ Jp=getJp(u,P,R,ds);
 
 %% 准备小循环
 % lamda=[]
-
+    lamda=ones(columns_num,1);
 % calc Q h
-
+    Q=getQ(lamda);
 
