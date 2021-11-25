@@ -1,7 +1,7 @@
 
 %% kinematics
 
-psi=[pi 30 0 0 pi/2 pi/3];
+psi=[pi 120 0 0 pi/2 0];
 [phi, lf, theta1, delta1, theta2, delta2]=getPsi(psi);
 [r_L1, L1, r_Lr, Lr, r_L2, L2, r_Lg, Lg, r_trocar]=getToolArmStructureParameter;
 
@@ -234,4 +234,4 @@ plotSnake(S0,S1,S2,S3,S4,S5,S6,Config_plot, T_config);
 % plot3(S5(1,:), S5(2,:), S5(3,:),'c',LineWidth=2);
 % plot3(S6(1,:), S6(2,:), S6(3,:),'r',LineWidth=2);
 xlabel('x');ylabel('y');zlabel('z');
-% plotTrocar;
+plotTrocar;
