@@ -7,15 +7,15 @@ global poseCam0;
 gPixelsLeft=reshape(Mpixeli(1:18),[2 9])';
 gPixelsRight=reshape(Mpixeli(19:36),[2 9])';
 MPoints=[
-      -5   5  1
-       0   5  1
-       5   5  1
-      -5   0  1
-       0   0  1
-       5   0  1
       -5  -5  1
        0  -5  1
        5  -5  1
+      -5   0  1
+       0   0  1
+       5   0  1
+      -5   5  1
+       0   5  1
+       5   5  1
 ];
 MPoints(:,3)=1;
 rotRelative = rotRpy(poseX(1:3));

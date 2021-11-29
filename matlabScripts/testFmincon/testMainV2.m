@@ -1,8 +1,8 @@
-SP.l=150*1e-3; % l>30
+SP.l=80.5*1e-3; % l>30
 
 
 SP.phi=0;
-SP.theta1=pi/4;
+SP.theta1=0.5616;
 SP.delta1=0;
 SP.theta2=pi/2-SP.theta1;
 SP.delta2=0;
@@ -11,13 +11,15 @@ SP=setInitVal(SP);
 % x=[0.1    0.1    0.1    0.19];
 
 theta1=SP.theta1;
-xhmax=[theta1 theta1 0.1 0.1];
+xhmax=[10 40 10 10];
 xhmin=[-1e-9 -1e-9 -1e-9 0];
-options = optimoptions('fmincon','Algorithm','interior-point',"EnableFeasibilityMode",true); % 'Display','iter',,'PlotFcn','optimplotfirstorderopt','PlotFcn','optimplotfval'
+options = optimoptions('fmincon','Algorithm','interior-point','display','iter',"EnableFeasibilityMode",true); % 'Display','iter',,'PlotFcn','optimplotfirstorderopt','PlotFcn','optimplotfval'
 options.StepTolerance=1e-25;
-x=[0.0008    0.0002    0.0502    0.1503];
-[xh,yh,exitflag] = fmincon('costFunc_u',x,[],[],[],[],xhmin,xhmax,'geth',options); %,options
-
+% options.OptimalityTolerance=5e-6;
+x=(xhmin+xhmax)/2;
+x=rand(1,size(xhmin,2)).*(xhmax-xhmin)+xhmin;
+[xh,yh,exitflag] = fmincon('costFunc_u_V2',x,[],[],[],[],xhmin,xhmax,'geth',options); %,options
+xh=xh./[100 100 300 200];
 if(xh(1)<1e-6)
     SP.d=xh(3);
 else
@@ -55,6 +57,8 @@ else
 end
 
 setInitVal(SP);
-Tc=plotResult(1,"clearance=1e-3");
+figure;
+Tc=plotResult(1,"");
 % Tn=plotResult_noClearance(1);
 Tn=plotResult_noClearance(1,0);
+ttt=[SP.d,SP.L1i,SP.thetasi+SP.theta1i,exitflag]

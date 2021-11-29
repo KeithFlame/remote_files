@@ -24,10 +24,10 @@ MP.d1=0.50e-3;%Rod diameters
 MP.d2=0.40e-3;
 MP.rho=0.85e-3;%Rod pitch circle radius
 MP.L=500e-3;%Robot stem length
-MP.L1=43e-3;%Robot seg1 length
-MP.L2=25e-3;%Robot seg2 length
-MP.Lr=0e-3;%Robot rigid seg length
-MP.Lg=10.0e-3;%Robot gipper length
+MP.L1=100e-3;%Robot seg1 length
+MP.L2=20e-3;%Robot seg2 length
+MP.Lr=10e-3;%Robot rigid seg length
+MP.Lg=15.0e-3;%Robot gipper length
 MP.r11=[1 0 0]'*MP.rho;MP.r12=[0 1 0]'*MP.rho;
 MP.r21=[1/sqrt(2) 1/sqrt(2) 0]'*MP.rho;MP.r22=[-1/sqrt(2) 1/sqrt(2) 0]'*MP.rho;
 MP.Q1=[S(MP.r11)*e3 S(MP.r12)*e3 S(MP.r21)*e3 S(MP.r22)*e3];
@@ -48,7 +48,7 @@ qa=[0 0 ...
 %inplace rot qa
   %qa=[0 0.03 -0.0020 0.0004 -0.0005 -0.0011]';
 %qa=[0 10 -0.736431 0 -0.314704 0.314704]'*1e-3;
-Fe=[0.0 -1.0 0.0]';Me=[0 0 0]';
+Fe=[0.0 0.0 0.0]';Me=[0 0 0]';
 fe=[0 0 0]';le=[0 0 0]';%distributed not active in this version
 
 %% ====Execute=== %%

@@ -1,6 +1,6 @@
 
 function [g,h]=geth(x)
-
+x=x./[100 100 300 200];
 
 SP=setInitVal;
 c=SP.c;
@@ -11,7 +11,7 @@ thetasi=x(1);
 theta1i=x(2);
 g=x(3)-x(4);
 if(SP.Ls>1e-5)
-    g=[-1;d/sin(thetasi)*(1-cos(thetasi))-c;-1;-1;-1];
+    g=[g;d/sin(thetasi)*(1-cos(thetasi))-c;-1;-1;-1];
 else
     dsi=d-x(3);
     d1=dsi/sin(thetasi)*(1-cos(thetasi));

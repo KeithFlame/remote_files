@@ -53,18 +53,20 @@ dAngle=zeros(size(Tst2tip,3),1);
 
 enPsi=zeros(size(endoPsi_ini,1),6);
 
+% x0N=setX0X1;
 x0N=xN_init;
 t=x0N(8);
 x0N(8)=x0N(9);
 x0N(9)=t;
+x0N=[100 10 20 15 0.1 5 0.7 -0.7854 381.5 -10 -2];
 iter=0;
 for i =1:size(Tst2tip,3)     
     
     temEndoPsi=endoPsi(i,:);
 
-%     endoU=fromPsi2Curvature(temEndoPsi,x0N);
+    endoU=fromPsi2Curvature(temEndoPsi,x0N);
     
-%     endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);
+    endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);
     endoQ=Qa_used(i,:);
 %         max(abs(endoQ1([1:4 end-3:end])-endoQ([1:4 end-3:end])))
     temEndoPsi(2)=temEndoPsi(2)+L1x-dttc;
