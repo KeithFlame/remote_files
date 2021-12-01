@@ -1,4 +1,6 @@
-SP.l=80.5*1e-3; % l>30
+clear,clc;
+%%
+SP.l=45.5*1e-3; % l>30
 
 
 SP.phi=0;
@@ -8,7 +10,7 @@ SP.theta2=pi/2-SP.theta1;
 SP.delta2=0;
 
 SP=setInitVal(SP);
-% x=[0.1    0.1    0.1    0.19];
+
 
 theta1=SP.theta1;
 xhmax=[10 40 10 10];

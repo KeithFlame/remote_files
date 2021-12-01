@@ -16,7 +16,7 @@ global residualVal;
 residualVal=zeros(3000,1);
 optTimes=0;
 
-serials='70_4';
+serials='61_2';
 [Tst2tip_ini,endoPsi_ini,qa_actual,xN_init]=getTandConfigV2_1110(serials);
 isSimplified=1;
 
@@ -72,13 +72,13 @@ for i = 1:iterTimes
     optTimes=0;
     a=rand(1,size(xhmax,2)).*(xhmax-xhmin)+xhmin;
     initVal(i,:)=a;
-%     optimal_path=['../systemCali/test1102/optimal_res_',serials,'.mat'];
-%     t=load(optimal_path);
-%     optimal_res=t.optimal_res;
+    optimal_path=['../systemCali/test1102/optimal_res_',serials,'.mat'];
+    t=load(optimal_path);
+    optimal_res=t.optimal_res;
 %     a=optimal_res(1:11);
-%     a=[optimal_res(2) optimal_res(4) optimal_res(6)...
-%         optimal_res(7)*10 optimal_res(9)*10 optimal_res(10) optimal_res(11)...
-%          optimal_res(1)/10  optimal_res(5)*10];
+    a=[optimal_res(2) optimal_res(4) optimal_res(6)...
+        optimal_res(7)*10 optimal_res(9)*10 optimal_res(10) optimal_res(11)...
+         optimal_res(1)/10  optimal_res(5)*10];
 
     [xh,yh,exitflag] = fmincon('costFuncVari_Final45_V0S_1110',a,[],[],[],[],xhmin,xhmax,[],options); %,options
 

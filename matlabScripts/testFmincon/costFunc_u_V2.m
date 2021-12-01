@@ -2,11 +2,15 @@ function f=costFunc_u_V2(x)
 
 SP=setInitVal;
 L1=SP.L1;
+L2=SP.L2;
+Lr=SP.Lr;
 Ls=SP.Ls;
 K1=SP.K1;
 Ks=SP.Ks;
 theta1=SP.theta1;
 Lstem=SP.Lstem;
+zeta=SP.zeta;
+
 
 x=x./[100 100 300 200];
 thetasi=x(1);
@@ -34,11 +38,11 @@ end
 if(theta1i==0)
     l1o=L1-dl1i;
 else
-    l1o=SP.l-SP.L2-SP.Lr+dl1i-dl1i/cos(thetasi)/sin(theta1i)*theta1i;
+    l1o=SP.l-L2-Lr+dl1i-dl1i/cos(thetasi)/sin(theta1i)*theta1i;
 end
 
-theta1_b=L1/(Lstem*SP.zeta+L1)*theta1;
-thetas_b=Lstem*SP.zeta/(Lstem*SP.zeta+L1)*theta1;
+theta1_b=L1/(Lstem*zeta+L1)*theta1;
+thetas_b=Lstem*zeta/(Lstem*zeta+L1)*theta1;
 u1_b=[0 theta1_b/L1 0]';
 us_b=[0 thetas_b/Lstem 0]';
 theta1o=theta1-thetasi-thetaso-theta1i;
