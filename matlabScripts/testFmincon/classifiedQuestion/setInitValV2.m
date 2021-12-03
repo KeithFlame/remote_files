@@ -1,4 +1,4 @@
-function SP_res=setInitValV1(SP)
+function SP_res=setInitValV2(SP)
 %
 %
 %
@@ -28,6 +28,12 @@ SP.structure.K1=[    0.0191         0         0
 SP.structure.zeta=0.1994;
 SP.structure.Ks=SP.structure.K1/SP.structure.zeta;
 
+%% trocar
+% SP.trocar.arc_radius=200;
+SP.trocar.c=0.51e-3;
+SP.trocar.arc_length=0.1;
+SP.trocar.line_2_length=0.074;
+
 %% dependent varibale
 if(SP.psi.l<SP.structure.Lr+SP.structure.L2)
     SP.psi.l=SP.structure.Lr+SP.structure.L2;
@@ -42,12 +48,18 @@ SP.dependent_psi.delta1i=SP.psi.delta1;
 SP.dependent_psi.deltasi=SP.psi.delta1;
 SP.dependent_psi.delta1o=SP.psi.delta1;
 SP.dependent_psi.deltaso=SP.psi.delta1;
-%% trocar
-% SP.trocar.arc_radius=200;
-SP.trocar.c=0.51e-3;
-SP.trocar.arc_length=0.1;
+theta1_b=L1/(SP.trocar.line_2_length*SP.structure.zeta+L1)*SP.psi.theta1;
+thetas_b=SP.trocar.line_2_length*SP.structure.zeta/(SP.trocar.line_2_length*SP.structure.zeta+L1)*SP.psi.theta1;
+u1_b=[0 theta1_b/L1 0]';
+us_b=[0 thetas_b/SP.trocar.line_2_length 0]';
+SP.dependent_psi.u1_b=u1_b;
+SP.dependent_psi.us_b=us_b;
 %% result
 SP1=SP;
 SP_res=SP1;
+
+
+
+
 end
 

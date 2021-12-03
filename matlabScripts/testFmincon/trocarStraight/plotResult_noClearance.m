@@ -9,12 +9,11 @@ end
 SP=getSPV1;
 % figure;
 d_before=d;
-L1x=0*1e-3;
-psi=[SP.psi.phi,L1x+d_before+SP.psi.l-SP.structure.Lr-SP.structure.L2,SP.psi.theta1,SP.psi.delta1,SP.psi.theta2,SP.psi.delta2];
+psi=[SP.psi.phi,d_before+SP.psi.l-SP.structure.Lr-SP.structure.L2,SP.psi.theta1,SP.psi.delta1,SP.psi.theta2,SP.psi.delta2];
 LS=zeros(10,1);
 LS(1)=SP.structure.L1;LS(2)=SP.structure.Lr;LS(3)=SP.structure.L2;LS(4)=SP.structure.Lg;LS(5)=SP.structure.zeta;
 [T,~,~,~,~,~,S1,S2,S3,S4,S5]=fromPsi2Config(psi,LS);
-
+d_before=d_before+0;
 S1=S1-[0 0 d_before]';
 S2=S2-[0 0 d_before]';
 S3=S3-[0 0 d_before]';

@@ -1,9 +1,9 @@
 %% 
-t=(40.5:10:180.5)*1e-3;
+t=(31.5:5:181.5)*1e-3;
 block_size=size(t,2);
 [X,Y] = meshgrid(t);
 Y=(Y-t(1))/(t(end)-t(1))*pi/2;
-Y(1,:)=Y(1,:)+0.01;
+Y(1,:)=Y(1,:)+0.05;
 exitflag_kw=zeros(block_size)+5;
 dis_err31_block=zeros(block_size);
 dis_err21_block=zeros(block_size);
@@ -61,3 +61,5 @@ figure;mesh(X,Y,dis_err31_block,C)
 xlabel('l (m)');ylabel('\theta_1 (rad)');zlabel('dis error (m)');title('\itline3 vs line1');
 figure;mesh(X,Y,d_block,C)
 xlabel('l (m)');ylabel('\theta_1 (rad)');zlabel('d (m)');title('\itd')
+figure;plot(X(1,:),d_block(end,:));
+figure;plot(Y(1,:),d_block(:,1));

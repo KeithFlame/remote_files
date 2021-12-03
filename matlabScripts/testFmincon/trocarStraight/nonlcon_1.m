@@ -1,0 +1,1 @@
+function [g,h]=nonlcon_1(x)
