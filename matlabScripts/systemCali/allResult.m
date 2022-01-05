@@ -6,8 +6,8 @@
 % Ver c1.0
 % 
 %-------------------------------------------------------------------------%
-flag=2;
-name='61_4';
+flag=0;
+name='59_2';
 [pos_err,dir_err]=testConfigErr(name,1);
 figure;
 subplot(1,2,1);

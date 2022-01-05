@@ -6,6 +6,7 @@ if(nargin==0)
     return;
 end
 SP=setInitValV2;
+x=x./[50 10 20 1 20];
 l1i=x(1);
 l1o=x(2);
 theta1i=x(3);
@@ -22,6 +23,11 @@ end
 SP.dependent_psi.theta1o=theta1o;
 SP.dependent_psi.l1o=l1o;
 
+SP.dependent_psi.dsi=0;
+SP.dependent_psi.lsi=0;
+SP.dependent_psi.thetasi=0;
+SP.dependent_psi.thetaso=0;
+SP.dependent_psi.lso=0;
 SP.trocar.d=d;
 SP0=SP;
 SP_res=SP;

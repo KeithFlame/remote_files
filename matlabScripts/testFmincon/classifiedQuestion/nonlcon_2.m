@@ -2,6 +2,7 @@ function [g,h]=nonlcon_2(x)
 
 
 SP=getSP_2(x);
+x=x./[50 10 20 1 20];
 theta1=SP.psi.theta1;
 l=SP.psi.l;
 Lr=SP.structure.Lr;

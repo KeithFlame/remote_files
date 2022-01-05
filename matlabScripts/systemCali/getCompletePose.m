@@ -8,14 +8,14 @@
 % output: 不同组的位姿文件，将其拼接并按照输入的名字进行保存
 %-------------------------------------------------------------------------%
 
-name='33_1';
+name='59_4';
 %% pose
-n1=['./test1102/pose/Ttrocar_marker_data_',name,'_1.mat'];
-n2=['./test1102/pose/Ttrocar_marker_data_',name,'_2.mat'];
+n1=['./test1102/pose_new/Ttrocar_marker_p_data_',name,'_1.mat'];
+n2=['./test1102/pose_new/Ttrocar_marker_p_data_',name,'_2.mat'];
 t=load(n1);
-Ttrocar_marker_1=t.Ttrocar_marker;
+Ttrocar_marker_1=t.Ttrocar_marker_proximal;
 t=load(n2);
-Ttrocar_marker_2=t.Ttrocar_marker;
+Ttrocar_marker_2=t.Ttrocar_marker_proximal;
 block_size = size(Ttrocar_marker_1,3);
 Ttrocar_marker=zeros(4,4,block_size);
 count=0;
@@ -29,7 +29,7 @@ for i =1:block_size
         count=count+1;
     end
 end
-fname=['./test1102/pose/Ttrocar_marker_data_',name];
+fname=['./test1102/pose_new/Ttrocar_marker_p_data_',name];
 save(fname,'Ttrocar_marker');
 
 
@@ -48,7 +48,7 @@ for i =1:block_size
 end
 if(count_psi==0)
     Psi=Psi_1;
-    fname=['./test1102/psi/Psi_actual_',name];
+    fname=['./test1102/psi_new/Psi_actual_',name];
     save(fname,'Psi');
 else
     fprintf("错误的Psi");

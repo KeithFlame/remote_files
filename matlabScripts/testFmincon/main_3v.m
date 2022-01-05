@@ -1,3 +1,5 @@
+close,clear ,clc;
+%%
 SP.l=40.1*1e-3; % l>30
 
 

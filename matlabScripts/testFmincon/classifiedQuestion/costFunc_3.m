@@ -1,9 +1,10 @@
 function f=costFunc_3(x)
 
-SP=getSP(x);
+SP=getSP_3(x);
 
 K1=SP.structure.K1;
-Kr=1;
+Ks=SP.structure.Ks;
+Kr=0.3;
 
 u1_b=SP.dependent_psi.u1_b;
 us_b=SP.dependent_psi.us_b;

@@ -1,11 +1,11 @@
 clear,clc;
 %%
-SP.psi.l=0.1308; % l>30
-SP.psi.phi=4.1108;
-SP.psi.theta1=1.5011;
-SP.psi.delta1=-2.0846;
-SP.psi.theta2=1.0927;
-SP.psi.delta2=0.8530;
+SP.psi.l=0.1357; % l>30
+SP.psi.phi=4.71;
+SP.psi.theta1=0.7819;
+SP.psi.delta1=-2.6722;
+SP.psi.theta2=1.7058;
+SP.psi.delta2=-1.2328;
 
 SP=setInitValV1(SP);
 

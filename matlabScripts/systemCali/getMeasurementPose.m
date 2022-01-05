@@ -36,7 +36,7 @@ for i =1:block_size
     Tcamera_marker(4,4,i)=1;
     Ttrocar_marker(:,:,i)=inv(Tcamera_trocar)*Tcamera_marker(:,:,i);
 end
-fname=['./test1102/pose/Ttrocar_marker_data_',name];
+fname=['./test1102/pose_new/Ttrocar_marker_data_',name];
 save(fname,'Ttrocar_marker');
 
 

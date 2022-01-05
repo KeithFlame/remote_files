@@ -65,22 +65,22 @@ p=y2(end,1:3)';R=[y2(end,4:6);y2(end,7:9);y2(end,10:12)]';T=[R p;0 0 0 1];
 [F_est,t1est,t2est,y1est,y2est]=shootingOptEst(qa(3:6),T,Guess,fe,le,MP);
 
 %---plot curvatures---%
-% u=calcCurvature(y1,y2,t1,t2,MP);
-% u1=u(:,1);u2=u(:,end);
-% for i=1:72
-%     u11(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r11));v11(1,i)=Guess(7);
-%     u12(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r12));v12(1,i)=Guess(8);
-%     u21(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r21));v21(1,i)=Guess(9);
-%     u22(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r22));v22(1,i)=Guess(10);
-%     bt_11(1,i) = norm(u11(:,i))*MP.d1/2;
-%     bt_12(1,i) = norm(u12(:,i))*MP.d1/2;
-%     bt_21(1,i) = norm(u21(:,i))*MP.d2/2;
-%     bt_22(1,i) = norm(u22(:,i))*MP.d2/2;
-%     strain_upper11(i) = v11(i)+bt_11(i);strain_lower11(i) = v11(i)-bt_11(i);
-%     strain_upper12(i) = v12(i)+bt_12(i);strain_lower12(i) = v12(i)-bt_12(i);
-%     strain_upper21(i) = v21(i)+bt_21(i);strain_lower21(i) = v21(i)-bt_21(i);
-%     strain_upper22(i) = v22(i)+bt_22(i);strain_lower22(i) = v22(i)-bt_22(i);
-% end
+u=calcCurvature(y1,y2,t1,t2,MP);
+u1=u(:,1);u2=u(:,end);
+for i=1:72
+    u11(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r11));v11(1,i)=Guess(7);
+    u12(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r12));v12(1,i)=Guess(8);
+    u21(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r21));v21(1,i)=Guess(9);
+    u22(:,i)=u(:,i)/(1-[0 0 1]*cross(u(:,i),MP.r22));v22(1,i)=Guess(10);
+    bt_11(1,i) = norm(u11(:,i))*MP.d1/2;
+    bt_12(1,i) = norm(u12(:,i))*MP.d1/2;
+    bt_21(1,i) = norm(u21(:,i))*MP.d2/2;
+    bt_22(1,i) = norm(u22(:,i))*MP.d2/2;
+    strain_upper11(i) = v11(i)+bt_11(i);strain_lower11(i) = v11(i)-bt_11(i);
+    strain_upper12(i) = v12(i)+bt_12(i);strain_lower12(i) = v12(i)-bt_12(i);
+    strain_upper21(i) = v21(i)+bt_21(i);strain_lower21(i) = v21(i)-bt_21(i);
+    strain_upper22(i) = v22(i)+bt_22(i);strain_lower22(i) = v22(i)-bt_22(i);
+end
 % figure(2);
 % subplot(2,2,1);hold on;grid on;
 % plot(strain_upper11,'-r');plot(strain_lower11,'-k');

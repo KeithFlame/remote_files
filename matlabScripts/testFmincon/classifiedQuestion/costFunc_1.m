@@ -5,7 +5,7 @@ SP=getSP_1(x);
 
 K1=SP.structure.K1;
 Ks=SP.structure.Ks;
-Kr=1;
+Kr=0.3;
 
 u1_b=SP.dependent_psi.u1_b;
 us_b=SP.dependent_psi.us_b;

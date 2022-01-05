@@ -31,7 +31,8 @@ else
             d1=dsi/sin(thetasi)*(1-cos(thetasi));
         end
     %     d2=x(3)/sin(theta1i)*(1-cos(theta1i));
-        d2=2*d1i/cos(thetasi)/sin(theta1i)*sin(theta1i/2)*sin(theta1i/2+thetasi);
+%         d2=2*d1i/cos(thetasi)/sin(theta1i)*sin(theta1i/2)*sin(theta1i/2+thetasi);
+        d2=d1i*tan(theta1i/2+thetasi);
         g=[g;d1+d2-c;d1i+(l-L2-Lr-L1)-c;-x(3);-x(4)];
     end
 end
