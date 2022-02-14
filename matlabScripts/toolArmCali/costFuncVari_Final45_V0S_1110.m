@@ -58,12 +58,12 @@ x0N=xN_init;
 t=x0N(8);
 x0N(8)=x0N(9);
 x0N(9)=t;
-% x0N=[100 10 20 15 0.1 5 0.7 -0.7854 381.5 -10 -2];
+x0N=[100 10 19.4 15 0.15 5 0.7 -0.7854 381.5 -10 -2];
 iter=0;
 for i =1:size(Tst2tip,3)     
     
     temEndoPsi=endoPsi(i,:);
-
+    temEndoPsi=[60 130 4*pi/9 pi/3*2 pi*11/18 -pi/3*2];
     endoU=fromPsi2Curvature(temEndoPsi,x0N);
     
     endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);

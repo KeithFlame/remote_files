@@ -1,63 +1,31 @@
 clear all;close all;clc;
-%% test 59;
-name='59_2';
-[Tend_m,Psi]=getEnd(name);
-Psi=Psi';
 
-
-psi0=[0.0055    0.0005    0.0289    0.0020   -0.0000    0.0034]'*0;
-% psi0=[-0.0051    0.0000    0.0692    0.0090    0.0101   -0.0141];
-xh=[0.0575   -0.3201   -0.4780    0.0014   -0.0093   -0.0040]*0;
-p=xh(1:3)/1000;
-zyx=xh(4:6);
-R=eul2rotm(zyx);
-Ttt_trocar=[R,p';[0 0 0 1]];
-
-
-
-block_size=max(size(Psi));
-for i =block_size:-1:1
-    if(Tend_m(3,4,i)==0||Psi(3,i)>pi/2.5)%||Psi(5,i)<pi/20||(Psi(3,i)+Psi(5,i)*(1-abs(Psi(6,i)-Psi(4,i))/pi))>pi/1
-        Tend_m(:,:,i)=[];
-        Psi(:,i)=[];
-    end
-
-end
-block_size=max(size(Psi));
+% Psi=0:5:90;
+L0=(0:5:90)+63;
+block_size=max(size(L0));
 exitflag_kw=zeros(block_size,1);
 d_block=zeros(block_size,1);
+dis_block=zeros(block_size,1);
 Tendc=zeros(4,4,block_size);
 Tendn=zeros(4,4,block_size);
 Tendn_no=zeros(4,4,block_size);
 % L1x=-1.9744*1e-3-3.7e-3;
-L1x=-5.5*1e-3;
-dttc=9.9999*1e-3;
+L1x=0*1e-3;
+dttc=0*1e-3;
 tic;
 first_point=1;
 
 for i = first_point:block_size
 
-    if(Tend_m(3,4,i)==0)
-        continue;
-    end
-
-    tem_psi=Psi(:,i);
-    t=tem_psi(2);
-    tem_psi(2)=tem_psi(1);
-    tem_psi(1)=t;
-    tem_psi=tem_psi.*[1 1e-3 1 1 1 1]'+psi0;
-%     if(tem_psi(3)>pi/2.1)
-%         continue;
-%     end
-
-    LL=tem_psi(2)+L1x;
-    thetatheta=tem_psi(3);
-    SP.psi.l=LL; % l>30
-    SP.psi.phi=tem_psi(1);
+    LL=L0(i)/1000;
+%     thetatheta=Psi(i)/180*pi;
+    thetatheta=pi/2;
+    SP.psi.l=LL; 
+    SP.psi.phi=0;
     SP.psi.theta1=thetatheta;
-    SP.psi.delta1=tem_psi(4);
-    SP.psi.theta2=tem_psi(5);
-    SP.psi.delta2=tem_psi(6);
+    SP.psi.delta1=pi/2;
+    SP.psi.theta2=0;
+    SP.psi.delta2=0;
     
     SP=setInitValV1(SP);
     
@@ -86,19 +54,15 @@ for i = first_point:block_size
     SP=getSPV1;
     Tc=plotResult(0);
     Tn=plotResult_noClearance(0,dttc);
-    Tn_no=plotResult_noClearance(0,-2e-3);
-    Tm=Tend_m(:,:,i);
-%     Tend_m(1:3,4,i)=Tend_m(1:3,4,i)+[0.62 0 0.11]'*1e-3;
-    Tendc(:,:,i)=Ttt_trocar*Tc;
-    Tendn(:,:,i)=Ttt_trocar*Tn;
-    Tendn_no(:,:,i)=Ttt_trocar*Tn_no;
-%     plotCoord(Tm);
-%     axis([Tc(1,4)-10e-3 Tc(1,4)+10e-3 Tc(2,4)-10e-3 Tc(2,4)+10e-3 Tc(3,4)-10e-3 Tc(3,4)+10e-3])
-% %     axis([-5e-3 +5e-3 -5e-3 +5e-3 -11e-3 1e-3])
-%         cla;
+    Tn_no=plotResult_noClearance(0,0);
+    Tendc(:,:,i)=Tc;
+    Tendn(:,:,i)=Tn;
+    Tendn_no(:,:,i)=Tn_no;
     d_block(i)=SP.trocar.d;
+    dis_block(i)=norm(Tc(1:3,4)-Tn_no(1:3,4));
 end
 %%
+plot(L0,dis_block)
 Terr_c=(Tend_m-Tendc);
 Terr_n=(Tend_m-Tendn);
 Terr_n_no=(Tend_m-Tendn_no);
@@ -150,17 +114,11 @@ plot(dis_err_c*1000,'k')
 title('在{target}下，测量结果的位置误差');xlabel('CF');ylabel('\iterror,mm');
 legend('X dev','Y dev','Z dev','dis err');
 figure;hold on;grid on;
-% plot(reshape(Tend_m(1,4,:)-Tendc(1,4,:),[1 block_size])*1000,'r')
-% plot(reshape(Tend_m(2,4,:)-Tendc(2,4,:),[1 block_size])*1000,'g')
-% plot(reshape(Tend_m(3,4,:)-Tendc(3,4,:),[1 block_size])*1000,'b')
-% plot(reshape(Tend_m(1,4,:)-Tendn_no(1,4,:),[1 block_size])*1000,'r:')
-% plot(reshape(Tend_m(2,4,:)-Tendn_no(2,4,:),[1 block_size])*1000,'g:')
-% plot(reshape(Tend_m(3,4,:)-Tendn_no(3,4,:),[1 block_size])*1000,'b:')
+plot(reshape(Tend_m(1,4,:)-Tendc(1,4,:),[1 block_size])*1000,'r')
+plot(reshape(Tend_m(2,4,:)-Tendc(2,4,:),[1 block_size])*1000,'g')
+plot(reshape(Tend_m(3,4,:)-Tendc(3,4,:),[1 block_size])*1000,'b')
 plot(dis_err_c*1000,'k')
-plot(dis_err_n_no*1000,'k:');
-% title('measurement result ');
-xlabel('CF');
-ylabel('error,(mm)');  %%Tendn_no
+title('在{trocar}下，测量结果与目标位姿的位置误差');xlabel('CF');ylabel('\iterror,mm');
 legend('X dev','Y dev','Z dev','dis err');
 figure;hold on;grid on;
 plot(a_dev_XZ,'c')

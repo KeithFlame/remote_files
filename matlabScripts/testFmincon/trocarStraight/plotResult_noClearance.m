@@ -25,11 +25,11 @@ if(flag)
     hold on;grid on;axis equal;view([0 0]);
     title(name);
     xlabel('x');ylabel('y');zlabel('z');
-    % plotTrocar;
-    line([-0.03, -SP.trocar.c/2],[0, 0],[0, 0],'color','black');
-    line([0.03, SP.trocar.c/2],[0, 0],[0, 0],'color','black');
-    line([SP.trocar.c/2, SP.trocar.c/2],[0, 0],[-SP.trocar.d, 0],'color','black');
-    line([-SP.trocar.c/2, -SP.trocar.c/2],[0, 0],[-SP.trocar.d, 0],'color','black');
+% % % %     % plotTrocar;
+% % % %     line([-0.03, -SP.trocar.c/2],[0, 0],[0, 0],'color','black');
+% % % %     line([0.03, SP.trocar.c/2],[0, 0],[0, 0],'color','black');
+% % % %     line([SP.trocar.c/2, SP.trocar.c/2],[0, 0],[-SP.trocar.d, 0],'color','black');
+% % % %     line([-SP.trocar.c/2, -SP.trocar.c/2],[0, 0],[-SP.trocar.d, 0],'color','black');
     plot3(S1(1,:), S1(2,:),S1(3,:),'r');
     plot3(S2(1,:), S2(2,:),S2(3,:),'g');
     plot3(S3(1,:), S3(2,:),S3(3,:),'b');

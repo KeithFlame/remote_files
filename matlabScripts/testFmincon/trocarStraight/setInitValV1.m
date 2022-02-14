@@ -44,7 +44,7 @@ SP.dependent_psi.delta1o=SP.psi.delta1;
 SP.dependent_psi.deltaso=SP.psi.delta1;
 %% trocar
 % SP.trocar.arc_radius=200;
-SP.trocar.c=0.51e-3;
+SP.trocar.c=1e-3;
 SP.trocar.arc_length=0.1;
 %% result
 SP1=SP;

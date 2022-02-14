@@ -86,7 +86,7 @@ for i = first_point:block_size
     SP=getSPV1;
     Tc=plotResult(0);
     Tn=plotResult_noClearance(0,dttc);
-    Tn_no=plotResult_noClearance(0,-2e-3);
+    Tn_no=plotResult_noClearance(1,-2e-3);
     Tm=Tend_m(:,:,i);
 %     Tend_m(1:3,4,i)=Tend_m(1:3,4,i)+[0.62 0 0.11]'*1e-3;
     Tendc(:,:,i)=Ttt_trocar*Tc;
@@ -132,23 +132,23 @@ else
 end
 toc;
 %%
-figure;hold on; axis equal;
-a_dev_XZ=zeros(block_size,1);
-a_dev_YZ=zeros(block_size,1);
-
-for i =1:block_size
-    plot3(T_dev(1,3,i),T_dev(2,3,i),T_dev(3,3,i),'g*');
-    a_dev_XZ(i)=atand(T_dev(2,3,i)/T_dev(3,3,i));
-    a_dev_YZ(i)=atand(T_dev(1,3,i)/T_dev(3,3,i));
-    
-end
-figure;hold on;grid on;
-plot(X_dev*1000,'r')
-plot(Y_dev*1000,'g')
-plot(Z_dev*1000,'b')
-plot(dis_err_c*1000,'k')
-title('在{target}下，测量结果的位置误差');xlabel('CF');ylabel('\iterror,mm');
-legend('X dev','Y dev','Z dev','dis err');
+% figure;hold on; axis equal;
+% a_dev_XZ=zeros(block_size,1);
+% a_dev_YZ=zeros(block_size,1);
+% 
+% for i =1:block_size
+%     plot3(T_dev(1,3,i),T_dev(2,3,i),T_dev(3,3,i),'g*');
+%     a_dev_XZ(i)=atand(T_dev(2,3,i)/T_dev(3,3,i));
+%     a_dev_YZ(i)=atand(T_dev(1,3,i)/T_dev(3,3,i));
+%     
+% end
+% figure;hold on;grid on;
+% plot(X_dev*1000,'r')
+% plot(Y_dev*1000,'g')
+% plot(Z_dev*1000,'b')
+% plot(dis_err_c*1000,'k')
+% title('在{target}下，测量结果的位置误差');xlabel('CF');ylabel('\iterror,mm');
+% legend('X dev','Y dev','Z dev','dis err');
 figure;hold on;grid on;
 % plot(reshape(Tend_m(1,4,:)-Tendc(1,4,:),[1 block_size])*1000,'r')
 % plot(reshape(Tend_m(2,4,:)-Tendc(2,4,:),[1 block_size])*1000,'g')
@@ -159,34 +159,13 @@ figure;hold on;grid on;
 plot(dis_err_c*1000,'k')
 plot(dis_err_n_no*1000,'k:');
 % title('measurement result ');
-xlabel('CF');
-ylabel('error,(mm)');  %%Tendn_no
-legend('X dev','Y dev','Z dev','dis err');
-figure;hold on;grid on;
-plot(a_dev_XZ,'c')
-plot(a_dev_YZ,'k')
-title('error');xlabel('CF');ylabel('\iterror,°');
-legend('angle XZ','angle YZ');
-
-
-%% 
-tt=Psi(6,:)-Psi(4,:);
-x=find(tt>pi);
-tt(x)=tt(x)-pi*2;
-x=find(tt<-pi);
-tt(x)=tt(x)+pi*2;
-figure;grid on;hold on;
-plot(tt,dis_err_c*1000,'*');
-plot(tt,a_dev,'*');
-xlabel("\delta2-\delta1");
-ylabel("error")
-legend('与位置误差的关系','与姿态误差的关系');
-
-ttmax=max(abs(tt));
-theta12_delta12=(ttmax-tt)/ttmax.*Psi(5,:)*0.5+Psi(3,:);
-figure;grid on;hold on;
-plot(theta12_delta12,dis_err_c*1000,'*');
-plot(theta12_delta12,a_dev,'*');
-xlabel("\delta2-\delta1");
-ylabel("error")
-legend('与位置误差的关系','与姿态误差的关系');
+ax = gca;
+ax.FontName = 'Times New Roman';
+xlabel('CF','fontSize',12);
+ylabel('error (mm)','fontSize',12);  %%Tendn_no
+legend('no-zero clearance model','zero clearance model','Z dev','dis err','fontSize',12);
+% figure;hold on;grid on;
+% plot(a_dev_XZ,'c')
+% plot(a_dev_YZ,'k')
+% title('error');xlabel('CF');ylabel('\iterror,°');
+% legend('angle XZ','angle YZ');

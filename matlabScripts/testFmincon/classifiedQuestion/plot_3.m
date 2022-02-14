@@ -5,7 +5,7 @@ Lr=10e-3;
 L2=20e-3;
 k=0.0191;
 
-theta1i=0.01:0.01:0.2;
+theta1i=0.01:0.01:2;
 sT1i=sin(theta1i);
 cT1i=cos(theta1i);
 

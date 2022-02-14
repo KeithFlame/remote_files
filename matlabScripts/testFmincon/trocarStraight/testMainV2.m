@@ -1,9 +1,9 @@
 clear,clc;
 %%
-SP.psi.l=0.1357; % l>30
+SP.psi.l=0.1057; % l>30
 SP.psi.phi=4.71;
-SP.psi.theta1=0.7819;
-SP.psi.delta1=-2.6722;
+SP.psi.theta1=pi/2;
+SP.psi.delta1=pi/2;
 SP.psi.theta2=1.7058;
 SP.psi.delta2=-1.2328;
 
@@ -25,7 +25,7 @@ xh=xh./[100 100 300 200];
 figure;
 Tc=plotResult(1,"");
 % Tn_d=plotResult_noClearance(1);
-Tn=plotResult_noClearance(1,0);
+Tn=plotResult_noClearance(0,0);
 SP=getSPV1;
 axis([-5e-3 +5e-3 -5e-3 +5e-3 -25e-3 +5e-3])
 % axis([Tc(1,4)-5e-6 Tc(1,4)+5e-6 Tc(2,4)-5e-6 Tc(2,4)+5e-6 Tc(3,4)-5e-6 Tc(3,4)+5e-6])
