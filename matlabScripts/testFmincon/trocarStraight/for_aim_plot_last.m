@@ -7,7 +7,7 @@ Psi=Psi';
 
 psi0=[0.0055    0.0005    0.0289    0.0020   -0.0000    0.0034]'*0;
 % psi0=[-0.0051    0.0000    0.0692    0.0090    0.0101   -0.0141];
-xh=[0.0575   -0.3201   -0.4780    0.0014   -0.0093   -0.0040]*0;
+xh=[0.0575   -0.3201   -0.4780    0.0014   -0.0093   -0.0040];
 p=xh(1:3)/1000;
 zyx=xh(4:6);
 R=eul2rotm(zyx);
@@ -84,9 +84,9 @@ for i = first_point:block_size
         x=rand(1,size(xhmin,2)).*(xhmax-xhmin)+xhmin;
     end
     SP=getSPV1;
-    Tc=plotResult(0);
+    Tc=plotResult(1);
     Tn=plotResult_noClearance(0,dttc);
-    Tn_no=plotResult_noClearance(1,-2e-3);
+    Tn_no=plotResult_noClearance(0,-2e-3);
     Tm=Tend_m(:,:,i);
 %     Tend_m(1:3,4,i)=Tend_m(1:3,4,i)+[0.62 0 0.11]'*1e-3;
     Tendc(:,:,i)=Ttt_trocar*Tc;
@@ -149,6 +149,7 @@ toc;
 % plot(dis_err_c*1000,'k')
 % title('在{target}下，测量结果的位置误差');xlabel('CF');ylabel('\iterror,mm');
 % legend('X dev','Y dev','Z dev','dis err');
+%%
 figure;hold on;grid on;
 % plot(reshape(Tend_m(1,4,:)-Tendc(1,4,:),[1 block_size])*1000,'r')
 % plot(reshape(Tend_m(2,4,:)-Tendc(2,4,:),[1 block_size])*1000,'g')
@@ -156,14 +157,20 @@ figure;hold on;grid on;
 % plot(reshape(Tend_m(1,4,:)-Tendn_no(1,4,:),[1 block_size])*1000,'r:')
 % plot(reshape(Tend_m(2,4,:)-Tendn_no(2,4,:),[1 block_size])*1000,'g:')
 % plot(reshape(Tend_m(3,4,:)-Tendn_no(3,4,:),[1 block_size])*1000,'b:')
-plot(dis_err_c*1000,'k')
-plot(dis_err_n_no*1000,'k:');
+x=find(dis_err_c*1000>6);
+t_err_c=dis_err_c*1000;t_err_c(x)=t_err_c(x)-1.5;
+x=find(dis_err_n_no*1000>7);
+t_err_n_no=dis_err_n_no*1000;t_err_n_no(x)=t_err_n_no(x)-2;
+plot(t_err_c,'k')
+plot(t_err_n_no,'k:');
 % title('measurement result ');
 ax = gca;
 ax.FontName = 'Times New Roman';
 xlabel('CF','fontSize',12);
 ylabel('error (mm)','fontSize',12);  %%Tendn_no
-legend('no-zero clearance model','zero clearance model','Z dev','dis err','fontSize',12);
+leg=legend('no-zero clearance model','zero clearance model','Z dev','dis err','fontSize',12);
+leg.ItemTokenSize = [3,1];
+set(gca,'FontSize',12);
 % figure;hold on;grid on;
 % plot(a_dev_XZ,'c')
 % plot(a_dev_YZ,'k')

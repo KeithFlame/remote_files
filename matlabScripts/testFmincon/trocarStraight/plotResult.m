@@ -57,11 +57,11 @@ L=SP.structure.Lg;theta=0;delta=0;
 
 
 d_before=0;
-S1=S1-[0 0 d_before]';
-S2=S2-[0 0 d_before]';
-S3=S3-[0 0 d_before]';
-S4=S4-[0 0 d_before]';
-S5=S5-[0 0 d_before]';
+S1=1000*S1-1000*[0 0 d_before]';
+S2=1000*S2-1000*[0 0 d_before]';
+S3=1000*S3-1000*[0 0 d_before]';
+S4=1000*S4-1000*[0 0 d_before]';
+S5=1000*S5-1000*[0 0 d_before]';
 T6(3,4)=T6(3,4)-d_before;
 
 if(flag)
@@ -70,7 +70,7 @@ if(flag)
     title(name);
     ax = gca;
     ax.FontName = 'Times New Roman';
-    xlabel('{\itx} (m)');ylabel('{\ity} (m)');zlabel('{\itz} (m)');
+    xlabel('{\itx} (mm)');ylabel('{\ity} (mm)');zlabel('{\itz} (mm)');
 %     % plotTrocar;
 %     line([-0.03, -SP.trocar.c/2],[0, 0],[0, 0],'color','black');
 %     line([0.03, SP.trocar.c/2],[0, 0],[0, 0],'color','black');
@@ -114,8 +114,8 @@ if(flag)
     plot3(values6(1,:), values6(2,:),values6(3,:),'black');%,LineWidth=2
 
 
-    [x,y,z]=cylinder(SP.trocar.c/2);  
-    z(2,:)=-SP.trocar.d;      
+    [x,y,z]=cylinder(1000*SP.trocar.c/2);  
+    z(2,:)=-1000*SP.trocar.d;      
     s2=surf(x,y,z,'FaceColor',[0.7,0.7,0.7],'FaceAlpha',0.5);       
 %     s2.AlphaData = 0.01;
     s2.EdgeColor = 'none';

@@ -30,10 +30,10 @@ plot(values3(1,:),values3(2,:));
 plot(values4(1,:),values4(2,:));
 plot(values5(1,:),values5(2,:));
 plot(values6(1,:),values6(2,:));
-xlabel("1^s^t segment bending angle (°)",'FontSize',16);
-ylabel("tip position difference (mm)",'FontSize',16);
+xlabel("1^s^t segment bending angle (°)",'FontSize',12);
+ylabel("tip position difference (mm)",'FontSize',12);
 
-legend("c=0.01 mm", "c=0.05 mm", "c=0.1 mm", "c=0.2 mm", "c=0.5 mm", "c=1 mm",'FontSize',12);
+legend("c=0.005 mm", "c=0.025 mm", "c=0.05 mm", "c=0.1 mm", "c=0.25 mm", "c=0.5 mm",'FontSize',12);
 
 
 
@@ -71,7 +71,13 @@ plot(values3(1,:),values3(2,:));
 plot(values4(1,:),values4(2,:));
 plot(values5(1,:),values5(2,:));
 plot(values6(1,:),values6(2,:));
-xlabel("feeding extension length (mm)",'FontSize',16);
-ylabel("tip position difference (mm)",'FontSize',16);
+xlabel("feeding extension length (mm)");
+ylabel("tip position difference (mm)");
 
-legend("c=0.01 mm", "c=0.05 mm", "c=0.1 mm", "c=0.2 mm", "c=0.5 mm", "c=1 mm",'FontSize',12);
+leg=legend("c=0.005 mm", "c=0.025 mm", "c=0.05 mm", "c=0.1 mm", "c=0.25 mm", "c=0.5 mm");
+leg.ItemTokenSize = [3,1];
+set(gca,'FontSize',8);
+set(gcf,'Position',[500,500,200,200], 'color','w');
+
+imwrite(gcf,'F:\synchronism_plus\synchronism_plus\好好写文章\好好写文章01\pic\final');
+

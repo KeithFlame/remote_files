@@ -1,0 +1,11 @@
+#pragma once
+namespace TYPE_KEITH
+{
+	enum class WARNING_WORD
+	{
+		LAST_QUESTION=0,
+		FIRST_QUESTION=1,
+		NUMBER_CONFLICT_BETWEEN_SOLUTION_QUESTION=2,
+
+	};
+}

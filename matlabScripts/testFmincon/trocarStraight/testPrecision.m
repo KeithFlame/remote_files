@@ -17,7 +17,7 @@ Ttt_trocar=[R,p';[0 0 0 1]];
 
 block_size=max(size(Psi));
 for i =block_size:-1:1
-    if(Tend_m(3,4,i)==0||Psi(3,i)>pi/2.5)%||Psi(5,i)<pi/20||(Psi(3,i)+Psi(5,i)*(1-abs(Psi(6,i)-Psi(4,i))/pi))>pi/1
+    if(Tend_m(3,4,i)==0||Psi(3,i)>pi/2.5||Psi(5,i)<pi/20||(Psi(3,i)+Psi(5,i)*(1-abs(Psi(6,i)-Psi(4,i))/pi))>pi/1)
         Tend_m(:,:,i)=[];
         Psi(:,i)=[];
     end

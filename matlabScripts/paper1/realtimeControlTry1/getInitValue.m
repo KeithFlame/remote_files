@@ -1,12 +1,8 @@
-function [T0,l,flag,S]=getInitValue(psi,LS)
+function [T0,Te,config,flag,S]=getInitValue(psi)
 %
 %
 %
-    [config,flag]=getInnerTrocarPara(psi,LS);
-    [T0,S]=getInitT(config);
-    if(config(2)~=0)
-        l=psi(2)-sum(LS(1:3))+d-config(1:3);
-    else
-        l=psi(2)-sum(LS(2:3))+d-config(1:3);
-    end
+    
+    [config,flag]=getInnerTrocarPara(psi);
+    [T0,Te,S]=getInitT(config);
 end
