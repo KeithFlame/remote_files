@@ -9,15 +9,15 @@ close,clear all;clc;
 SP = getStructurePara_keith;
 init_pose = SP.init_pose;
 joint_limit = SP.joint_limit;
-% T_relative_1to2 = [eul2rotm([0 0 pi/6]), [0 5 0]';[0 0 0 1]];
-T_relative_1to2 = [eul2rotm([0 0 pi]), [0 5 0]';[0 0 0 1]];
+T_relative_1to2 = [eul2rotm([0 0 pi/6]), [0 5 0]';[0 0 0 1]];
+% T_relative_1to2 = [eul2rotm([0 0 pi]), [0 5 0]';[0 0 0 1]];
 threshold = [0.01 0.01 1];
 frequency = 5000000;
 pool_size= zeros(4,4,frequency);
 %% 
 psi=getPsi(frequency);
 tic;
-parfor i =1 : size(psi,1)
+for i =1 : size(psi,1)
     psi1=psi(i,:);
     [T1, S1] = forwardKinematicsandPlotSnake_keith(psi1,1,0);
     T2=init_pose\T1*T_relative_1to2;
