@@ -101,8 +101,7 @@ while error_P >= 1e-4 || error_A >= 1e-4 || error_n >= 1e-4 || error_m >= 1e-4
     %计算雅可比矩阵
     jacobian = get_jacobian_forward(res,guess,q1,q2,q3,ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
     %更新guess
-    t=(jacobian'*jacobian+damp*eye(size(jacobian)))\jacobian' * res;
-    guess = guess - t(1:size(guess,1));
+    guess = guess - (jacobian'*jacobian+damp*eye(size(jacobian)))\jacobian' * res;
     guess_set=[guess_set;guess'];
     %积分全部支链
     
@@ -158,7 +157,6 @@ input3 = [zeros(2,1);reshape(-eye(2),4,1);n3_0;m3_0];
 ys3 = int_one_translator(input3);
 
 end
-
 function ys = int_one_translator(input)
 %	积分一条支链
 
@@ -192,8 +190,8 @@ R1 = reshape(ys0(3:6,end),2,2);    %姿态不变
 P1 = ys0(1:2,end) + R1*[D;0];    %加上多腔管的长度
 
 n1=-G_m + ys0(7:8 ,end);
-m1=-cross_2D_keith((ys0(1:2,end) + P1)/2, G_m) + cross_2D_keith(ys0(1:2,end),ys0(7:8 ,end))...
-   -cross_2D_keith(P1,n1) + ys0(end,end);
+m1=-cross_2D_keith((ys0(1:2,end) + P1)/2, G_m) + cross_2D_keith(ys0(1:2,end),ys0(7:8 ,end)) -...
+    cross_2D_keith(P1,n1) + ys0(end,end);
 
 y1 = [P1;reshape(R1,4,1);n1;m1];
 ys1 = RK4(@cos_rod,y1,h,D+L,D+2*L);
@@ -238,14 +236,14 @@ function ys = cos_rod(~,y)
 
 
     %解包
-%     P = y(1:2);
+    P = y(1:2);
     R = reshape(y(3:6),2,2);
     n = y(7:8);
     m = y(9);
     %计算
     dP = R*(Kse^-1*R'*n + [1;0]);
-    dm = -cross_2D_keith(dP,n);
-%     dm = dm(3);
+    dm = -cross([dP;0],[n;0]);
+    dm = dm(3);
     u = Kbt^-1*m + 0;
     dR = R*[0 -u;u 0];
     dn = [0;0];
@@ -532,11 +530,9 @@ error_m_end = error_m_end - cross(r1,R1_1*n_1_3) - cross(r2,R2_1*n_2_3) - cross(
 
 res = [ error_P_1;error_P_2;error_P_3;
         error_A_1;error_A_2;error_A_3;
-        error_n_1;error_n_2;error_n_3;
-        error_m_1;error_m_2;error_m_3;
-        error_n_end;
-%         error_m_end
-        ];
+%         error_n_1;error_n_2;error_n_3;
+%         error_m_1;error_m_2;error_m_3;
+        error_n_end];
 
 %% 残差范数计算
 error_P = max([norm(error_P_1),norm(error_P_2),norm(error_P_3)]);
@@ -548,7 +544,7 @@ end
 function jacobian = get_jacobian_forward(error,guess,q1,q2,q3,ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1)
 %	计算雅可比矩阵
 delta = 0.001;
-jacobian = zeros(length(error),length(error));
+jacobian = zeros(length(error),length(guess));
 for i = 1:length(guess)                             % 逐列计算雅可比矩阵
     guess(i) = guess(i) + delta;
     if i >= 1 && i <= 3        %属于 动平台
