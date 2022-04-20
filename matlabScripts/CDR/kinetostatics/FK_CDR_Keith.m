@@ -28,7 +28,7 @@ phi_2 = phi * 1;
 phi_3 = phi * 2;
 
 %初始驱动量(m)
-q1 = 290/1000;
+q1 = 190/1000;
 q2 = 190/1000;
 q3 = 190/1000;
 
@@ -67,6 +67,7 @@ m3_1 = 0;
 %初始化猜测向量
 
 guess = [target;n1_0;m1_0;n2_0;m2_0;n3_0;m3_0];
+% guess=[0.0000    0.0000   -0.3183   -2.6542    0.3862   -0.0625   -2.6542    0.3862   -0.0625   -2.6542    0.3862   -0.0625]';
 % load('matlab.mat');
 %积分全部支链
 [ys1,ys2,ys3] = int_all_translator(guess);
@@ -88,49 +89,71 @@ plot_delta_robot(flag, 1000*guess(1:3,1),1000*q1,1000*q2,1000*q3,points_1,points
 %计算残差向量
 [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
 %迭代计数
-k = 1;
+
 %阻尼系数
 damp = 0.000005;
-v = 4;
+% v = 4;
 % guess=fsolve(@solve_test,guess);
 guess_set=guess';
 res_set=res';
 normres_set=0;
-while error_P >= 1e-4 || error_A >= 1e-4 || error_n >= 1e-4 || error_m >= 1e-4
-    tic
-    %计算雅可比矩阵
-    jacobian = get_jacobian_forward(res,guess,q1,q2,q3,ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
-    %更新guess
-    t=(jacobian'*jacobian+damp*eye(size(jacobian)))\jacobian' * res;
-    guess = guess - t(1:size(guess,1));
-    guess_set=[guess_set;guess'];
-    %积分全部支链
-    
+Q=getQ_keith;
+tic
+for mmi =1:10
+    k=1;
+    qq=Q(:,mmi)'/1000;
+    q1=qq(1);
+    q2=qq(2);
+    q3=qq(3);
     [ys1,ys2,ys3] = int_all_translator(guess);
-    %计算各支链的弯曲平面矩阵
     R1_1 = get_R1(q1,guess(1:3,1),1);
     R2_1 = get_R1(q2,guess(1:3,1),2);
     R3_1 = get_R1(q3,guess(1:3,1),3);
-    %计算残差向量
-    [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
-    res_set=[res_set;res'];
-    %各支链坐标变换到世界坐标系下
-    points_1 = 1000 * R1_1 * [ys1(1:2,:);zeros(1,14)];
-    points_2 = 1000 * R2_1 * [ys2(1:2,:);zeros(1,14)];
-    points_3 = 1000 * R3_1 * [ys3(1:2,:);zeros(1,14)];
-    
-    %绘制 delta robot
-    plot_delta_robot(flag, 1000*guess(1:3,1),1000*q1,1000*q2,1000*q3,points_1,points_2,points_3);
-    
-    %计算残差向量
-    
-    %迭代计数
-    k = k + 1;
-    disp(norm(res));
-    toc
-    normres_set=[normres_set; norm(res)];
+    [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC,R1_1, R2_1, R3_1);
+    while error_P >= 1e-3 || error_A >= 5e-3 || error_n >= 5e-3 || error_m >= 1e-4
+        
+        %计算雅可比矩阵
+        jacobian = get_jacobian_forward(res,guess,q1,q2,q3,ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
+        %更新guess
+        if(k<10)
+            step_keith=1;
+        elseif(k<20)
+            step_keith=0.3;
+        else
+            step_keith=0.1;
+        end
+        t=(jacobian'*jacobian+damp*eye(size(jacobian)))\jacobian' * res;
+        guess = guess - step_keith* t(1:size(guess,1));
+        guess = guessLimit(guess);
+        guess_set=[guess_set;guess'];
+        %积分全部支链
+        
+        [ys1,ys2,ys3] = int_all_translator(guess);
+        %计算各支链的弯曲平面矩阵
+        R1_1 = get_R1(q1,guess(1:3,1),1);
+        R2_1 = get_R1(q2,guess(1:3,1),2);
+        R3_1 = get_R1(q3,guess(1:3,1),3);
+        %计算残差向量
+        [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1);
+        res_set=[res_set;res'];
+        %各支链坐标变换到世界坐标系下
+        points_1 = 1000 * R1_1 * [ys1(1:2,:);zeros(1,14)];
+        points_2 = 1000 * R2_1 * [ys2(1:2,:);zeros(1,14)];
+        points_3 = 1000 * R3_1 * [ys3(1:2,:);zeros(1,14)];
+        
+        %绘制 delta robot
+    %     plot_delta_robot(flag, 1000*guess(1:3,1),1000*q1,1000*q2,1000*q3,points_1,points_2,points_3);
+        
+        %计算残差向量
+        
+        %迭代计数
+        k = k + 1;
+    %     disp(norm(res));
+        
+        normres_set=[normres_set; norm(res)];
+    end
 end
-
+toc
 disp(1000*guess(1:3,1));
 
 function [ys1,ys2,ys3] = int_all_translator(guess)
@@ -191,9 +214,9 @@ ys0 = RK4(@cos_rod,y0,h,0,L);
 R1 = reshape(ys0(3:6,end),2,2);    %姿态不变
 P1 = ys0(1:2,end) + R1*[D;0];    %加上多腔管的长度
 
-n1=-G_m + ys0(7:8 ,end);
-m1=-cross_2D_keith((ys0(1:2,end) + P1)/2, G_m) + cross_2D_keith(ys0(1:2,end),ys0(7:8 ,end))...
-   -cross_2D_keith(P1,n1) + ys0(end,end);
+n1=(-G_m + ys0(7:8 ,end));
+m1=(-cross_2D_keith((ys0(1:2,end) + P1)/2, G_m) + cross_2D_keith(ys0(1:2,end),ys0(7:8 ,end))...
+   -cross_2D_keith(P1,n1) + ys0(end,end));
 
 y1 = [P1;reshape(R1,4,1);n1;m1];
 ys1 = RK4(@cos_rod,y1,h,D+L,D+2*L);
@@ -494,15 +517,17 @@ error_P_3 = error_P_3(1:2,1);
 
 % 各支链的末端姿态约束
 target_orientation = [-1 0 0;0 -1 0;0 0 1];
-[~,error_A_1] = error_orientation(R_1_3,target_orientation);
-error_A_1 = error_A_1(3);
-
-[~,error_A_2] = error_orientation(R_2_3,target_orientation);
-error_A_2 = error_A_2(3);
-
-[~,error_A_3] = error_orientation(R_3_3,target_orientation);
-error_A_3 = error_A_3(3);
-
+% [~,error_A_1] = error_orientation(R_1_3,target_orientation);
+% error_A_1 = error_A_1(3);
+% 
+% [~,error_A_2] = error_orientation(R_2_3,target_orientation);
+% error_A_2 = error_A_2(3);
+% 
+% [~,error_A_3] = error_orientation(R_3_3,target_orientation);
+% error_A_3 = error_A_3(3);
+[error_A_1,~] = error_orientation(R_1_3,target_orientation);
+[error_A_2,~] = error_orientation(R_2_3,target_orientation);
+[error_A_3,~] = error_orientation(R_3_3,target_orientation);
 
 % 各支链多腔管受力平衡
 error_n_1 = -n_1_1 + n_1_2 + R1_1'* G_m;
@@ -532,8 +557,7 @@ error_m_end = error_m_end - cross(r1,R1_1*n_1_3) - cross(r2,R2_1*n_2_3) - cross(
 
 res = [ error_P_1;error_P_2;error_P_3;
         error_A_1;error_A_2;error_A_3;
-        error_n_1;error_n_2;error_n_3;
-        error_m_1;error_m_2;error_m_3;
+
         error_n_end;
 %         error_m_end
         ];
@@ -541,13 +565,13 @@ res = [ error_P_1;error_P_2;error_P_3;
 %% 残差范数计算
 error_P = max([norm(error_P_1),norm(error_P_2),norm(error_P_3)]);
 error_A = max([norm(error_A_1),norm(error_A_2),norm(error_A_3)]);
-error_n = max([norm(error_n_1),norm(error_n_2),norm(error_n_3),norm(error_n_end)]);
-error_m = max([norm(error_m_1),norm(error_m_2),norm(error_m_3)]);
+error_n = norm(error_n_end);
+error_m = max([norm(error_m_1),norm(error_m_2),norm(error_m_3)]);%,norm(error_m_end)
 end
 
 function jacobian = get_jacobian_forward(error,guess,q1,q2,q3,ys1,ys2,ys3,SPC, R1_1, R2_1, R3_1)
 %	计算雅可比矩阵
-delta = 0.001;
+delta = 0.0001;
 jacobian = zeros(length(error),length(error));
 for i = 1:length(guess)                             % 逐列计算雅可比矩阵
     guess(i) = guess(i) + delta;
@@ -570,6 +594,7 @@ for i = 1:length(guess)                             % 逐列计算雅可比矩�
     guess(i) = guess(i) - delta;
 end
 end
+
 function  R1 = get_R1(q,target,number)
 %	计算弯曲平面变换矩阵
 
@@ -652,5 +677,16 @@ function [error_angle,error_axis] = error_orientation(orientation_current,orient
     else
         error_axis=1/(2*sin(error_angle))*[error_R(3,2)-error_R(2,3);error_R(1,3)-error_R(3,1);error_R(2,1)-error_R(1,2)];
     end
-    error_axis = error_angle*error_axis;
+%     error_axis = error_angle*error_axis;
+    error_angle=error_angle/10;
+end
+
+function guess = guessLimit(guess0)
+    guess_max=[0.406 0.406 0.126 6 16 1 6 16 1 6 16 1]';
+    guess_min=[-0.406 -0.406 -0.400 -6 -16 -1 -6 -16 -1 -6 -16 -1]';
+    x=find(guess0./guess_max>1);
+    y=find(guess0./guess_min>1);
+    guess=guess0;
+    guess(x)=guess_max(x);
+    guess(y)=guess_min(y);
 end
