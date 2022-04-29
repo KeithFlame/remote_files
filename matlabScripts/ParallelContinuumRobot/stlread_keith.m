@@ -34,13 +34,13 @@ if use_color
 end
 
 h = waitbar(0,'Please wait...');
-for i=1:num_facet,
-    norm=fread(fid,3,'float32'); % normal coordinates, ignored for now
+for i=1:num_facet
+    fread(fid,3,'float32'); % normal coordinates, ignored for now
     ver1=fread(fid,3,'float32'); % vertex 1
     ver2=fread(fid,3,'float32'); % vertex 2
     ver3=fread(fid,3,'float32'); % vertex 3
     col=fread(fid,1,'uint16'); % color bytes
-    if (bitget(col,16)==1 & use_color)
+    if (bitget(col,16)==1 && use_color)
         r=bitshift(bitand(2^15-1, col),-10);
         g=bitshift(bitand(2^10-1, col),-5);
         b=bitand(2^5-1, col);
@@ -59,30 +59,4 @@ end
 fclose(fid);
 close(h);
 
-
-% % % % % % % fp = fopen(filename,'rb');
-% % % % % % % src = fread(fp,'uint8=>uint8');
-% % % % % % % fclose(fp);
-% % % % % % % 
-% % % % % % % %% 二、提取有效信息
-% % % % % % % % 提取数据长度信息（四字节无符号整形）
-% % % % % % % len = typecast(src(81:84),'uint32');
-% % % % % % % 
-% % % % % % % % 提取三角片信息（[48有效字节+2填充字节]*len）
-% % % % % % % data = reshape(src(85:end),[50,len]);
-% % % % % % % data(end-1:end,:) = [];
-% % % % % % % 
-% % % % % % % % 类型转换(float*12*len)
-% % % % % % % dataf = typecast(data(:),'single');
-% % % % % % % dataf = reshape(dataf,[12,len]);
-% % % % % % % 
-% % % % % % % %% 三、获取v、f、n
-% % % % % % % % 获取v,f,n（注意MATLAB是列优先的，所以必须按下列方式写）
-% % % % % % % n = dataf(1:3,:)';
-% % % % % % % v = reshape(dataf(4:end,:),[3,len*3])';
-% % % % % % % f = reshape((1:len*3)',[3,len])';
-% % % % % % % 
-% % % % % % % % 去除重复顶点
-% % % % % % % [v, ~, indexn] =  unique(v, 'rows');
-% % % % % % % f = indexn(f);
-% % % % % % % x=n;y=v;z=f;
+end

@@ -13,7 +13,7 @@ function [Tend,S]=forwardKinematicsandPlotSnake_keith(psi, arm_serial, is_plot)
 % Date: 03.24.2022
 
 if(nargin == 0)
-    psi=[0 0 0 0 0 0]';
+    psi=[0 0 0 0 0 0 0]';
     is_plot=0;
     arm_serial=1;
 end
@@ -24,6 +24,12 @@ end
 if(nargin == 2)
     is_plot=0;
 end
+if(max(size(psi)) == 6)
+    beta = 0;
+else
+    beta = psi(7);
+end
+
 
 SP=getStructurePara_keith;
 gamma1=SP.size_para(6);
@@ -41,6 +47,9 @@ theta1=psi(3);
 delta1=psi(4);
 theta2=psi(5);
 delta2=psi(6);
+
+% effector
+effector = SP.effector;
 
 if(arm_serial== 1)
     init_pose = eye(4);
@@ -163,7 +172,7 @@ if(is_plot>0)
     radius_L1 = assembly_para(1)/2;
     radius_L2 = assembly_para(3)/2;
     radius_Lr = assembly_para(2)/2;
-    radius_Lg = radius_Lr;
+%     radius_Lg = radius_Lr;
     number_niti_L1 = assembly_para(4);
     number_niti_L2 = assembly_para(5);
     first_niti_L1 = assembly_para(6);
@@ -182,7 +191,7 @@ if(is_plot>0)
         for j = 1:max(size(s2)) 
             p_i(1:3,j)= s2(1:3,j)+T1(1:3,1:3)*getContinuumBending(s2(4,j), delta1)*p0;
         end
-        plot3(p_i(1,:),p_i(2,:),p_i(3,:),LineWidth=1,Color='r');
+        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',1.2,Color='r');
     end
     % plot L1 spacer
     dis=L1-spacer_interval;
@@ -218,7 +227,7 @@ if(is_plot>0)
         for j = 1:max(size(s4)) 
             p_i(1:3,j)= s4(1:3,j)+T1(1:3,1:3)*T2(1:3,1:3)*getContinuumBending(s4(4,j), delta2)*p0;
         end
-        plot3(p_i(1,:),p_i(2,:),p_i(3,:),LineWidth=1,Color='#3b4');
+        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',0.5,Color='#3b4');
     end
     
     % plot L2 spacer
@@ -229,9 +238,9 @@ if(is_plot>0)
         plotcylinder(p1,p2,'cyan',radius_Lr,0.5);
     end
 
-    % drawGripper(p,R,rho,Lg,color)
-    r_gripper=Tend(1:3,1:3);
-    drawGripper(s5(1:3,1),r_gripper,radius_Lg,Lg,'b');
+    % draw gripper
+    color = [0.5 0.5 0.5];
+    plotEffector_keith(T1*T2*T3*T4, effector,beta,color);
 
     % darw coordinates
     plotCoord(init_pose,1);
@@ -314,33 +323,78 @@ surf(X,Y,Z,'facecolor',color,'edgecolor','none','FaceAlpha',alpha)    %圆柱表
 end
 
 %% 画末端执行器
-function [hG]=drawGripper(p,R,rho,Lg,color)
-if(nargin == 4)
-    color=[0 0 0];
+% % % % % % % % function [hG]=drawGripper(p,R,rho,Lg,color)
+% % % % % % % % if(nargin == 4)
+% % % % % % % %     color=[0 0 0];
+% % % % % % % % end
+% % % % % % % % if(Lg == 0)
+% % % % % % % %     hG=[];
+% % % % % % % %     return;
+% % % % % % % % end
+% % % % % % % % Lg=Lg*1.25;
+% % % % % % % % D1=rho*cos(pi/6);
+% % % % % % % % D2=rho*sin(pi/6);
+% % % % % % % % H1=Lg*0.3;
+% % % % % % % % H2=Lg*0.4;
+% % % % % % % % p0=[D1 D2 0;D1 -D2 0;-D1 -D2 0;-D1 D2 0;...
+% % % % % % % %    D1 D2 H1;D1 -D2 H1;-D1 -D2 H1;-D1 D2 H1;...
+% % % % % % % %    0 D2 H2;0 -D2 H2;...
+% % % % % % % %    D1 D2 Lg;D1 -D2 Lg;-D1 -D2 Lg;-D1 D2 Lg]';
+% % % % % % % % p1=p+R*p0;
+% % % % % % % % h1=patch([p1(1,1) p1(1,5) p1(1,9) p1(1,8) p1(1,4)]',[p1(2,1) p1(2,5) p1(2,9) p1(2,8) p1(2,4)]',[p1(3,1) p1(3,5) p1(3,9) p1(3,8) p1(3,4)]',color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h2=patch([p1(1,2) p1(1,6) p1(1,10) p1(1,7) p1(1,3)],[p1(2,2) p1(2,6) p1(2,10) p1(2,7) p1(2,3)],[p1(3,2) p1(3,6) p1(3,10) p1(3,7) p1(3,3)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h3=patch([p1(1,1) p1(1,2) p1(1,6) p1(1,5)],[p1(2,1) p1(2,2) p1(2,6) p1(2,5)],[p1(3,1) p1(3,2) p1(3,6) p1(3,5)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h4=patch([p1(1,4) p1(1,3) p1(1,7) p1(1,8)],[p1(2,4) p1(2,3) p1(2,7) p1(2,8)],[p1(3,4) p1(3,3) p1(3,7) p1(3,8)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h5=patch([p1(1,5) p1(1,6) p1(1,10) p1(1,9)],[p1(2,5) p1(2,6) p1(2,10) p1(2,9)],[p1(3,5) p1(3,6) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h6=patch([p1(1,8) p1(1,7) p1(1,10) p1(1,9)],[p1(2,8) p1(2,7) p1(2,10) p1(2,9)],[p1(3,8) p1(3,7) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h7=patch([p1(1,11) p1(1,12) p1(1,10) p1(1,9)],[p1(2,11) p1(2,12) p1(2,10) p1(2,9)],[p1(3,11) p1(3,12) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % h8=patch([p1(1,14) p1(1,13) p1(1,10) p1(1,9)],[p1(2,14) p1(2,13) p1(2,10) p1(2,9)],[p1(3,14) p1(3,13) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
+% % % % % % % % hG=[h1 h2 h3 h4 h5 h6 h7 h8];
+% % % % % % % % end
+%% 画末端执行器，高级版
+function plotEffector_keith(T, effector, beta, color)
+%   this is a function to plot the gripper
+%   there is two input, where the former is used to set the pose of gripper,
+%   and the latter is set the open angle.
+%
+%   Author Keith W.
+%   Ver. 1.0
+%   Date 04.29.2022
+
+if nargin == 3
+    beta = 0;
 end
-if(Lg == 0)
-    hG=[];
-    return;
+if nargin == 2
+    color = [0.5 0.5 0.5];
+    beta = 0;
 end
-Lg=Lg*1.25;
-D1=rho*cos(pi/6);
-D2=rho*sin(pi/6);
-H1=Lg*0.3;
-H2=Lg*0.4;
-p0=[D1 D2 0;D1 -D2 0;-D1 -D2 0;-D1 D2 0;...
-   D1 D2 H1;D1 -D2 H1;-D1 -D2 H1;-D1 D2 H1;...
-   0 D2 H2;0 -D2 H2;...
-   D1 D2 Lg;D1 -D2 Lg;-D1 -D2 Lg;-D1 D2 Lg]';
-p1=p+R*p0;
-h1=patch([p1(1,1) p1(1,5) p1(1,9) p1(1,8) p1(1,4)]',[p1(2,1) p1(2,5) p1(2,9) p1(2,8) p1(2,4)]',[p1(3,1) p1(3,5) p1(3,9) p1(3,8) p1(3,4)]',color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h2=patch([p1(1,2) p1(1,6) p1(1,10) p1(1,7) p1(1,3)],[p1(2,2) p1(2,6) p1(2,10) p1(2,7) p1(2,3)],[p1(3,2) p1(3,6) p1(3,10) p1(3,7) p1(3,3)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h3=patch([p1(1,1) p1(1,2) p1(1,6) p1(1,5)],[p1(2,1) p1(2,2) p1(2,6) p1(2,5)],[p1(3,1) p1(3,2) p1(3,6) p1(3,5)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h4=patch([p1(1,4) p1(1,3) p1(1,7) p1(1,8)],[p1(2,4) p1(2,3) p1(2,7) p1(2,8)],[p1(3,4) p1(3,3) p1(3,7) p1(3,8)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h5=patch([p1(1,5) p1(1,6) p1(1,10) p1(1,9)],[p1(2,5) p1(2,6) p1(2,10) p1(2,9)],[p1(3,5) p1(3,6) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h6=patch([p1(1,8) p1(1,7) p1(1,10) p1(1,9)],[p1(2,8) p1(2,7) p1(2,10) p1(2,9)],[p1(3,8) p1(3,7) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h7=patch([p1(1,11) p1(1,12) p1(1,10) p1(1,9)],[p1(2,11) p1(2,12) p1(2,10) p1(2,9)],[p1(3,11) p1(3,12) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-h8=patch([p1(1,14) p1(1,13) p1(1,10) p1(1,9)],[p1(2,14) p1(2,13) p1(2,10) p1(2,9)],[p1(3,14) p1(3,13) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
-hG=[h1 h2 h3 h4 h5 h6 h7 h8];
+R=T(1:3,1:3);
+P=T(1:3,4);
+stator = effector.stator;
+rotor = effector.rotor;
+block_size_rotor = size(rotor,2);
+block_size_stator = size(stator,2);
+r0 = eul2rotm([0 0 beta]);
+for i = 1:3
+    for j = 1:block_size_stator
+        p1=[stator(i,j);stator(i+3,j);stator(i+6,j)];
+        p1=R*p1;
+        stator(i,j)=p1(1);stator(i+3,j)=p1(2);stator(i+6,j)=p1(3);
+    end
+    for j = 1:(block_size_rotor-1)
+        p1=[rotor(i,j);rotor(i+3,j);rotor(i+6,j)];
+        p1=R*r0*p1;
+        rotor(i,j)=p1(1);rotor(i+3,j)=p1(2);rotor(i+6,j)=p1(3);
+    end
+end
+% P=[0 0 0]';
+stator_x=stator(1:3,:)+P(1);stator_y=stator(4:6,:)+P(2);stator_z=stator(7:9,:)+P(3);
+P=P+R*rotor(1:3,end); 
+% P=[0 0 0]';
+% figure;hold on;
+rotor_x=rotor(1:3,1:end-1)+P(1);rotor_y=rotor(4:6,1:end-1)+P(2);rotor_z=rotor(7:9,1:end-1)+P(3);
+patch(stator_x,stator_y,stator_z,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',color);
+patch(rotor_x,rotor_y,rotor_z,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',color);
 end
 
 %% 画半刚性段
