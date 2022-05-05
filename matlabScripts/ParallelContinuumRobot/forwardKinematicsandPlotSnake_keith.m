@@ -12,14 +12,19 @@ function [Tend,S]=forwardKinematicsandPlotSnake_keith(psi, arm_serial, is_plot)
 % Ver. 1.0
 % Date: 03.24.2022
 
+% Ver. 2.0 
+% add trocar and 4 arms, respectively.
+% Date 05.02.2022
+% Author: Keith W.
+
 if(nargin == 0)
     psi=[0 0 0 0 0 0 0]';
     is_plot=0;
-    arm_serial=1;
+    arm_serial=getArmPara;
 end
 if(nargin == 1)
     is_plot=0;
-    arm_serial=1;
+    arm_serial=getArmPara;
 end
 if(nargin == 2)
     is_plot=0;
@@ -31,15 +36,18 @@ else
 end
 
 
-SP=getStructurePara_keith;
-gamma1=SP.size_para(6);
-L1=SP.size_para(1);
-Lr=SP.size_para(2);
-L2=SP.size_para(3);
-Lg=SP.size_para(4);
-ZETA=SP.stiffness_para(3);
+SP = getStructurePara_keith;
+gamma1=arm_serial.size_para(6);
+L1=arm_serial.size_para(1);
+Lr=arm_serial.size_para(2);
+L2=arm_serial.size_para(3);
+Lg=arm_serial.size_para(4);
+gamma3=arm_serial.size_para(7);
+port = arm_serial.port;
+ZETA=arm_serial.stiffness_para(3);
 
-gamma3=SP.size_para(7); 
+
+ 
 scalar=0:0.05:1;
 PHI=psi(1);
 l=psi(2);
@@ -49,13 +57,11 @@ theta2=psi(5);
 delta2=psi(6);
 
 % effector
-effector = SP.effector;
+effector = arm_serial.effector;
 
-if(arm_serial== 1)
-    init_pose = eye(4);
-elseif(arm_serial == 2)
-    init_pose = SP.init_pose;
-end
+% trocar
+init_pose = SP.init_pose(:,:,arm_serial.port);
+
 
 
 
@@ -156,8 +162,13 @@ T5=[cos(gamma3) -sin(gamma3) 0 0
     0 0 1 Lg
     0 0 0 1];
 s5=T1*T2*T3*T4*[0 0;0 0;0 Lg;1 1];s5(4,:)=[0 0];
-
-Tend=T1*T2*T3*T4*T5;%R=T([1 2 3],[1 2 3]);p=T([1 2 3],4);
+Tend=zeros(4,4,5);
+Tend(:,:,1)=T1;
+Tend(:,:,2)=Tend(:,:,1)*T2;
+Tend(:,:,3)=Tend(:,:,2)*T3;
+Tend(:,:,4)=Tend(:,:,3)*T4;
+Tend(:,:,5)=Tend(:,:,4)*T5;
+% Tend=[T1,T1*T2,T1*T2*T3,T1*T2*T3*T4,T1*T2*T3*T4*T5];%R=T([1 2 3],[1 2 3]);p=T([1 2 3],4);
 S=[s1 s2 s3 s4 s5];
 
 
@@ -165,10 +176,10 @@ S=[s1 s2 s3 s4 s5];
 if(is_plot>0)
 %     figure;
     axis equal;grid on; hold on;
-    xlabel("X");
-    ylabel("Y");
-    zlabel("Z");
-    assembly_para=SP.assembly_para;
+%     xlabel("X");
+%     ylabel("Y");
+%     zlabel("Z");
+    assembly_para=arm_serial.assembly_para;
     radius_L1 = assembly_para(1)/2;
     radius_L2 = assembly_para(3)/2;
     radius_Lr = assembly_para(2)/2;
@@ -180,8 +191,15 @@ if(is_plot>0)
     spacer_interval = assembly_para(8);
 
     % plot lstem
-    plotTorus(Ls, radius_Lr,theta0,delta1,'black', init_pose);
-
+    lefc = [0.2    0.2    0.2];alpha = 0.9; 
+    plotTorus(Ls, radius_Lr,theta0,delta1+PHI+gamma1,lefc, init_pose);
+    if(l>L1)
+        P_Lstem = T1(1:3,4);
+        P_lsetm_d = P_Lstem + T1(1:3,3)*0.1;
+        % lstem end face color
+             
+        plotcylinder(P_lsetm_d,P_Lstem,lefc,radius_Lr,alpha);
+    end
     % plot L1 body
     for i = 1:number_niti_L1
         interval_angle=2*pi/number_niti_L1;
@@ -191,7 +209,22 @@ if(is_plot>0)
         for j = 1:max(size(s2)) 
             p_i(1:3,j)= s2(1:3,j)+T1(1:3,1:3)*getContinuumBending(s2(4,j), delta1)*p0;
         end
-        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',1.2,Color='r');
+        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',2,Color=[0.6314    0.5961    0.7647]);
+    end
+    for i = 1:number_niti_L2
+        if(port == 3)
+            interval_angle=2*pi/number_niti_L2;
+            delta_angle=delta1+first_niti_L2+interval_angle*(i-1);
+        else
+            interval_angle=16/180*pi;
+            delta_angle=delta1+first_niti_L2+interval_angle*(i-1)+26/180*pi*floor(i/4);
+        end
+        p_i=s2;
+        p0=radius_L1*[cos(delta_angle) sin(delta_angle) 0]';
+        for j = 1:max(size(s4)) 
+            p_i(1:3,j)= s2(1:3,j)+T1(1:3,1:3)*getContinuumBending(s2(4,j), delta1)*p0;
+        end
+        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth', 0.1, Color=[0.6863    0.8510    0.9098]);
     end
     % plot L1 spacer
     dis=L1-spacer_interval;
@@ -212,54 +245,71 @@ if(is_plot>0)
         p1=s2(1:3,i);
         r=T1(1:3,1:3)*getContinuumBending(s2(4,i), delta1);
         p2=p1+r(:,3);
-        plotcylinder(p1,p2,'magenta',radius_Lr,0.3);
+        plotcylinder(p1,p2,[ 0.9569    0.6784    0.6941],radius_Lr,0.6);
     end
 
     % rigid 
-    plotcylinder(s3(1:3,1),s3(1:3,end),'black',radius_Lr,0.6);
+    plotcylinder(s3(1:3,1),s3(1:3,end),[0.4 0.4 0.4],radius_Lr,1);
 
     % plot L2 body
     for i = 1:number_niti_L2
-        interval_angle=16/180*pi;
-        delta_angle=delta2+first_niti_L2+interval_angle*(i-1)+26/180*pi*floor(i/4);
+        if(port == 3)
+            interval_angle=2*pi/number_niti_L2;
+            delta_angle=delta1+first_niti_L2+interval_angle*(i-1);
+        else
+            interval_angle=16/180*pi;
+            delta_angle=delta1+first_niti_L2+interval_angle*(i-1)+26/180*pi*floor(i/4);
+        end
         p_i=s4;
         p0=radius_L2*[cos(delta_angle) sin(delta_angle) 0]';
         for j = 1:max(size(s4)) 
             p_i(1:3,j)= s4(1:3,j)+T1(1:3,1:3)*T2(1:3,1:3)*getContinuumBending(s4(4,j), delta2)*p0;
         end
-        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',0.5,Color='#3b4');
+        plot3(p_i(1,:),p_i(2,:),p_i(3,:),'LineWidth',0.5,Color=[0.6863    0.8510    0.9098]);
     end
     
     % plot L2 spacer
-    for i =[(max(size(scalar))+1)/2 max(size(scalar))]
-        p1=s4(1:3,i);
-        r=T1(1:3,1:3)*T2(1:3,1:3)*getContinuumBending(s4(4,i), delta2);
-        p2=p1-r(:,3);
-        plotcylinder(p1,p2,'cyan',radius_Lr,0.5);
+    
+    if(port == 3)
+        alpha =0.5;
+        for i =[floor((max(size(scalar))+1)/3) floor((max(size(scalar))+1)/3*2) max(size(scalar))]
+            p1=s4(1:3,i);
+            r=T1(1:3,1:3)*T2(1:3,1:3)*getContinuumBending(s4(4,i), delta2);
+            p2=p1-r(:,3);
+            plotcylinder(p1,p2,[0.7451    0.8392    0.5451],radius_Lr,alpha);
+        end
+    else
+        alpha =0.5;
+        for i =[(max(size(scalar))+1)/2 max(size(scalar))]
+            p1=s4(1:3,i);
+            r=T1(1:3,1:3)*T2(1:3,1:3)*getContinuumBending(s4(4,i), delta2);
+            p2=p1-r(:,3);
+            plotcylinder(p1,p2,[0.7451    0.8392    0.5451],radius_Lr,alpha);
+            alpha = alpha +0.5;
+        end
     end
-
     % draw gripper
     color = [0.5 0.5 0.5];
     plotEffector_keith(T1*T2*T3*T4, effector,beta,color);
 
     % darw coordinates
     plotCoord(init_pose,1);
-    plotCoord(Tend,1);
+    plotCoord(Tend(:,:,5),1);
     
     
 end
 if(is_plot < 0)
     axis equal;grid on; hold on;
-    xlabel("X");
-    ylabel("Y");
-    zlabel("Z");
+%     xlabel("X");
+%     ylabel("Y");
+%     zlabel("Z");
     plot3(s1(1,:),s1(2,:),s1(3,:),LineWidth=1,Color='black');
     plot3(s2(1,:),s2(2,:),s2(3,:),LineWidth=1,Color='r');
     plot3(s3(1,:),s3(2,:),s3(3,:),LineWidth=1,Color='black');
     plot3(s4(1,:),s4(2,:),s4(3,:),LineWidth=1,Color='#3b4');
     plot3(s5(1,:),s5(2,:),s5(3,:),LineWidth=1,Color='b');
     plotCoord(init_pose,1);
-    plotCoord(Tend,1);
+    plotCoord(Tend(:,:,5),1);
 end
 end
 
@@ -393,8 +443,8 @@ P=P+R*rotor(1:3,end);
 % P=[0 0 0]';
 % figure;hold on;
 rotor_x=rotor(1:3,1:end-1)+P(1);rotor_y=rotor(4:6,1:end-1)+P(2);rotor_z=rotor(7:9,1:end-1)+P(3);
-patch(stator_x,stator_y,stator_z,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',color);
-patch(rotor_x,rotor_y,rotor_z,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',color);
+patch(stator_x,stator_y,stator_z,'w','FaceAlpha',0.7,'EdgeColor','none','FaceColor',color);
+patch(rotor_x,rotor_y,rotor_z,'w','FaceAlpha',0.7,'EdgeColor','none','FaceColor',color+0.3);
 end
 
 %% 画半刚性段
@@ -410,7 +460,8 @@ function plotTorus(Lstem_l, r_Lstem,theta_Lstem,delta_Lstem,seg_color, T_config)
 % input3: curve angle.
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 %% para
-fig_resolution=256;  % figure resolution
+fig_resolution=128;  % figure resolution
+alpha = 0.9;
 % seg_color=100;  % continuum's color. 
 if(nargin==4)
     T_config=eye(4);
@@ -432,15 +483,15 @@ else
     y=r_Lstem*sin(v);
 end
 width_block=size(x,2);
-height_bloack=size(x,1);
-lay3=zeros(height_bloack,width_block,3);
-lay_used=zeros(height_bloack,width_block,3);
+height_block=size(x,1);
+lay3=zeros(height_block,width_block,3);
+lay_used=zeros(height_block,width_block,3);
 lay3(:,:,1)=x;
 lay3(:,:,2)=y;
 lay3(:,:,3)=z;
 t_delta_Lstem=[cos(delta_Lstem),-sin(delta_Lstem),0, 0;
     sin(delta_Lstem), cos(delta_Lstem), 0, 0;0, 0, 1, 0;0, 0, 0, 1];
-for j =1:height_bloack
+for j =1:height_block
     for i =1:width_block
         temP= [lay3(j,i,1) lay3(j,i,2) lay3(j,i,3) 1]';
         tem=T_config*t_delta_Lstem*temP;
@@ -450,8 +501,10 @@ for j =1:height_bloack
     end
 end
 hold on;
- 
-surf(lay_used(:,:,1),lay_used(:,:,2),lay_used(:,:,3),'FaceAlpha',0.3,'EdgeColor','none','FaceColor',seg_color);
+
+
+surf(lay_used(:,:,1),lay_used(:,:,2),lay_used(:,:,3),'FaceAlpha',alpha,'EdgeColor','none','FaceColor',seg_color);
+
 end
 
 %% 画坐标系

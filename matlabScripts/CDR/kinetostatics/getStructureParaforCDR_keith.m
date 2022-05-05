@@ -34,7 +34,7 @@ if(is_refresh||isempty(SP0))
     % gravity for multi-lumen tube moving platform external load
     external_load = load('./structure_parameters_CDR/gravity_para.raw');
 
-    gravity_para = [2.4059 0.7448 external_load];
+    gravity_para = [0 0 external_load];%[2.4059 0.7448 external_load];
     SP0.gravity_para = gravity_para;
 end
 

@@ -1,4 +1,4 @@
-function psi = invKine_keith(T)
+function psi = invKine_keith(T,arm1)
 % This is a function to calculate the inverse kinematics for a 2-segment
 % continuum robot with size is known.
 % cite the approach by:
@@ -10,9 +10,8 @@ function psi = invKine_keith(T)
 % Ver. 1.0
 % Date: 25.03.2022
 
-    SP=getStructurePara_keith;
-    LS=SP.size_para;
-    joint_limit = SP.joint_limit;
+    LS=arm1.size_para;
+    joint_limit = arm1.joint_limit;
     L1=LS(1);Lr=LS(2);L2=LS(3);Lg=LS(4);
     T(1:3,4)=T(1:3,4);
     config=invKineC3(T,Lr,L2,Lg);

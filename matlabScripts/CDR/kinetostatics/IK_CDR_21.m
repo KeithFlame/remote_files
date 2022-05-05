@@ -38,7 +38,7 @@ q2 = 300/1000;
 q3 = 300/1000;
 
 %目标动平台位置(m)
-x_end = -160;
+x_end = 150;
 y_end = 0;
 z_end = -225;
 target = 1/1000*[x_end;y_end;z_end];
@@ -82,6 +82,7 @@ R2_1 = get_R1(q2,target,2);
 R3_1 = get_R1(q3,target,3);
 
 %各支链坐标变换到世界坐标系下
+block_size=2*(L*100+1);
 points_1 = 1000 * R1_1 * [ys1(1:2,:);zeros(1,14)];
 points_2 = 1000 * R2_1 * [ys2(1:2,:);zeros(1,14)];
 points_3 = 1000 * R3_1 * [ys3(1:2,:);zeros(1,14)];
@@ -128,6 +129,8 @@ while error_P >= 1e-4 || error_A >= 1e-4 || error_n >= 1e-4 || error_m >= 1e-4
     toc
 end
 disp([q1 q2 q3]);
+point=points_3;
+angle=90+atand((point(3,block_size/2+1)-point(3,block_size/2))/abs(point(1,block_size/2+1)-point(1,block_size/2)))
 
 function [ys1,ys2,ys3] = int_all_translator(guess)
 %	积分全部支链

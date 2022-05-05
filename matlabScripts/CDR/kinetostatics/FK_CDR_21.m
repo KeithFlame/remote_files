@@ -28,9 +28,9 @@ phi_2 = phi * 1;
 phi_3 = phi * 2;
 
 %初始驱动量(m)
-q1 = 191/1000;
-q2 = 470/1000;
-q3 = 470/1000;
+q1 = 190/1000;
+q2 = 490/1000;
+q3 = 490/1000;
 
 %初始动平台位置(m)
 x_end = 0;
@@ -141,6 +141,8 @@ disp(1000*guess(1:3,1));
 xlabel("X axis (mm)");
 ylabel("Y axis (mm)");
 zlabel("Z axis (mm)");
+view([180 0])
+[res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC,R1_1, R2_1, R3_1);
 set(gca,'FontName','Times New Roman','FontSize',12,'FontWeight','bold');
 
 function jacobian = get_jacobian_forward(error,guess,q1,q2,q3,ys1,ys2,ys3,SPC,R1_1, R2_1, R3_1)
