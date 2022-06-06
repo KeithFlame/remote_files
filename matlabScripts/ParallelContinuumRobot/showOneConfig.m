@@ -8,7 +8,7 @@ clear all;
 SP = getStructurePara_keith;
 init_pose = SP.init_pose;
 figure;
-view([90 0]);axis equal;grid on; hold on;
+view([200 30]);axis equal;grid on; hold on;
 % title("initial pose");
 trocar = SP.trocar;
 plotTrocar(trocar);
@@ -18,7 +18,7 @@ arm2 = getArmPara(1112,2);
 arm3 = getArmPara(111,3);
 arm4 = getArmPara(2112,4);
 
-T_needle = eye(4);T_needle(1:3,1:3)=eul2rotm([0 10/180*pi 0]);T_needle(1:3,4) = [30 -20 120];
+T_needle = eye(4);T_needle(1:3,1:3)=eul2rotm([0 10/180*pi 0]);T_needle(1:3,4) = [50 -30 140];
 R1=eul2rotm([10/180*pi 0 0]);
 P1=R1*[-SP.needle.r;0; 0];R1=R1*eul2rotm([90/180*pi 0 0]);
 R2=eul2rotm([70/180*pi 0 0]);
@@ -40,7 +40,7 @@ forwardKinematicsandPlotSnake_keith(psi3,arm3,1);
 T4_0 = Tend1(:,:,2);T4_0(1:3,1:3)=T4_0(1:3,1:3)*eul2rotm([0 0 pi/2])*eul2rotm([pi/2 0 0]);
 T4=init_pose(:,:,arm4.port)\T4_0;
 psi4=invKine_keith(T4, arm4);
-psi4=[psi4 pi/5];
+psi4=[psi4 pi/12];
 [Tend4, ~] = forwardKinematicsandPlotSnake_keith(psi4,arm4,1);
 
 xlabel("X (mm)");

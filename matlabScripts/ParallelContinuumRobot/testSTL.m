@@ -10,16 +10,16 @@
 
 
 % TR = stlread_keith('./end_effector/nh_1.STL');
-[x1,y1,z1]=stlread_keith('./end_effector/needle_holder_rotor.STL');
-[x2,y2,z2]=stlread_keith('./end_effector/vision_field.STL');
+[x1,y1,z1]=stlread_keith('./end_effector/wusundazhuaqian_stator.STL');
+[x2,y2,z2]=stlread_keith('./end_effector/wusundazhuaqian_rotor.STL');
 
 % patch(x,y,z);
 backcolor = 'white';
 interval=1;
 block_size1=max(size(x1));
 block_size2=max(size(x2));
-R1=eul2rotm([ 0, 0 ,-pi/2]);
-R2=eul2rotm([ 0, 0 ,0]);
+R1=eul2rotm([ pi/2, -pi/2 ,0]);
+R2=eul2rotm([ pi/2, -pi/2 ,0]);
 for j = 1:3
     for i = 1:block_size1
         p1=[x1(j,i); y1(j,i);z1(j,i)];
@@ -32,17 +32,19 @@ for j = 1:3
         x2(j,i)=p2(1);y2(j,i)=p2(2);z2(j,i)=p2(3);
     end
 end
-% x1=x1-1.8;
+y1=y1+12.8939;
+x1=x1+3.25;
 % % % % z1=z1+17.98;y1=y1-2.4;
-% z1=z1+8.98;y1=y1-1.23;
-% z2=z2+17.98;y2=y2+3;x2=x2-2.63685;
-
-y2=y2-4.9051;
-x2=x2-5-6.1555;
-figure;axis equal;grid on;view([180 0])
-% patch(x1,y1,z1,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',[0.5 0.5 0.5]);
+% z1=z1+15.25+9;y1=y1+2.8-1.17;
+% % z2=z2+17.98;y2=y2+3;x2=x2-2.63685;
+% z2=z2+17.98+6.27;y2=y2+3;x2=x2-2.63685;
+% y2=y2-4.9051;
+% x2=x2-5-6.1555;
+y2=y2+12.8939;x2=x2+3.2;z2=z2-7.405;
+figure;axis equal;grid on;view([90 0])
+patch(x1,y1,z1,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',[0.5 0.5 0.5]);
 patch(x2,y2,z2,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',[0.5 0.5 0.5]);
-
+patch(x2,-y2,z2,'w','FaceAlpha',.5,'EdgeColor','none','FaceColor',[0.5 0.5 0.5]);
 xlabel("x");
 ylabel("y");
 zlabel("z");

@@ -424,6 +424,12 @@ stator = effector.stator;
 rotor = effector.rotor;
 block_size_rotor = size(rotor,2);
 block_size_stator = size(stator,2);
+if(rotor(end,end) == 2)
+    beta = beta/2;
+    rotor2=rotor;
+elseif(rotor(end,end) == 1)
+    
+end
 r0 = eul2rotm([0 0 beta]);
 for i = 1:3
     for j = 1:block_size_stator
@@ -432,9 +438,13 @@ for i = 1:3
         stator(i,j)=p1(1);stator(i+3,j)=p1(2);stator(i+6,j)=p1(3);
     end
     for j = 1:(block_size_rotor-1)
-        p1=[rotor(i,j);rotor(i+3,j);rotor(i+6,j)];
-        p1=R*r0*p1;
+        p11=[rotor(i,j);rotor(i+3,j);rotor(i+6,j)];
+        p1=R*r0*p11;
         rotor(i,j)=p1(1);rotor(i+3,j)=p1(2);rotor(i+6,j)=p1(3);
+        if(rotor(end,end) == 2)
+            p2 = R * r0'*(p11.*[1; -1; 1]);
+            rotor2(i,j)=p2(1);rotor2(i+3,j)=p2(2);rotor2(i+6,j)=p2(3);
+        end
     end
 end
 % P=[0 0 0]';
@@ -445,6 +455,10 @@ P=P+R*rotor(1:3,end);
 rotor_x=rotor(1:3,1:end-1)+P(1);rotor_y=rotor(4:6,1:end-1)+P(2);rotor_z=rotor(7:9,1:end-1)+P(3);
 patch(stator_x,stator_y,stator_z,'w','FaceAlpha',0.7,'EdgeColor','none','FaceColor',color);
 patch(rotor_x,rotor_y,rotor_z,'w','FaceAlpha',0.7,'EdgeColor','none','FaceColor',color+0.3);
+if(rotor(end,end) == 2)
+    rotor_x=rotor2(1:3,1:end-1)+P(1);rotor_y=rotor2(4:6,1:end-1)+P(2);rotor_z=rotor2(7:9,1:end-1)+P(3);
+    patch(rotor_x,rotor_y,rotor_z,'w','FaceAlpha',0.7,'EdgeColor','none','FaceColor',color+0.3);
+end
 end
 
 %% 画半刚性段

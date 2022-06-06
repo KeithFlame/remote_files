@@ -117,6 +117,12 @@ def get_arm_params(arm_id):
     arm_name=getArmName(arm_id_num)
     arm_nelectronics=getArmElectronics(arm_id_num)
     paramsStr = lines[0].split(' ')
+
+    arm_params_file = "../configurationData/arm" + arm_id + "/L1x.log"
+    with open(arm_params_file, 'r') as f:        
+        lines = f.readlines()
+    p_L1x = lines[0].split(' ')
+    
     params = {}
     params.update({"name": arm_name})
     params.update({"arm_sn": arm_id})
@@ -129,7 +135,7 @@ def get_arm_params(arm_id):
     params.update({"Lstem": float(paramsStr[7])})
     params.update({"Gamma1_ini": float(paramsStr[8])})
     params.update({"d": -float(paramsStr[9])})
-    params.update({"L1x": float(paramsStr[11])})
+    params.update({"L1x": float(p_L1x[0])})
     if(arm_nelectronics==1):
         params.update({"isE": 1})
         params.update({"isE_cutting": 0})
