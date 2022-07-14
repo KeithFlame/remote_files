@@ -16,7 +16,9 @@ finalValue=zeros(11,8);finalValue(:,1)=40;
 validateConfig=zeros(4,4,5);
 xxxx=0;
 if(xxxx==0)
-    xN=load('../conf/matlab/finalPara.log');
+    xN = [80 30 20 15 0.1964 6.9978 0.7177...
+        376.7004 -0.7854 -7.9171 2.2758 -0.7562 ];
+%     xN=load('../conf/matlab/finalPara.log');
 %     xOpt1=load('../conf/matlab/initPara.log');
 else
     xN=load('../conf/matlab/finalPara.log');
@@ -26,29 +28,29 @@ gamma1=xN(9);
 dttc=xN(10);
 Ttc2ttc=eye(4);
 Ttc2ttc(3,4)=dttc;
-Tst2ttc=Tst2tc*Ttc2ttc; 
-L1x=XH1_7(5);
+% Tst2ttc=Tst2tc*Ttc2ttc; 
+L1x=0;
 LS=xN;
-
+% 
 gripperLength=15;
+% 
+% t=load('../conf/matlab/Tmarker2Lm.log');
+% TLm2marker=inv(reshape(t,[4  4]));
+% TLm2marker_used=TLm2marker;
+% beta=xN(11);
+% T2e2Lg=eye(4);TLg2Lm=eye(4);TLm2marker1Position=eye(4);Tmarker1Position2YZ=eye(4);TYZ2Z=eye(4);
+% T2e2Lg(3,4)=xN(4);
+% x_rot_ang=acos(dot([0 0 1]',TLm2marker_used(1:3,3)));
+% TLg2Lm(1:3,1:3)=[cos(xN(9)) -sin(xN(9)) 0 ;sin(xN(9)) cos(xN(9)) 0 ;0 0 1]';
+% 
+% TLm2marker1Position(1:3,4)=TLm2marker_used(1:3,4);
+% Tmarker1Position2YZ(1:3,1:3)=[cos(beta) -sin(beta) 0 ;sin(beta) cos(beta) 0 ;0 0 1];
+% TYZ2Z(1:3,1:3)=[1 0 0;0 cos(x_rot_ang) -sin(x_rot_ang);0 sin(x_rot_ang) cos(x_rot_ang) ];
+%  
+% T2e2testpoint=eye(4);T2e2testpoint(3,4)=15;
+% Tall=inv(inv(T2e2Lg*TLg2Lm*TLm2marker1Position*Tmarker1Position2YZ*TYZ2Z)*T2e2testpoint);
 
-t=load('../conf/matlab/Tmarker2Lm.log');
-TLm2marker=inv(reshape(t,[4  4]));
-TLm2marker_used=TLm2marker;
-beta=xN(11);
-T2e2Lg=eye(4);TLg2Lm=eye(4);TLm2marker1Position=eye(4);Tmarker1Position2YZ=eye(4);TYZ2Z=eye(4);
-T2e2Lg(3,4)=xN(4);
-x_rot_ang=acos(dot([0 0 1]',TLm2marker_used(1:3,3)));
-TLg2Lm(1:3,1:3)=[cos(xN(9)) -sin(xN(9)) 0 ;sin(xN(9)) cos(xN(9)) 0 ;0 0 1]';
-
-TLm2marker1Position(1:3,4)=TLm2marker_used(1:3,4);
-Tmarker1Position2YZ(1:3,1:3)=[cos(beta) -sin(beta) 0 ;sin(beta) cos(beta) 0 ;0 0 1];
-TYZ2Z(1:3,1:3)=[1 0 0;0 cos(x_rot_ang) -sin(x_rot_ang);0 sin(x_rot_ang) cos(x_rot_ang) ];
- 
-T2e2testpoint=eye(4);T2e2testpoint(3,4)=15;
-Tall=inv(inv(T2e2Lg*TLg2Lm*TLm2marker1Position*Tmarker1Position2YZ*TYZ2Z)*T2e2testpoint);
-
-
+Tall =eye(4);
 
 for iter =1:size(precisionTarget,1)
     % ”≈ªØ≥ı÷µ
@@ -109,6 +111,7 @@ end
         x(2)=x(1);
         x(1)=temx2;
         x=x*180/pi;
+%         x(1) = x(1);
         finalValue(iter*2,1:6)=x;
         if(finalValue(iter*2, 3)==0)
              finalValue(iter*2,[4 6])= finalValue(iter*2,[4 6]);

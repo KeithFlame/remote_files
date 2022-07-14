@@ -44,11 +44,11 @@ qa=[0 0 ...
     -1.1*pi/4 ...
     -sqrt(2)*1.1*pi/4+0.8*pi ...
     -sqrt(2)*1.1*pi/4+0.8*pi ]'*MP.rho; % PHI D 
-% qa=zeros(6,1);
+qa=zeros(6,1);
 %inplace rot qa
   %qa=[0 0.03 -0.0020 0.0004 -0.0005 -0.0011]';
 %qa=[0 10 -0.736431 0 -0.314704 0.314704]'*1e-3;
-Fe=[0.0 0.0 0.0]';Me=[0 0 0]';
+Fe=[0.05 -0. 0.]';Me=[0 0 0]';
 fe=[0 0 0]';le=[0 0 0]';%distributed not active in this version
 
 %% ====Execute=== %%
