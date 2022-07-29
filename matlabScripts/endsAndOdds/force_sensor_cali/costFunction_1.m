@@ -7,8 +7,9 @@ function f = costFunction_1(x)
     a = x(1);
     b = x(2);
     omiga1 = x(3);
+    u0 = x(4);
 
-    u0 = 3.285;
+%     u0 = 3.285;
     f0 = 0;
     block_size = size(F0,2);
     block_size2 = size(vol,1);
