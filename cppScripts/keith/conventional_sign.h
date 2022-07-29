@@ -1,0 +1,9 @@
+#pragma once
+enum class FileProcess
+{
+	FILE_PROCESS_SUCCESS,
+	CAN_NOT_OPEN_FILE,
+	FILE_IS_EMPTY,
+	FILE_PATTERN_ERROR,
+	FILE_OPEN_UNNECCESARY,
+};
