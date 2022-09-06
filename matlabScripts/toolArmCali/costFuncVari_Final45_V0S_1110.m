@@ -63,7 +63,7 @@ iter=0;
 for i =1:size(Tst2tip,3)     
     
     temEndoPsi=endoPsi(i,:);
-    temEndoPsi=[60 130 4*pi/9 pi/3*2 pi*11/18 -pi/3*2];
+    temEndoPsi=[0 40 4*pi/8 0 0 0];
     endoU=fromPsi2Curvature(temEndoPsi,x0N);
     
     endoQ1=fromCurvature2Movitation(endoU,x0N,temEndoPsi);

@@ -1,0 +1,41 @@
+<? xml version="2.0" encoding="utf-8" ?>
+<user_reader>
+    <admin>
+        <serial_id>0</serial_id>
+        <name_id>admin</name_id>
+        <password_id>keith</password_id>
+		<password_tips_id>keith</password_tips_id>
+    </admin>
+    <user_1>
+        <serial_id>1</serial_id>
+        <name_id>1234</name_id>
+        <password_id>1234</password_id>
+        <password_tips_id>1234</password_tips_id>
+        <password_protection_id>最快乐的人是？</password_protection_id>
+        <password_protection_password_id>Keith W.</password_protection_password_id>
+    </user_1>
+    <user_002>
+        <serial_id>2</serial_id>
+        <name_id>1222</name_id>
+        <password_id>1222</password_id>
+        <password_tips_id>1222</password_tips_id>
+        <password_protection_id>最快乐的人是？</password_protection_id>
+        <password_protection_password_id>Keith W.</password_protection_password_id>
+    </user_002>
+    <user_003>
+        <serial_id>3</serial_id>
+        <name_id>1333</name_id>
+        <password_id>1333</password_id>
+        <password_tips_id>1333</password_tips_id>
+        <password_protection_id>最快乐的人是？</password_protection_id>
+        <password_protection_password_id>Keith W.</password_protection_password_id>
+    </user_003>
+    <user_004>
+        <serial_id>4</serial_id>
+        <name_id>13333</name_id>
+        <password_id>13333</password_id>
+        <password_tips_id>13333</password_tips_id>
+        <password_protection_id>最快乐的人是？</password_protection_id>
+        <password_protection_password_id>Keith W.</password_protection_password_id>
+    </user_004>
+</user_reader>

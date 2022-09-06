@@ -24,8 +24,8 @@ end
 ftitle=fread(fid,80,'uchar=>schar'); % Read file title
 num_facet=fread(fid,1,'int32'); % Read number of Facets
 
-fprintf('\nTitle: %s\n', char(ftitle'));
-fprintf('Num Facets: %d\n', num_facet);
+% fprintf('\nTitle: %s\n', char(ftitle'));
+% fprintf('Num Facets: %d\n', num_facet);
 
 % Preallocate memory to save running time
 x=zeros(3,num_facet); y=zeros(3,num_facet); z=zeros(3,num_facet);

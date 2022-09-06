@@ -17,6 +17,11 @@ function AP = getArmPara(arm_serial, port)
 %   Author Keith W.
 %   Ver. 1.2
 %   Date 05.06.2022
+%
+% added statics parameter
+%   Author Keith W.
+%   Ver. 2.0 
+%   Date 07.29.2022
 
 if(nargin==0)
     arm_serial=111;
@@ -63,6 +68,12 @@ if ~exist(name0,'file')
 end
 
 %% 载入臂的信息
+% 判断是否为视觉臂
+if (armtype_flag == endoscope_flag)
+    is_endoscope = true;
+else
+    is_endoscope = false;
+end
 
 % L1 Lr L2 Lg Lstem gamma1 gamma3
 name0=[name,'/size_para.raw'];
@@ -71,9 +82,13 @@ size_para=load(name0);
 name0=[name,'/stiffness_para.raw'];
 stiffness_para=load(name0);
 
-if(armtype_flag~=endoscope_flag)
+% material parameter
+% E poissiom_rate
+material_para=load('./structurePara/material_para.raw');
+
+if(~is_endoscope)
     % diamter_L1 diameter_Lr diameter_L2 number_L1 number_L2 first_L1
-    % first_L2 spacer_interval
+    % first_L2 spacer_interval d1 d2
     assembly_para=load('./structurePara/tool_assembly_para.raw');
 
     % joint limit
@@ -104,13 +119,17 @@ if(armtype_flag == endoscope_flag)
     port = 3;
 end
 
+
+distribution_para = getDistribution(assembly_para,is_endoscope);
+
 ap0.size_para = size_para;
 ap0.stiffness_para = stiffness_para;
+ap0.material_para = material_para;
 ap0.assembly_para = assembly_para;
 ap0.joint_limit = joint_limit;
 ap0.effector = effector;
 ap0.port = port;
-
+ap0.distribution_para = distribution_para;
 AP=ap0;
 
 end
@@ -156,7 +175,6 @@ function [camera,vision_field] = getCamera
     vision_field = [vision_field zeros(9,1)];
 end
 
-
 function [stator,rotor] = getWusunDazhuaqian
     [x1,y1,z1]=stlread_keith('./end_effector/wusundazhuaqian_stator.STL');
     [x2,y2,z2]=stlread_keith('./end_effector/wusundazhuaqian_rotor.STL');
@@ -182,3 +200,60 @@ function [stator,rotor] = getWusunDazhuaqian
     stator = [x1;y1;z1];
     rotor = [[x2;y2;z2] p];
 end
+function distribution_para = getDistribution(assembly_para,is_endoscope)
+    rho1 = assembly_para(1)/2;
+    rho2 = assembly_para(3)/2;
+    ai1 = assembly_para(6);
+    ai2 = assembly_para(7);
+    e3 = [0 0 1]';
+    if(is_endoscope)
+        r11=[cos(ai1) sin(ai1) 0]'*rho1;
+        r12=[cos(ai1 + pi/2) sin(ai1 + pi/2) 0]'*rho1;
+        r13=[cos(ai1 + pi) sin(ai1 + pi) 0]'*rho1;
+        r14=[cos(ai1 + pi/0.75) sin(ai1 + pi/0.75) 0]'*rho1;
+        r21=[cos(ai2) sin(ai2) 0]'*rho2;
+        r22=[cos(ai2 + pi/2) sin(ai2 + pi/2) 0]'*rho2;
+        r23=[cos(ai2 + pi) sin(ai2 + pi) 0]'*rho2;
+        r24=[cos(ai2 + pi/0.75) sin(ai2 + pi/0.75) 0]'*rho2;
+%         Q1 = [S(r11)*e3 S(r12)*e3 S(r13)*e3 S(r14)*e3];
+%         Q2 = [S(r21)*e3 S(r22)*e3 S(r23)*e3 S(r24)*e3];
+        Q1 = [r11 r12 r13 r14];
+        Q2 = [r21 r22 r23 r24];
+    else
+        r11=[cos(ai1) sin(ai1) 0]'*rho1;
+        r12=[cos(ai1 + pi/2) sin(ai1 + pi/2) 0]'*rho1;
+        r13=[cos(ai1 + pi) sin(ai1 + pi) 0]'*rho1;
+        r14=[cos(ai1 + pi/2*3) sin(ai1 + pi/2*3) 0]'*rho1;
+        gap_r2 = (pi/2 - ai2 * 2) / 3;
+        r21=[cos(1 * ai2 + gap_r2 * 0) sin(1 * ai2 + gap_r2 * 0) 0]'*rho2;
+        r22=[cos(1 * ai2 + gap_r2 * 1) sin(1 * ai2 + gap_r2 * 1) 0]'*rho2;
+        r23=[cos(1 * ai2 + gap_r2 * 2) sin(1 * ai2 + gap_r2 * 2) 0]'*rho2;
+        r24=[cos(1 * ai2 + gap_r2 * 3) sin(1 * ai2 + gap_r2 * 3) 0]'*rho2;
+        r25=[cos(3 * ai2 + gap_r2 * 3) sin(3 * ai2 + gap_r2 * 3) 0]'*rho2;
+        r26=[cos(3 * ai2 + gap_r2 * 4) sin(3 * ai2 + gap_r2 * 4) 0]'*rho2;
+        r27=[cos(3 * ai2 + gap_r2 * 5) sin(3 * ai2 + gap_r2 * 5) 0]'*rho2;
+        r28=[cos(3 * ai2 + gap_r2 * 6) sin(3 * ai2 + gap_r2 * 6) 0]'*rho2;
+        r29=[cos(5 * ai2 + gap_r2 * 6) sin(5 * ai2 + gap_r2 * 6) 0]'*rho2;
+        r2a=[cos(5 * ai2 + gap_r2 * 7) sin(5 * ai2 + gap_r2 * 7) 0]'*rho2;
+        r2b=[cos(5 * ai2 + gap_r2 * 8) sin(5 * ai2 + gap_r2 * 8) 0]'*rho2;
+        r2c=[cos(5 * ai2 + gap_r2 * 9) sin(5 * ai2 + gap_r2 * 9) 0]'*rho2;
+        r2d=[cos(7 * ai2 + gap_r2 * 9) sin(7 * ai2 + gap_r2 * 9) 0]'*rho2;
+        r2e=[cos(7 * ai2 + gap_r2 * 10) sin(7 * ai2 + gap_r2 * 10) 0]'*rho2;
+        r2f=[cos(7 * ai2 + gap_r2 * 11) sin(7 * ai2 + gap_r2 * 11) 0]'*rho2;
+        r2g=[cos(7 * ai2 + gap_r2 * 12) sin(7 * ai2 + gap_r2 * 12) 0]'*rho2;
+%         Q1 = [S(r11)*e3 S(r12)*e3 S(r13)*e3 S(r14)*e3];
+%         Q2=[S(r21)*e3 S(r22)*e3 S(r23)*e3 S(r24)*e3 ...
+%             S(r25)*e3 S(r26)*e3 S(r27)*e3 S(r28)*e3 ...
+%             S(r29)*e3 S(r2a)*e3 S(r2b)*e3 S(r2c)*e3 ...
+%             S(r2d)*e3 S(r2e)*e3 S(r2f)*e3 S(r2g)*e3];
+        Q1 = [r11 r12 r13 r14];
+        Q2 = [r21 r22 r23 r24 ...
+              r25 r26 r27 r28 ...
+              r29 r2a r2b r2c ...
+              r2d r2e r2f r2g];
+    end
+    distribution_para.Q1 = Q1;
+    distribution_para.Q2 = Q2;
+
+end
+

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>proposal_draft.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%E7%AD%94%E8%BE%A9ppt%E7%A8%BF%E4%BB%B6">答辩ppt稿件</h1>
+<p>ppt_v6</p>
+<hr>
+<h2 id="toc">[TOC]</h2>
+<h2 id="%E5%BC%80%E5%9C%BA">开场</h2>
+<p>各位老师、同学好，我是2020级普博生王翔，我的导师是徐凯教授。
+我的论文题目是“<strong>基于柔性关节的并联机构理论研究及其在工业和医疗中的应用</strong>”</p>
+<hr>
+<p>将从以下几个方面介绍</p>
+<hr>
+<p>首先是课程学习状况，已经满足培养计划的学分要求，资格考试笔试、面试均已通过。</p>
+<hr>
+<hr>
+<h2 id="%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF">研究背景</h2>
+<p>然后是研究背景介绍
+柔性机器人具有柔顺性、交互安全性、灵巧性等优点，在工业领域和医疗领域广泛应用，比如
+左图的<strong>curviPicker</strong>，使用柔性关节的分拣机器人
+右图的手术平台<strong>SHURUI</strong>系统，柔性机器人通过鞘套进入病人体内完成手术。</p>
+<p>但是这种细长型结构的柔性机器人的刚度和运动精度需要进一步提升</p>
+<hr>
+<p>基于柔性关节的并联平台由多个柔性支链和动平台组成，被称作并联柔性机器人(Parallel Continuum Robot，简称为PCR)。</p>
+<p>相比于串联柔性机器人，其具有定位精度高、负载能力高的特点
+相比于传统并联机构，其具有较高的灵活性、交互安全性</p>
+<hr>
+<hr>
+<h2 id="%E7%8E%B0%E5%AD%98%E9%97%AE%E9%A2%98%E4%B8%8E%E7%A0%94%E7%A9%B6%E6%84%8F%E4%B9%89">现存问题与研究意义</h2>
+<p>在工业工业分拣任务中，提到的柔性机器人CurviPicker结构刚度不足，
+在一些研究中，如图所示的平面PCR和空间PCR，由于采用基于常曲率的运动模型，导致运动误差较大。
+因此，开展“<strong>面向工业分拣任务的并联柔性机器人结构设计和定位精度研究</strong>”</p>
+<hr>
+<p>在单孔腔镜手术中，现有的柔性机器人结构刚度不够大，图中所示为100g负载时的臂体状态。
+其次，在柔性机器人的模型中，忽略了鞘套与柔性机器人间隙；
+因此，开展“<strong>单孔腔镜手术下的柔性机器人的可重构并联方案与运动精度研究</strong>”</p>
+<hr>
+<p>经自然腔道膀胱镜手术，对手术机器人的长径比、灵巧性有着较高的要求
+现有的手术机器人，如图所示的奥林巴斯的经自然腔道膀胱镜手术机器人，仅有两个自由度，无法完成如图所示的前壁肿瘤切除。
+以及，该手术机器人的外径较大，直径有8.6mm；不利于通过自然腔道
+因此，开展“<strong>经自然腔道膀胱镜手术环境下新型并联柔性机器人研究</strong>”</p>
+<hr>
+<hr>
+<h2 id="%E5%9B%BD%E5%86%85%E5%A4%96%E7%8E%B0%E7%8A%B6">国内外现状</h2>
+<p>首先是在工业中，
+左图为分拣任务用的柔性机器人；（4？自由度，可以完成中速小负载的分拣任务）
+中间为航空发动机检修的柔性机器人（机器人有13节，一共有16个自由度）
+右侧为抓取物体的柔性机器人（6自由度，可以抓取路障、球类以及在岸边的水中物体抓取。）
+这些柔性结构的刚度导致他们难以完成较大负载的任务</p>
+<hr>
+<p>基于单孔腔镜手术的柔性机器人
+左图为titan公司的SPORT系统，25mm的鞘套，两只8mm直径的柔性机器人
+右图为SURS系统，12mm的鞘套，两只柔性机器人和一个内窥镜，柔性机器人的bellow直径为6.35mm</p>
+<hr>
+<p>最后一个是，SHURUI系统，从26mm的鞘套中伸出三只8mm的柔性机器人和一支内窥镜。</p>
+<p>上述三种柔性机器人均是通过一个鞘套进入病人体内，鞘套与机器人之间需要一个间隙是其能够顺利通过，然而现有的研究中均认为鞘套和机器人之间没有间隙。
+以上的柔性机器人均为细长型结构，</p>
+<hr>
+<p>然而较大的结构刚度才能够更好的完成一些需要大操作力的任务
+同时，间隙的存在导致运动精度不足</p>
+<hr>
+<p>在经自然腔道的膀胱镜手术中，为了提高灵巧性，柔性机器人被广泛采用。</p>
+<hr>
+<p>TURbot系统的手术机器人，如图所示，鞘套外径为9.5mm端面有一个相机并且伸出一个5mm外径的柔性机器人，柔性机器人有三个腔道，分别伸出1.65mm的远端激光臂、1.6mm的纤维镜和一个1mm的抓钳</p>
+<hr>
+<p>同心管平台，如图所示，一个外径为8.3mm的内窥镜端面伸出两只末端直径为1mm的手术机器人。</p>
+<hr>
+<p>第三个则是一个8mm的鞘套伸出两个直径为3mm的手术机器人和一个内窥镜</p>
+<hr>
+<p>上述的膀胱镜手术机器人相比于奥林巴斯的手术机器人
+灵活性显著提升，然而刚度下降；以及外径都很大，没有改善。</p>
+<hr>
+<p>刚度提升
+分为基于塑性的方法和基于弹性的方法
+基于塑性的方法有，material jamming 利用柔性机器人内部的颗粒摩擦提升刚度；thermal activation 通过形状记忆合金的热效应改变间隔片和驱动丝之间的摩擦力。不可自动恢复
+基于弹性的方法，并联柔性结构，和特殊结构设计，通过调整内外两个管之间的槽口重合情况，改变结构刚度</p>
+<hr>
+<p>针对并联柔性机器人
+近期关于并联柔性机器人的研究有一下几种：
+可以分为，基于柔性关节和基于柔性杆两类。
+在现有的研究中，柔性杆中有特殊的一种情况为<strong>可重构</strong></p>
+<hr>
+<p>如图所示，在病人身上开多个小孔，在体内，手术工具穿过套圈针并拉紧套圈并联成型，
+另外一种是是通过形状记忆合金的热效应，完成并联。</p>
+<hr>
+<p>最后是关于柔性机器人的建模
+在运动学建模中，
+基于常曲率的模型，优点是计算速度快，缺点是受到外力时模型不准确；
+基于变曲率的模型，优点是计算准确，符合实际情况，确定是计算效率低；
+在力学模型中，
+常见的建模方法有，能量法，欧拉伯努利梁法，集总参数法，cosserat rod理论</p>
+<hr>
+<p>研究现状总结
+<strong>面向工业分拣任务的并联柔性机器人结构设计和定位精度研究</strong>
+【1】中的结构刚度较小
+一些并联机器人研究中的常曲率假设误差较大
+<strong>单孔腔镜手术下柔性机器人的可重构并联方案和运动精度研究</strong>
+在操作力比较大的手术任务中，手术机器人会出现刚度不够大的情况，
+建模过程中，未考虑鞘套与柔性机器人间隙对运动控制精度的影响
+<strong>经自然腔道膀胱镜手术环境下新型并联柔性机器人研究</strong>
+鞘管内窥镜的直径较大，不利于手术机器人经自然腔道的进入
+缺少一种提升结构刚度的同时不降低柔性机器人的灵活性的经自然腔道的膀胱镜手术机器人</p>
+<hr>
+<hr>
+<h2 id="%E7%A0%94%E7%A9%B6%E7%9B%AE%E6%A0%87">研究目标</h2>
+<p>本课题拟针对工业或医疗应用背景下的柔性并联机器人，通过机器人设计，以及对机器人进行建模分析，完成以下三个研究目标
+1、在工业分拣任务中，设计高刚度的柔性机器人并且提升定位精度
+2、在单孔腔镜手术中，设计提高刚度的可重构并联框架以及减少运动误差
+3、在经自然腔道的膀胱镜手术机器人中，研究新型并联柔性机器人并且建立准确的静力学模型</p>
+<hr>
+<p>研究内容
+面向分拣任务
+1、设计并联柔性机器人
+2、推导准确的静力学模型
+单孔腔镜手术下的柔性机器人
+1、推导考虑鞘套间隙的力学模型
+2、建立面向刚度的可重构并联方案
+经自然腔道的膀胱镜手术下的柔性机器人
+1、设计具有大刚度的灵巧的细长型并联柔性结构
+2、建立准确的力学模型</p>
+<p>关键科学问题
+1、面向工业分拣任务的并联柔性机器人的研究
+2、腔镜手术场景下高精度、高刚度并联柔性机器人的研究</p>
+<hr>
+<h2 id="%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF">技术路线</h2>
+<p>通过这一系列研究任务，实现并联柔性结构设计和完成变曲率运动算法推导
+通过这一系列研究任务，实现可重构并联柔性机器人的设计与控制方案
+通过这一系列研究任务，实现新型手术机器人的结构设计和运动算法推导</p>
+<hr>
+<p>可行性分析
+对分拣用并联柔性机器人的结构设计研究：
+利用柔性关节的弯曲能力
+考虑结构干涉、运动碰撞等约束
+以工作空间的大小为优化对象进行优化设计 最终获得结构</p>
+<p>基于静力学模型的运动控制算法研究：
+一是根据基于常曲率假设的定位误差较大，因此采用变曲率的静力学模型；
+二是Cosserat杆理论，同时认为结构骨的长度（首尾分别固连在支链两端）不会变化，将支链中的柔性关节简化为等效杆，建立静力学模型</p>
+<p>可行性：
+柔性关节的弯曲能力》90°；
+和文献【16】类似，根据打靶法完成模型的计算；</p>
+<hr>
+<p>根据鞘套与柔性机器人之间的间隙，建立新的基于鞘套间隙的力学模型；
+鞘套内柔性段的弯曲状态可以分为三个阶段：
+第一阶段：柔性段是直的或略微弯曲的，没有与鞘套发生接触（图(b)）。
+第二阶段：柔性段在其端面与鞘套通道接触（图(c)） 。
+第三阶段：柔性段第二次接触发生，接触位置随着弯曲角度的变化而移动（图(d)） 。</p>
+<p>可行性：
+利用最小能量法，计算鞘套内部连续段的长度和形状</p>
+<hr>
+<p>将柔性机器人并联，可以计算出很多种并联框架，根据力的方向选择相应刚度的并联框架
+可行性：根据力学模型，选择最佳的并联框架</p>
+<hr>
+<p>完成结构设计，
+考虑长径比 6mm的外径
+灵活性目前10个自由度
+刚度有并联结构</p>
+<hr>
+<p>创新点
+<strong>面向工业分拣任务的并联柔性机器人结构设计和定位精度研究</strong>
+综合考虑了结构干涉，对分拣用并联柔性机器人进行了结构设计，以充分利用柔性关节的弯曲能力，提出了减小负载下运动误差的静力学模型。
+<strong>单孔腔镜手术下柔性机器人的可重构并联方案与运动精度研究</strong>
+提出鞘套与柔性机器人存在间隙时的可实时计算的力学模型；提出手术过程中柔性机器人的可重构并联控制方案，分析可能构型的刚度从而获得末端刚度最大的并联框架。
+<strong>经自然腔道膀胱镜手术环境下新型并联柔性机器人研究</strong>
+为了满足膀胱镜手术对柔性机器人的灵巧性， 高刚度和大长径比的要求，设计新型并联柔性机器人。 并基于该结构建立力学模型以实现准确的运动控制。</p>
+<hr>
+<hr>
+<h2 id="%E8%AE%A1%E5%88%92%E8%BF%9B%E5%BA%A6">计划进度</h2>
+<p>计划进度如图所示，
+预计完成
+分拣用并联柔性机器人的结构设计和力学模型推导
+完成可重构并联柔性机器人的设计和经自然腔道的膀胱镜并联柔性机器人设计，建立力学模型，实现准确的运动控制；</p>
+<hr>
+<hr>
+<h2 id="%E5%B7%B2%E6%9C%89%E8%BF%9B%E5%B1%95">已有进展</h2>
+<p>其中一篇期刊文章在JMR杂志，已投
+一篇会议文章预计今年7月份投至ROBIO</p>
+<hr>
+<p>首先是考虑结构干涉等约束的结构优化设计
+其次是基于cosserat的静力学模型的推导</p>
+<hr>
+<p>实验验证，通过100个点，分为四个圆C1、C2、C3和C4；分别在无负载和负载情况下验证；
+实验结构可以看出，提出的模型明显优于常曲率模型</p>
+<hr>
+<p>基于cosserat理论，文献[25]推导了n个柔性段的力学模型，同时在外力和外力矩为0的情况下，模型可以变成：臂体的曲率和驱动量之间的线性关系。</p>
+<hr>
+<p>图中蓝绿色为无鞘套模型的第i段柔性段的形状，红色为有鞘套间隙模型第i段柔性段的形状
+dc是无鞘管模型的C坐标系和w坐标系之间的距离，
+当dc小于2c时，此时鞘套端面两侧的曲率相同。
+当dc大于2c时，此时利用能量法计算鞘套端面内外的曲率、长度和应变；
+最终实验结果显示了，精度提升了35%。</p>
+<hr>
+<h2 id="%E7%A0%94%E7%A9%B6%E7%BB%8F%E8%B4%B9%E5%B7%B2%E8%90%BD%E5%AE%9E">研究经费已落实</h2>
+<hr>
+<h2 id="%E8%BF%99%E4%BA%9B%E6%98%AF%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">这些是参考文献</h2>
+<p>感谢各位老师，
+请各位老师指正</p>
+
+</body>
+</html>

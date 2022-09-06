@@ -49,8 +49,8 @@ ZETA=arm_serial.stiffness_para(3);
 
  
 scalar=0:0.05:1;
-PHI=psi(1);
-l=psi(2);
+PHI=psi(2);
+l=psi(1);
 theta1=psi(3);
 delta1=psi(4);
 theta2=psi(5);
@@ -330,7 +330,8 @@ function plotcylinder(u1,u2,color,r,alpha)
 % color ——颜色
 % r     ——半径
 % alpha ——透明度
-
+u1 = reshape(u1, [3 1]);
+u2 = reshape(u2, [3 1]);
 n=u2-u1;
 theta=(0:2*pi/100:2*pi)'; %theta角从0到2*pi
 a=cross(n,[1 0 0]);       %n与i叉乘，求取a向量

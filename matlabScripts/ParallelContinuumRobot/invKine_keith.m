@@ -22,6 +22,9 @@ function psi = invKine_keith(T,arm1)
     end
     psi(1)=psi(1)-LS(6);
     psi=limitRange(psi, joint_limit);
+    t= psi(2);
+    psi(2) = psi(1);
+    psi(1) = t;
 end
 
 function config=invKineC3(T,Lr,L2,Lg)

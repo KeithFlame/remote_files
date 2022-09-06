@@ -1,0 +1,10 @@
+<? xml version="2.0" encoding="utf-8" ?>
+<user_reader>
+	<admin>
+		<serial_id>0</serial_id>
+		<name_id>admin</name_id>
+		<password_id>keith</password_id>
+		<password_protection>keith</password_protection>
+	</admin>
+
+</user_reader>
