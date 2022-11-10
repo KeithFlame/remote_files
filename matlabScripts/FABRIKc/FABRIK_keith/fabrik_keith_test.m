@@ -11,7 +11,7 @@ title("fabrik 2chain");
 set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
 view([0 0]);
-is_plot = 0;
+is_plot = 1;
 
 is_write = 0;
 if(is_write)
@@ -22,9 +22,9 @@ P = [0 0 0 0 0 0
     0 0 0 0 0 0
     0 100 200 300 400 500];
 joint_unit1 = MotionUnit(P(:,1), (P(:,1) + P(:,2))/2,P(:,2),1);
-joint_unit2 = MotionUnit(P(:,2), (P(:,2) + P(:,3))/2,P(:,3),3);
+joint_unit2 = MotionUnit(P(:,2), (P(:,2) + P(:,3))/2,P(:,3),2);
 joint_unit3 = MotionUnit(P(:,3), (P(:,3) + P(:,4))/2,P(:,4),3);
-joint_unit4 = MotionUnit(P(:,4), (P(:,4) + P(:,5))/2,P(:,5),3);
+joint_unit4 = MotionUnit(P(:,4), (P(:,4) + P(:,5))/2,P(:,5),2);
 joint_unit5 = MotionUnit(P(:,5), (P(:,5) + P(:,6))/2,P(:,6),1);
 joint_units = [
     joint_unit1
@@ -50,7 +50,7 @@ err_dis =  errp;
 joint_units(1).end_position = [100 0 0]';
 joint_units(1).joint_position = [50 0 0]';
 joint_units(end).end_position = [500 0 0]'; % [300 200 500]';
-joint_units(end).joint_position = [450 0 0]'; %[270 200 460]';
+joint_units(end).joint_position = [450.01 0 0]'; %[270 200 460]';
 joint_units(end).origin_position = [400 0 0]'; %[270 200 410]';
 joint_units(end) = joint_units(end).refreshUnit;
 
@@ -108,6 +108,9 @@ while(errp>err_p)
     errp = norm(joint_units(end-1).end_position - joint_units(end).origin_position);
     iter = iter +1;
     err_dis = [err_dis errp];
+    if(iter == 20)
+        break;
+    end
 end
 toc;
 if(is_plot)

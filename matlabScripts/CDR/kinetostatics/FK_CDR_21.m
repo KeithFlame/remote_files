@@ -1,6 +1,6 @@
-clear
+clear all;
 clc
-close
+% close
 %平面Cosserat rod积分测试
 
 %界面参数
@@ -28,9 +28,9 @@ phi_2 = phi * 1;
 phi_3 = phi * 2;
 
 %初始驱动量(m)
-q1 = 190/1000;
-q2 = 490/1000;
-q3 = 490/1000;
+q1 = 300/1000;
+q2 = 300/1000;
+q3 = 301/1000;
 
 %初始动平台位置(m)
 x_end = 0;
@@ -86,19 +86,23 @@ points_3 = 1000 * R3_1 * [ys3(1:2,:);zeros(1,block_size)];
 damp = 0.000005;
 % v = 4;
 Q=getQ_keith;
+pc = load('point_cloud.mat');
+pc = pc.r';
+tc = zeros(4,200);
 tic
+k=0;
 for mmi =1:1
 %     guess=guess*0.95;
-    k=1;
-%     qq=Q(:,mmi)'/1000;
-%     q1=qq(1);
-%     q2=qq(2);
-%     q3=qq(3);
-%     [ys1,ys2,ys3] = int_all_translator(guess);
-%     R1_1 = get_R1(q1,guess(1:3,1),1);
-%     R2_1 = get_R1(q2,guess(1:3,1),2);
-%     R3_1 = get_R1(q3,guess(1:3,1),3);
-%     [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC,R1_1, R2_1, R3_1);
+    k = k + 1;
+    qq=pc(:,mmi)'/1000 * 0;
+    q1=qq(1) + 200/1000;
+    q2=qq(2) + 200/1000;
+    q3=qq(3) + 200/1000;
+    [ys1,ys2,ys3] = int_all_translator(guess);
+    R1_1 = get_R1(q1,guess(1:3,1),1);
+    R2_1 = get_R1(q2,guess(1:3,1),2);
+    R3_1 = get_R1(q3,guess(1:3,1),3);
+    [res,error_P,error_A,error_n,error_m] = delta_robo_error(q1,q2,q3,guess(1:3,1),ys1,ys2,ys3,SPC,R1_1, R2_1, R3_1);
 while error_P >= 1e-4 || error_A >= 1e-4 || error_n >= 1e-4 || error_m >= 1e-4
 %     tic
     %计算雅可比矩阵
@@ -127,17 +131,19 @@ while error_P >= 1e-4 || error_A >= 1e-4 || error_n >= 1e-4 || error_m >= 1e-4
     points_3 = 1000 * R3_1 * [ys3(1:2,:);zeros(1,block_size)];
     
     %绘制 delta robot
-    plot_delta_robot(1000*guess(1:3,1),1000*q1,1000*q2,1000*q3,points_1,points_2,points_3);
+%     plot_delta_robot(1000*guess(1:3,1),1000*q1,1000*q2,1000*q3,points_1,points_2,points_3);
     
     %迭代计数
-    k = k + 1;
+    
 %      disp(norm(res));
     
 end
+    tc(1:3,mmi) = guess(1:3,1);
+    tc(4,mmi) = error_P + error_A + error_n + error_m;
 end
 toc;
-angle=90+atand((points_1(3,block_size/2+1)-points_1(3,block_size/2))/abs(points_1(1,block_size/2+1)-points_1(1,block_size/2)))
-disp(1000*guess(1:3,1));
+% angle=90+atand((points_1(3,block_size/2+1)-points_1(3,block_size/2))/abs(points_1(1,block_size/2+1)-points_1(1,block_size/2)))
+% disp(1000*guess(1:3,1));
 xlabel("X axis (mm)");
 ylabel("Y axis (mm)");
 zlabel("Z axis (mm)");
@@ -505,7 +511,7 @@ points_can_not_reach = [0 190;0 0;0 0];
 points_can_reach = [190 490;0 0;0 0];
 
 %导轨角度参数
-alpha = -70/180*pi;
+alpha = -40/180*pi;
 beta = 120/180*pi;
 
 %连续体长度参数
@@ -618,7 +624,7 @@ grid on;
 title('delta robot');
 axis equal;
 axis([-500 500  -500 500  -300 500]);
-drawnow;
+% drawnow;
 hold off;
 
 end

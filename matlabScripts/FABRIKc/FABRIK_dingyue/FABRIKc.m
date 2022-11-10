@@ -1,4 +1,4 @@
-clear;
+clear;close;
 clc;
 %部分构型参数
 Lg=20;
@@ -22,12 +22,12 @@ psi_target = [1.01243460441139;113.716864699113;1.36833815053487;2.2039952895673
 
 %输入当前位姿并初始化虚拟关节位置和虚拟杆长
 config=4;
-psi=[3.33404224555252;124.863507942778;0.938535398689426;2.10682322641804;0.626695423382348;2.84372280732744];
+psi=[3.33404224555252;-100;2.0;0;2.0;0];
 [position_current,~,z_1b,z_1e,z_2b,z_2e,l1,l2,P_1j,P_2j] = plot_manipulator(psi);
 hold on;
 plot_orientation(position_target,orientation_target,40);
 %
-
+% position_target = position_target + 20 * orientation_target(:,3);
 %计算位置误差
 [error_P,~]=error_position(position_current,position_target);
 %
@@ -127,6 +127,20 @@ while k<k_max && error_P>error_P_desired
     k=k+1;
     xita_one(k)=xita1;
     xita_two(k)=xita2;
+
+
+
+    %%
+%     dzZ = z_1b'*(position_target-position_current);
+%     dzz = [0 0 dzZ]';
+%     Ls = dzZ + Ls;
+%     P_STEM = P_STEM + dzz;
+%     P_1b = P_1b + dzz;
+%     P_1j = P_1j + dzz;
+%     P_2b = P_2b + dzz;
+%     P_2j = P_2j + dzz;
+%     position_current = position_current + dzz;
+    %%
     %计算位置误差
     [error_P,~]=error_position(position_current,position_target);
     %
@@ -142,10 +156,10 @@ while k<k_max && error_P>error_P_desired
     R_2b_2e = continuum_oriention(xita2,delta2);
     
     psi = [phi;Ls;xita1;delta1;xita2;delta2];
-    plot_manipulator(psi);
-    
+    [position_tar,~] = plot_manipulator(psi);
+    Ls,
+    pause(0.1);
 end
-
     k_count(k) = k-1;
     error(k) = error_P;
 

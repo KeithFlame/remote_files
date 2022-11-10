@@ -1,7 +1,16 @@
 classdef MotionUnit
     %MOTIONUNIT 此处显示有关此类的摘要
     %   此处显示详细说明
-    
+    %   声明，不同的joint_type对应不同的关节
+    %   0 刚体运动单元    FMU    -
+    %   1 移动运动单元    PMU    l1
+    %   2 万向节运动单元   UMU    theta, delta
+    %   3 连续体运动单元   CMU    l1, l2, theta, delta
+    %   4 轴向旋转运动单元    PiMU    theta
+    %   5 径向旋转运动单元  RMU    delta
+    %   6 球铰运动单元    SMU    theta, delta
+    %
+
     properties
         end_position
         origin_position
@@ -25,13 +34,25 @@ classdef MotionUnit
     
     methods
         function obj = MotionUnit(origin_position,joint_position,...
-                end_position,joint_type,constraint_limit,color)
+                end_position,joint_type,color,constraint_limit)
             %MOTIONUNIT 构造此类的实例
             %   此处显示详细说明
+            if(nargin == 3)
+                joint_type = 2;
+                color = rand(1,3);
+                constraint_limit.l1_lim = [1e-6 150];
+                constraint_limit.l2_lim = [1e-6 150];
+                constraint_limit.theta_lim = [0 pi/3*2];
+            end
             if(nargin == 4)
                 color = rand(1,3);
-                constraint_limit.l1_lim = [1e-6 100];
-                constraint_limit.l2_lim = [1e-6 100];
+                constraint_limit.l1_lim = [1e-6 150];
+                constraint_limit.l2_lim = [1e-6 150];
+                constraint_limit.theta_lim = [0 pi/3*2];
+            end
+            if(nargin == 5)
+                constraint_limit.l1_lim = [1e-6 150];
+                constraint_limit.l2_lim = [1e-6 150];
                 constraint_limit.theta_lim = [0 pi/3*2];
             end
             obj.color = color;

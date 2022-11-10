@@ -41,8 +41,20 @@ function mu = single_forward(motion_units,i,hd,is_plot)
             l1 * ee1;
         
     elseif(motion_units(i).joint_type == 2) % 万向节
-        motion_units(i).origin_position = motion_units(i).joint_position + ...
-            motion_units(i).l1 * ee2;
+%         motion_units(i).origin_position = motion_units(i).joint_position + ...
+%             motion_units(i).l1 * ee2;
+        theta = acosd(ee2'*ee1);
+        if(theta>180)
+            ee3 = cross(ee2,ee1);
+            ee3 = cross(ee1,ee3);
+            ee3 = ee3/norm(ee3)/sqrt(3) + ee1;
+            ee3 = ee3/norm(ee3);
+            motion_units(i).origin_position = motion_units(i).joint_position + ...
+                motion_units(i).l1 * ee3;
+        else
+            motion_units(i).origin_position = motion_units(i).joint_position + ...
+                motion_units(i).l1 * ee2;
+        end
     elseif(motion_units(i).joint_type == 3) % 连续体副
         if(motion_units(i).theta < 1e-6)
             L = motion_units(i).l1 + motion_units(i).l2;
