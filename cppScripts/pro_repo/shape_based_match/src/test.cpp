@@ -27,7 +27,7 @@
 //    std::chrono::time_point<clock_> beg_;
 //};
 
-static std::string prefix = "./test_img/monopoleBendingShear4_anti/";
+static std::string prefix = "./test_img/danjiwanjianxia_beijing/";
 
 void circle_gen(){
 	cv::Mat bg = cv::Mat(800, 800, CV_8UC3, { 0, 0, 0 });
@@ -86,7 +86,7 @@ int angle_test(std::string mode = "test"){
 
 		//cv::Mat test_img = cv::imread(prefix + "dualGrapper/test5.png");
 
-		cv::Mat test_img = cv::imread("C:/Users/Administrator/Desktop/camera3/CZQ2.png");
+		cv::Mat test_img = cv::imread("F:/code_git/pythonScripts/rotate_figure/test.png");
 		cv::resize(test_img, test_img, cv::Size(), 2.0, 2.0);
        /* int padding = 250;
         cv::Mat padded_img = cv::Mat(test_img.rows + 2*padding,
@@ -172,6 +172,6 @@ int angle_test(std::string mode = "test"){
 }
 
 int main(){
-    int rotate_angle = angle_test("train");
+    int rotate_angle = angle_test("test");
     return 0;
 }

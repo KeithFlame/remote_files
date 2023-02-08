@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\Libs\opencv\include;$(ProjectDir)..\Libs\opencv\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\Libs\opencv\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\libs\opencv\include;$(ProjectDir)..\..\libs\opencv\include\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -123,6 +123,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opencv_world420d.lib;opencv_world420.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

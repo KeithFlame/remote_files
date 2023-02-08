@@ -1,0 +1,17 @@
+theta = pi/100:pi/100:pi;
+L = 100;
+px = (1-cos(theta))*L./theta;
+pz = L./theta.*sin(theta);
+P = [px;pz];
+figure;hold on;grid on; axis equal;
+plot(px,pz);
+theta = pi/3;
+L = 1:100;
+thetai = L/100*theta;
+px = (1-cos(thetai)).*L./thetai;
+pz = L./thetai.*sin(thetai);
+plot(px,pz,LineWidth=5);
+plot(0,100/theta*tan(theta/2),"ro");
+tx = 1.5*px(end);tz = pz(end)-0.5*(100/theta*tan(theta/2) - pz(end));
+plot([0 tx], [100/theta*tan(theta/2) tz], "r--");
+plot(tx,tz,"ro");
