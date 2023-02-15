@@ -1,4 +1,4 @@
-function PS_2segs_nobending_keith(S,Tend, discrete_number, init_pose, plot_type)
+function PS_2segs_keith(S, SL, Tend, discrete_element, init_pose, plot_type)
 % Declaration
 % the end-effector coordinate {g}.
 % the base coordinate {b}
@@ -18,33 +18,43 @@ function PS_2segs_nobending_keith(S,Tend, discrete_number, init_pose, plot_type)
 % Author: Keith W.
 
 
-if(nargin == 1)
-    discrete_number = 20;
+if(nargin == 2)
+    discrete_element = 1;
     plot_type = 1;
     init_pose = eye(4);
     Tend = eye(4);
 end
-if(nargin == 2)
-    plot_type = 1;
-    init_pose = eye(4);
-    discrete_number = 20;
-end
 if(nargin == 3)
     plot_type = 1;
     init_pose = eye(4);
+    discrete_element = 1;
 end
 if(nargin == 4)
     plot_type = 1;
+    init_pose = eye(4);
+end
+if(nargin == 5)
+    plot_type = 1;
 end
 
-S(4,:) = S(4,:)*0;
+% S(4,:) = S(4,:)*0;
 S=init_pose*(S');
-discrete_number = discrete_number + 1;
-s1 = S(1:3,1:2);
-s2 = S(1:3,3:2+discrete_number);
-s3 = S(1:3,3+discrete_number:4+discrete_number);
-s4 = S(1:3,end-1-discrete_number:end-2);
-s5 = S(1:3, end-1:end);
+S(4,:) = S(4,:)*0;
+n2 = ceil(SL(3)/discrete_element);
+n1 = ceil(SL(1)/discrete_element);
+ng = 1;
+nr = 1;
+n_size = size(S,2);
+n0 = n_size-n1-nr-n2-ng;
+if(n0 < 0)
+    n1 = n1 + n0 - 1;
+    n0 = 1;
+end
+s1 = S(1:3, 1:n0);
+s2 = S(1:3, n0:n0+n1);
+s3 = S(1:3, n0+n1:n0+n1+nr);
+s4 = S(1:3, n0+n1+nr:n0+n1+nr+n2);
+s5 = S(1:3, n0+n1+nr+n2:n0+n1+nr+n2+ng);
 
     
     if(plot_type == 2)

@@ -43,7 +43,7 @@ function [psi_inv, flag_psi] = IKcc_2segs_nobending_keith(T, SL, psi_limit)
            flag_psi = flag_psi_test;
         end
     end
-    T_test = FK_2segs_nobending_keith(psi_inv, SL);
+    T_test = FKcc_2segs_nobending_keith(psi_inv, SL);
     t1 = norm(T_test(1:3,4) - T(1:3,4));
     t2 = abs(trace(T_test(1:3,1:3)'*T(1:3,1:3)) - 3);
     if(t1>1e-3||t2>1e-3)
