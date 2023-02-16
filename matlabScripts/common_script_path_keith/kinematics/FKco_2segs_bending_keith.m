@@ -1,4 +1,4 @@
-function [Tend, S] = FKco_2segs_bending_keith(qa, SL, FM, MBP, discrete_element)
+function [Tend, S] = FKco_2segs_bending_keith(qa, MBP, FM, discrete_element)
 % Declaration
 % the end-effector coordinate {g}.
 % the base coordinate {b}
@@ -7,11 +7,9 @@ function [Tend, S] = FKco_2segs_bending_keith(qa, SL, FM, MBP, discrete_element)
 % manipulator Based on the Cosserat rod theory.
 %
 % input1: qa (6 X 1 vector, for 6 DoFs)
-% input2: structural length SL (4 X 1 vector, L1 Lr L2 Lg)
-%                             or (8 X 1 vector additional gamma1 gamma2 gamma3 zeta)
+% input2: multi-backbone manipulator parameter MBP
 % input3: FM (external concentrated/distributed force/moment, 12 X 1 vector)
-% input4: multi-backbone manipulator parameter MBP
-% input5: discrete_element (the size of the smallest element of integration, 
+% input4: discrete_element (the size of the smallest element of integration, 
 % also used in plotting)
 %
 % output1: Tend (4 X 4 matrix)
@@ -40,104 +38,17 @@ function [Tend, S] = FKco_2segs_bending_keith(qa, SL, FM, MBP, discrete_element)
 %%-------------------------------------------------------------%%
 
 %% ===Input Specifications=== %%
-e3=[0 0 1]';
 qa(2:end) = qa(2:end)/1000;
 
-if(nargin == 1)
-    SL = [100 10 20 15]';
+if (nargin == 2)
     FM = zeros(12,1);
-    
-    MBP.E=40e9;%Rod Young's modules
-    MBP.mu=0.33;%Rod Poisson rate
-    MBP.d1=0.95e-3;%Rod diameters
-    MBP.d2=0.40e-3;
-    MBP.rho1=2.5e-3;%Rod pitch circle radius
-    MBP.rho2=2.7e-3;%Rod pitch circle radius
-    MBP.L=600e-3;%Robot stem length
-    MBP.L1=SL(1)*1e-3;%Robot seg1 length
-    MBP.L2=SL(3)*1e-3;%Robot seg2 length
-    MBP.Lr=SL(2)*1e-3;%Robot rigid seg length
-    MBP.Lg=SL(4)*1e-3;%Robot gipper length
-    MBP.r11=[1 0 0]'*MBP.rho1;MBP.r12=[0 1 0]'*MBP.rho1;
-    MBP.r21=[1/sqrt(2) 1/sqrt(2) 0]'*MBP.rho2;MBP.r22=[-1/sqrt(2) 1/sqrt(2) 0]'*MBP.rho2;
-    MBP.Q1=[skewMatrix_keith(MBP.r11)*e3 skewMatrix_keith(MBP.r12)*e3 skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.Q2=[skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.I1=pi*MBP.d1^4/64;MBP.A1=pi*MBP.d1^2/4;
-    MBP.I2=pi*MBP.d2^4/64;MBP.A2=pi*MBP.d2^2/4;
-    MBP.G=MBP.E/2/(1+MBP.mu);MBP.J=2*MBP.I1;
-    MBP.Ke1=diag([3e8 3e8 MBP.A1*MBP.E]);
-    MBP.Kb1=diag([MBP.E*MBP.I1 MBP.E*MBP.I1 2*MBP.G*MBP.I1]);
-    MBP.Ke2=4*diag([3e8 3e8 MBP.A2*MBP.E]);
-    MBP.Kb2=4*diag([MBP.E*MBP.I2 MBP.E*MBP.I2 2*MBP.G*MBP.I2]);
-    MBP.zeta = 0.2;
-    MBP.Ls = 0;
-    MBP.L1o=MBP.L1;%Robot seg1 length out of trocar
-    MBP.Lo=MBP.L;%Robot stem length in trocar
     MBP.discrete_element = 1e-3;
 end
 
-if(nargin == 2)
-    FM = zeros(12,1);
-
-    MBP.E=40e9;%Rod Young's modules
-    MBP.mu=0.33;%Rod Poisson rate
-    MBP.d1=0.95e-3;%Rod diameters
-    MBP.d2=0.40e-3;
-    MBP.rho1=2.5e-3;%Rod pitch circle radius
-    MBP.rho2=2.75e-3;%Rod pitch circle radius
-    MBP.L=600e-3;%Robot stem length
-    MBP.L1=SL(1)*1e-3;%Robot seg1 length
-    MBP.L2=SL(3)*1e-3;%Robot seg2 length
-    MBP.Lr=SL(2)*1e-3;%Robot rigid seg length
-    MBP.Lg=SL(4)*1e-3;%Robot gipper length
-    MBP.r11=[1 0 0]'*MBP.rho1;MBP.r12=[0 1 0]'*MBP.rho1;
-    MBP.r21=[1/sqrt(2) -1/sqrt(2) 0]'*MBP.rho2;MBP.r22=[1/sqrt(2) 1/sqrt(2) 0]'*MBP.rho2;
-    MBP.Q1=[skewMatrix_keith(MBP.r11)*e3 skewMatrix_keith(MBP.r12)*e3 skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.Q2=[skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.I1=pi*MBP.d1^4/64;MBP.A1=pi*MBP.d1^2/4;
-    MBP.I2=pi*MBP.d2^4/64;MBP.A2=pi*MBP.d2^2/4;
-    MBP.G=MBP.E/2/(1+MBP.mu);MBP.J=2*MBP.I1;
-    MBP.Ke1=diag([3e8 3e8 MBP.A1*MBP.E]);MBP.Kb1=diag([MBP.E*MBP.I1 MBP.E*MBP.I1 2*MBP.G*MBP.I1]);
-    MBP.Ke2=4*diag([3e8 3e8 MBP.A2*MBP.E]);MBP.Kb2=4*diag([MBP.E*MBP.I2 MBP.E*MBP.I2 2*MBP.G*MBP.I2]);
-    MBP.zeta = 0.2;
-    MBP.Ls = 0;
-    MBP.L1o=MBP.L1;%Robot seg1 length out of trocar
-    MBP.Lo=MBP.L;%Robot stem length in trocar
+if(nargin == 3)
     MBP.discrete_element = 1e-3;
 end
-
-if (nargin == 3)
-    MBP.E=40e9;%Rod Young's modules
-    MBP.mu=0.33;%Rod Poisson rate
-    MBP.d1=0.95e-3;%Rod diameters
-    MBP.d2=0.40e-3;
-    MBP.rho1=2.5e-3;%Rod pitch circle radius
-    MBP.rho2=2.7e-3;%Rod pitch circle radius
-    MBP.L=600e-3;%Robot stem length
-    MBP.L1=SL(1)*1e-3;%Robot seg1 length
-    MBP.L2=SL(3)*1e-3;%Robot seg2 length
-    MBP.Lr=SL(2)*1e-3;%Robot rigid seg length
-    MBP.Lg=SL(4)*1e-3;%Robot gipper length
-    MBP.r11=[1 0 0]'*MBP.rho1;MBP.r12=[0 1 0]'*MBP.rho1;
-    MBP.r21=[1/sqrt(2) 1/sqrt(2) 0]'*MBP.rho2;MBP.r22=[-1/sqrt(2) 1/sqrt(2) 0]'*MBP.rho2;
-    MBP.Q1=[skewMatrix_keith(MBP.r11)*e3 skewMatrix_keith(MBP.r12)*e3 skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.Q2=[skewMatrix_keith(MBP.r21)*e3 skewMatrix_keith(MBP.r22)*e3];
-    MBP.I1=pi*MBP.d1^4/64;MBP.A1=pi*MBP.d1^2/4;
-    MBP.I2=pi*MBP.d2^4/64;MBP.A2=pi*MBP.d2^2/4;
-    MBP.G=MBP.E/2/(1+MBP.mu);MBP.J=2*MBP.I1;
-    MBP.Ke1=diag([3e8 3e8 MBP.A1*MBP.E]);MBP.Kb1=diag([MBP.E*MBP.I1 MBP.E*MBP.I1 2*MBP.G*MBP.I1]);
-    MBP.Ke2=4*diag([3e8 3e8 MBP.A2*MBP.E]);MBP.Kb2=4*diag([MBP.E*MBP.I2 MBP.E*MBP.I2 2*MBP.G*MBP.I2]);
-    MBP.zeta = 0.2;
-    MBP.Ls = 0;
-    MBP.L1o=MBP.L1;%Robot seg1 length out of trocar
-    MBP.Lo=MBP.L;%Robot stem length in trocar
-    MBP.discrete_element = 1e-3;
-end
-
 if(nargin == 4)
-    MBP.discrete_element = 1e-3;
-end
-if(nargin == 5)
     MBP.discrete_element = discrete_element*1e-3;
 end
 Fe=FM(1:3);Me=FM(4:6);
@@ -146,7 +57,6 @@ if(qa(2)>MBP.L1)
     MBP.Ls = qa(2) - MBP.L1;
 else
     MBP.Ls = 0;
-    MBP.Lo = MBP.L + MBP.L1 - qa(2);
     MBP.L1o = qa(2);
 end
 
@@ -222,8 +132,8 @@ if(MBP.Ls>0)
     y1 = [y0;y1];
     t1 = [t0;t1];
 end
-qe1=(MBP.Lo+MBP.L1o)*[v(3,1) v(3,2)]'; % elongation seg1
-qe2=(MBP.Lo+MBP.L1o+MBP.L2+MBP.Lr)*[v(3,3) v(3,4)]'; % elongation seg2
+qe1=(MBP.Lstem+MBP.L1)*[v(3,1) v(3,2)]'; % elongation seg1
+qe2=(MBP.Lstem+MBP.L1+MBP.L2+MBP.Lr)*[v(3,3) v(3,4)]'; % elongation seg2
 
 Rsd=zeros(10,1);
 Rsd(1:3)=Fe-yL2(13:15); % boundary conditions
@@ -304,14 +214,14 @@ if(SegIdx == 1)
     N=ceil(MBP.L1o/step);
     t=linspace(0,MBP.L1o,N)';
     mod_SegIdx=1;
-    Kb = 4*Kb1+4*Kb2;
+    Kb = 4*Kb1+16*Kb2;
     step=MBP.L1o/(N-1);
 elseif(SegIdx == 2)
     Q=MBP.Q2;
     N=ceil(MBP.L2/step);
     t=linspace(MBP.L1o+MBP.Lr,MBP.L1o+MBP.Lr+MBP.L2,N)';
     mod_SegIdx=0;
-    Kb = 4*Kb2;
+    Kb = 16*Kb2;
     step=MBP.L2/(N-1);
 elseif(SegIdx == 0)
     Q=MBP.Q1;
@@ -319,7 +229,7 @@ elseif(SegIdx == 0)
     t=linspace(0,MBP.Ls,N)';
     mod_SegIdx=1;
     zeta=MBP.zeta;
-    Kb = (4*Kb1+4*Kb2)/zeta;
+    Kb = (4*Kb1+16*Kb2)/zeta;
     step=MBP.Ls/(N-1);
 end
     

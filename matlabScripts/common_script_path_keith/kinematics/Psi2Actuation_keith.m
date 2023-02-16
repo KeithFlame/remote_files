@@ -7,7 +7,6 @@ function qa=Psi2Actuation_keith(psi,SL,MBP)
 % Date: 15.02.2022
 
 u = Psi2Curvature_keith(psi,SL);
-l = psi(2);
-QA = Curvature2Actuation_keith(u,l,MBP);
-qa = [psi(1:2);QA];
+QA = Curvature2Actuation_keith(u,MBP);
+qa = [psi(1:2);QA*1000];
 end
