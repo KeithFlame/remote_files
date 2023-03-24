@@ -12,6 +12,7 @@ function psi = Actuation2Psi_keith(qa,SL,MBP)
     psi = Curvature2Psi_keith(u,SL,l);
     psi(1) = qa(1);
     psi(2) = qa(2)*1000;
+% %     psi([4 6])= psi([4 6]) + pi;
 
 end
 

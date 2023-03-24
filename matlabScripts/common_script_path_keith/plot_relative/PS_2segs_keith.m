@@ -167,8 +167,8 @@ s5 = S(1:3, n0+n1+nr+n2:n0+n1+nr+n2+ng);
         Lgt = norm(s5(1:3,2)-s5(1:3,1))*1.33;
         drawGripper(init_pose*Tend,radius_Lr,Lgt,color);
         % darw coordinates
-        plotCoord(init_pose,1);
-        plotCoord(init_pose*Tend,1);
+        plotCoord_keith(init_pose,1);
+        plotCoord_keith(init_pose*Tend,1);
         
         
     end
@@ -179,8 +179,8 @@ s5 = S(1:3, n0+n1+nr+n2:n0+n1+nr+n2+ng);
         plot3(s3(1,:),s3(2,:),s3(3,:),LineWidth=1,Color='black');
         plot3(s4(1,:),s4(2,:),s4(3,:),LineWidth=1,Color='#3b4');
         plot3(s5(1,:),s5(2,:),s5(3,:),LineWidth=1,Color='b');
-        plotCoord(init_pose,1);
-        plotCoord(init_pose*Tend,1);
+        plotCoord_keith(init_pose,1);
+        plotCoord_keith(init_pose*Tend,1);
     end
 end
 
@@ -276,23 +276,3 @@ h7=patch([p1(1,11) p1(1,12) p1(1,10) p1(1,9)],[p1(2,11) p1(2,12) p1(2,10) p1(2,9
 h8=patch([p1(1,14) p1(1,13) p1(1,10) p1(1,9)],[p1(2,14) p1(2,13) p1(2,10) p1(2,9)],[p1(3,14) p1(3,13) p1(3,10) p1(3,9)],color,'FaceColor',color,'FaceAlpha',0.4,'EdgeColor',color,'LineWidth',1);
 hG=[h1 h2 h3 h4 h5 h6 h7 h8]';
 end
-
-%% 画坐标系
-function hd=plotCoord(T,length)
-if nargin==1
-    length=1;
-end
-    arrowLen=length*10;
-    lineWidth=length;
-    R=T(1:3,1:3);
-    P=T(1:3,4);
-    px = R*[arrowLen 0 0]'+P;
-    py = R*[0 arrowLen 0]'+P;
-    pz = R*[0 0 arrowLen]'+P;
-    h1 = line([P(1) px(1)],[P(2) px(2)],[P(3) px(3)],'Color','r','LineStyle','-','LineWidth',lineWidth);
-    h2 = line([P(1) py(1)],[P(2) py(2)],[P(3) py(3)], 'Color','g','LineStyle','-','LineWidth',lineWidth);
-    h3 = line([P(1) pz(1)],[P(2) pz(2)],[P(3) pz(3)], 'Color','b','LineStyle','-','LineWidth',lineWidth);
-%     plot3(P(1),P(2),P(3),'c*');
-    hd=[h1 h2 h3]';
-end
-

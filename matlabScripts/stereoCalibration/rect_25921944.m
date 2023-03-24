@@ -148,7 +148,7 @@ ay = (ay_1 + ay_2)/2; % ay = focal_length*sy
 % Revise. 2020.8.12. To ensure a FOV by 90-degrees, we should verify the P.
 % --------
 % P = 1.0942;
-P=1.0;%第一�?
+P=1.0;%第一�?
 % --------
 ax = max([ax_1, ax_2, ay_1, ay_2]) * P;
 ay = ax;
@@ -167,8 +167,8 @@ v0=params.height/2*scale;
 
 params.new_intrinsic = [ax, 0, u0/2; 0, ay, v0/2; 0, 0, 1];
 params.P=P;
-%成像平面放大两�?�，�?以光心在u0，v0处，则left_start为（u0-960,v0-540�?;
-%18�?23之后的模组将光心定为960�?540，因此left_start为（960,540�?;
+%成像平面放大两�?�，�?以光心在u0，v0处，则left_start为（u0-960,v0-540�?;
+%18�?23之后的模组将光心定为960�?540，因此left_start为（960,540�?;
 
 mapx1 = zeros(height_rect,width_rect);
 mapy1 = zeros(height_rect,width_rect);
@@ -483,7 +483,7 @@ toc
 
 
 %% 
-csvwrite('mapx1.csv',mapx1);
-csvwrite('mapy1.csv',mapy1);
-csvwrite('mapx2.csv',mapx2);
-csvwrite('mapy2.csv',mapy2);
+% csvwrite('mapx1.csv',mapx1);
+% csvwrite('mapy1.csv',mapy1);
+% csvwrite('mapx2.csv',mapx2);
+% csvwrite('mapy2.csv',mapy2);

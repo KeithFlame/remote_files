@@ -104,7 +104,7 @@ nc=Guess(1:3); % base internal force
 mc=Guess(4:6); % base internal load
 v=zeros(3,4);v(end,:)=Guess(7:10)'; % rod elongation strain
 
-p0=zeros(3,1);R0=eye(3);
+p0=zeros(3,1);R0=eul2rotm([qa(1) 0 0]);
 y0=[p0' R0(:,1)' R0(:,2)' R0(:,3)' nc' mc' 0 0 0 0]';
 if(MBP.Ls)>0
     [t0,y0]=odeCosserat1(y0,v,0,MBP,fe,le,MBP.discrete_element);
