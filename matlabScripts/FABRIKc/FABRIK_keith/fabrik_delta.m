@@ -13,7 +13,7 @@ set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
 view([0 0]);
 is_plot = 1;
-is_write = 1;
+is_write = 0;
 if(is_write)
     dt = 1/32;
 end

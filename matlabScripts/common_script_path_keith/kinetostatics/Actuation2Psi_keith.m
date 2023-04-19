@@ -8,6 +8,7 @@ function psi = Actuation2Psi_keith(qa,SL,MBP)
 
     qa(2:end) = qa(2:end) / 1000;
     l = qa(2);
+    MBP = MBP.refreshLso(l*1000);
     u = Actuation2Curvature_keith(qa,MBP);
     psi = Curvature2Psi_keith(u,SL,l);
     psi(1) = qa(1);

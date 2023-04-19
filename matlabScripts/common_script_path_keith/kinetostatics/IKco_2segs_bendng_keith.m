@@ -116,7 +116,7 @@ Guess=zeros(5,1);Guess(2)=-0.001;
 %% ====Execute=== %%
 % disp(['Target ' num2str(j) ': ' num2str(Tg(1,4)) ' ' num2str(Tg(2,4)) ' ' num2str(Tg(3,4)) ' ']);
 
-[QA,Guess,Res,t1,t2,y1,y2]=shootingOpt2_SingleIK(Tg,Guess,Fe,Me,fe,le,MP);
+[QA,Guess,Res,t1,t2,y1,y2]=shootingOpt2_SingleIK(T,Guess,Fe,Me,fe,le,MBP);
 
 psi_inv = QA;
 

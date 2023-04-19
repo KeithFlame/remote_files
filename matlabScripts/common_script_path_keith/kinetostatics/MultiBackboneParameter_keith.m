@@ -12,11 +12,12 @@ classdef MultiBackboneParameter_keith
         % structural properties
         d1                          % Rod diameter seg1
         d2                          % Rod diameter seg2
-        Lstem                           % Robot stem length
+        Lstem                       % Robot stem length
         L1                          % Robot seg1 length
         L2                          % Robot seg2 length
         Lr                          % Robot rigid seg length
         Lg                          % Robot gipper length
+        Ldo                         % Deformable object length
         A1                          % crosssection area for rod in seg1
         A2                          % crosssection area for rod in seg2
         I1                          % second moment of inertia for seg1
@@ -81,6 +82,7 @@ classdef MultiBackboneParameter_keith
             obj.Lr = SP(5);
             obj.L2 = SP(6);
             obj.Lg = SP(7);
+            obj.Ldo = SP(6);
             obj.A1 = pi * obj.d1 ^ 2 / 4;
             obj.A2 = pi * obj.d2 ^ 2;
             obj.I1 = pi * obj.d1 ^ 4 / 64;
@@ -145,11 +147,17 @@ classdef MultiBackboneParameter_keith
         function obj = resetZeta(obj,SL)
             obj.zeta = SL;
         end
+        function obj = resetLg(obj,SL)
+            obj.Lg = SL;
+        end
         function obj = resetGamma1(obj,SL)
             obj.gamma1 = SL;
         end
         function obj = resetLstem(obj,SL)
             obj.Lstem = SL;
+        end
+        function obj = setLdo(obj,Ldo)
+            obj.Ldo = Ldo;
         end
         function obj = calcMatrix(obj)         
             obj.dGamma(1:4,1:3)=(obj.L1o+obj.Ls*obj.zeta)*obj.Q1';

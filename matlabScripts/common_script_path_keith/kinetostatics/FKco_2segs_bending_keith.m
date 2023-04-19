@@ -119,7 +119,7 @@ y1(end+1,:)=y1(end,:);y1(end,1:3)=y1(end,1:3)+[0 0 1]*MBP.Lr*R1'; % move from 1e
 t1(end+1)=t1(end)+MBP.Lr;
 yL1=y1(end,:)';
 
-y1_=[yL1(1:3);yL1(4:15);yL1(16:18)+2*(cross(R1*MBP.r11,R1*MBP.Ke1*v(:,1))+...
+y1_=[yL1(1:3);yL1(4:15);cross(R1*[0 0 MBP.Lr]',yL1(13:15)) + yL1(16:18)+2*(cross(R1*MBP.r11,R1*MBP.Ke1*v(:,1))+...
     cross(R1*MBP.r12,R1*MBP.Ke1*v(:,2)));yL1(21:22)]; % ? start of 2nd seg
 
 [t2,y2]=odeCosserat1(y1_,v,2,MBP,fe,le,MBP.discrete_element); % second seg
@@ -137,7 +137,7 @@ qe2=(MBP.Lstem+MBP.L1+MBP.L2+MBP.Lr)*[v(3,3) v(3,4)]'; % elongation seg2
 
 Rsd=zeros(10,1);
 Rsd(1:3)=Fe-yL2(13:15); % boundary conditions
-Rsd(4:6)=Me-yL2(16:18)-2*( cross(R2*MBP.r21,R2*MBP.Ke2*v(:,3))+cross(R2*MBP.r22,R2*MBP.Ke2*v(:,4)));
+Rsd(4:6)=Me-yL2(16:18)-2*( cross(R2*MBP.r21,R2*MBP.Ke2*v(:,3))+cross(R2*MBP.r22,R2*MBP.Ke2*v(:,4))) - cross(R2*[0 0 MBP.Lg]',yL2(13:15));
 Rsd(7:8) =yL1(19:20)-(qa(3:4)+qe1); % path length
 Rsd(9:10)=yL2(19:20)-(qa(5:6)+qe2);
 end
@@ -179,17 +179,6 @@ end
 
 end
 
-% function [R]=Expm(u)
-% %simplified calculation for exponetial map (u in R3)
-% theta=norm(u);
-% if(theta == 0)
-%     R=eye(3);
-% else
-%     un=u/theta;
-%     R=cos(theta)*eye(3)+(1-cos(theta))*(un*un')+sin(theta)*skewMatrix_keith(un);
-% end
-% end
-
 function [t,y,U]=odeCosserat1(y0,v,SegIdx,MBP,fe,le,step)
 %-----Integral of IVP using difference equation-------
 % for BottumUPCosserat_TwoSeg script, forward differential equations.
@@ -214,14 +203,14 @@ if(SegIdx == 1)
     N=ceil(MBP.L1o/step);
     t=linspace(0,MBP.L1o,N)';
     mod_SegIdx=1;
-    Kb = 4*Kb1+16*Kb2;
+    Kb = 4*Kb1+16*Kb2+MBP.K1*Kb1;
     step=MBP.L1o/(N-1);
 elseif(SegIdx == 2)
     Q=MBP.Q2;
     N=ceil(MBP.L2/step);
     t=linspace(MBP.L1o+MBP.Lr,MBP.L1o+MBP.Lr+MBP.L2,N)';
     mod_SegIdx=0;
-    Kb = 16*Kb2;
+    Kb = 16*Kb2+MBP.K2*Kb1;
     step=MBP.L2/(N-1);
 elseif(SegIdx == 0)
     Q=MBP.Q1;
@@ -229,7 +218,7 @@ elseif(SegIdx == 0)
     t=linspace(0,MBP.Ls,N)';
     mod_SegIdx=1;
     zeta=MBP.zeta;
-    Kb = (4*Kb1+16*Kb2)/zeta;
+    Kb = (4*Kb1+16*Kb2+MBP.K1*Kb1)/zeta;
     step=MBP.Ls/(N-1);
 end
     
