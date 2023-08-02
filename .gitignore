@@ -390,3 +390,7 @@ FodyWeavers.xsd
 
 # Keith Defined
 *.fig
+*.avi
+*.mat
+cppScripts/libs/ceres/
+cppScripts/libs/ceres_release/
