@@ -156,9 +156,9 @@ while k<k_max && error_P>error_P_desired
     R_2b_2e = continuum_oriention(xita2,delta2);
     
     psi = [phi;Ls;xita1;delta1;xita2;delta2];
-    [position_tar,~] = plot_manipulator(psi);
-    Ls,
-    pause(0.1);
+%     [position_tar,~] = plot_manipulator(psi);
+%     Ls,
+%     pause(0.1);
 end
     k_count(k) = k-1;
     error(k) = error_P;

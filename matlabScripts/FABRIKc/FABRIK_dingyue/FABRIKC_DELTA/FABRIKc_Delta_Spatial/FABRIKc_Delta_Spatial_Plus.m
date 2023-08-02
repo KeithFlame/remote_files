@@ -95,8 +95,14 @@ delta_3_s = zeros(1000,1);
 %% FABRIKc 迭代
 threshold = 2*1e-3;
 iteration_index = 0;
+broyden_number = 1;
+J=[eye(6) eye(6) eye(6)]';
+last_joint_position = [P_1_proximal_joint; P_1_distal_joint; ...
+            P_2_proximal_joint; P_2_distal_joint; ...
+            P_3_proximal_joint; P_3_distal_joint;];
+last_end_position = [P_2_proximal_base; P_3_proximal_base];
 tic
-FABRIKc_process_draw();
+% FABRIKc_process_draw();
 while pos_error > threshold
     iteration_index = iteration_index + 1;
     %% forward reaching phase
@@ -232,17 +238,33 @@ while pos_error > threshold
     delta_1_s(iteration_index) = delta_1/pi*180;
     delta_2_s(iteration_index) = delta_2/pi*180;
     delta_3_s(iteration_index) = delta_3/pi*180;
-    if iteration_index == 3 || iteration_index == 5 || iteration_index == 7 || iteration_index == 9 || iteration_index == 15 || iteration_index == 2
-        FABRIKc_process_draw();
+
+    if(iteration_index>10)
+        current_joint_position = [P_1_proximal_joint; P_1_distal_joint; ...
+            P_2_proximal_joint; P_2_distal_joint; ...
+            P_3_proximal_joint; P_3_distal_joint;];
+        current_end_position = [P_2_proximal_base; P_3_proximal_base];
+        dp = current_joint_position-last_joint_position;
+        dx = current_end_position-last_end_position;
+        J=BadBroydenJacobian(dp,dx,J);
+        if(iteration_index>15)
+            dx_ = -[P_2_proximal_base - target_2; ...
+                P_3_proximal_base - target_3];
+            dp = J*dx_;
+            P_1_proximal_joint = P_1_proximal_joint+dp(1:3);
+            P_1_distal_joint = P_1_distal_joint+dp(4:6);
+            P_2_proximal_joint = P_2_proximal_joint+dp(7:9);
+            P_2_distal_joint = P_2_distal_joint+dp(10:12);
+            P_3_proximal_joint = P_3_proximal_joint+dp(13:15);
+            P_3_distal_joint = P_3_distal_joint+dp(16:18);
+            broyden_number = broyden_number + 1;
+        end
+        last_joint_position = current_joint_position;
+        last_end_position = current_end_position;
     end
-    
-%     if iteration_index==30
-%         break;
-%     end
-%     
-%     disp(iteration_index);
+
 end
-FABRIKc_process_draw();
+% FABRIKc_process_draw();
 toc
 %%  后续处理
 pos_moving_platform = 1/3*(P_1_distal_end+P_2_distal_end+P_3_distal_end);
@@ -259,23 +281,23 @@ switch number
 end
 
 
-figure(1);
-plot_delta_robot(psi,pos_moving_platform);
-figure(2);
-plot(error_s(1:iteration_index));
-figure(3);
-hold on;
-yyaxis left;
-xlabel('Iterarion index');
-ylabel('{\itθ}(°)');
-plot(xita_1_s(1:iteration_index),'-','color',[0 0.45 0.74],'linewidth',2);
-
-plot(xita_2_s(1:iteration_index),'--','color',[0 0.45 0.74],'linewidth',2);
-
-yyaxis right;
-ylabel('{\itδ}(°)');
-plot(delta_1_s(1:iteration_index),'-','color','r','linewidth',2);
-plot(delta_2_s(1:iteration_index),'--','color','r','linewidth',2);
-plot(delta_3_s(1:iteration_index),'-.','color','r','linewidth',2);
-legend('{\itθ}_1 and {\itθ}_3','{\itθ}_2','{\itδ}_1','{\itδ}_2','{\itδ}_3');
-hold off;
+% figure(1);
+% plot_delta_robot(psi,pos_moving_platform);
+% figure(2);
+% plot(error_s(1:iteration_index));
+% figure(3);view(2)
+% hold on;
+% yyaxis left;
+% xlabel('Iterarion index');
+% ylabel('{\itθ}(°)');
+% plot(xita_1_s(1:iteration_index),'-','color',[0 0.45 0.74],'linewidth',2);
+% 
+% plot(xita_2_s(1:iteration_index),'--','color',[0 0.45 0.74],'linewidth',2);
+% 
+% yyaxis right;
+% ylabel('{\itδ}(°)');
+% plot(delta_1_s(1:iteration_index),'-','color','r','linewidth',2);
+% plot(delta_2_s(1:iteration_index),'--','color','r','linewidth',2);
+% plot(delta_3_s(1:iteration_index),'-.','color','r','linewidth',2);
+% legend('{\itθ}_1 and {\itθ}_3','{\itθ}_2','{\itδ}_1','{\itδ}_2','{\itδ}_3');
+% hold off;

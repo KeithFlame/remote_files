@@ -30,7 +30,9 @@ T = fromQuat2T(pose);
 %% forward kinematics
 qa = qa+setQA(QA-qa);
 [guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3]=shootingFkOpt_keith(Guess_sf(1:20),qa,ksi2,MBPF);
-
+[s1,s2] = setPlotData(y0,y1,y2,y3);
+figure;axis equal;grid on;hold on;
+plotParallelContinuumRobot(s1,s2);
 %% write
 
 psi1=Actuation2Psi_keith(qa(1:6),SL,MBP1);

@@ -40,7 +40,12 @@ function mu = single_backward(motion_units,i,hd,is_plot)
         elseif(l1<motion_units(i).constraint_limit.l1_lim(1))
             l1=motion_units(i).constraint_limit.l1_lim(1);
         end
-
+        l1_last = norm(motion_units(i).origin_position-motion_units(i).joint_position);
+        if(l1-l1_last>5)
+            l1 = l1_last+5;
+        elseif(l1-l1_last<-5)
+            l1 = l1_last-5;
+        end
         motion_units(i).joint_position = motion_units(i - 1).end_position + ...
                 ee1 * l1;
         motion_units(i).end_position = motion_units(i).joint_position + ...

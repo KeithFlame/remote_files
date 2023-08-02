@@ -1,8 +1,8 @@
-function hd=plotCoord_keith(T,length)
+function hd=plotCoord_keith(T,length,discrete_element)
 if nargin==1
     length=1;
 end
-    arrowLen=length*10;
+    arrowLen=length*10*discrete_element;
     lineWidth=length;
     R=T(1:3,1:3);
     P=T(1:3,4);

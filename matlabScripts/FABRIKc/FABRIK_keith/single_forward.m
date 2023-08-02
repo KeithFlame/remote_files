@@ -37,6 +37,12 @@ function mu = single_forward(motion_units,i,hd,is_plot)
         elseif(l1<motion_units(i).constraint_limit.l1_lim(1))
             l1=motion_units(i).constraint_limit.l1_lim(1);
         end
+        l1_last = norm(motion_units(i).origin_position-motion_units(i).joint_position);
+        if(l1-l1_last>5)
+            l1 = l1_last+5;
+        elseif(l1-l1_last<-5)
+            l1 = l1_last-5;
+        end
         motion_units(i).origin_position = motion_units(i).joint_position + ...
             l1 * ee1;
         

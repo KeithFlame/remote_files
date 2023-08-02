@@ -14,7 +14,9 @@ datetime('now','Format','yyyy-MM-dd HH:mm:SS')
 %% 1 Load parameters
 cam_no = 57;
 partialPath=pwd;
-folderPath = [partialPath,'/D0410NO65XX',num2str(cam_no)];
+% folderPath = [partialPath,'/date0722',num2str(cam_no)];
+folderPath = [partialPath,'/date0722/'];
+
 load([folderPath,'/stereoParams.mat']);
 
 % test_image_id = 7;
@@ -113,8 +115,8 @@ params.rectify2 = R_rectify_2;
 % I2 = imread([test_data_path,'/right/',right_image_names{test_image_id}]);
 % I1=imread('E:/术锐/ROI选取/roi/NO24_wlf/FindROI.png');
 % I2=imread('E:/术锐/ROI选取/roi/NO24_wlf/FindROI.png');
-I1 = imread([folderPath, '\left\left06.jpg']);
-I2 = imread([folderPath, '\right\right06.jpg']);
+I1 = imread([folderPath, '\left\0001.png']);
+I2 = imread([folderPath, '\right\0001.png']);
 
 figure('Name','Image before rectification')
 hold on;

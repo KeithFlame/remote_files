@@ -125,6 +125,9 @@ while norm(P_2_proximal_base - target) > threshold
     P_2_proximal_base = P_2_proximal_joint + L_2 * Z_base;  
     
     error_s(iteration_index) = norm(P_2_proximal_base - target);
+    if(iteration_index>10)
+        
+    end
 end
 toc
 %% 后续处理

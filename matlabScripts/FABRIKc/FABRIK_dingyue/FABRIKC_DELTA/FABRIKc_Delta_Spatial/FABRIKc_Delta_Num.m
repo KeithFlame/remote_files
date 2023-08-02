@@ -79,6 +79,13 @@ error_s = zeros(1000,1);
 %% FABRIKc 迭代
 threshold = 2*1e-3;
 iteration_index = 0;
+broyden_number = 1;
+J=[eye(6) eye(6,3)]';
+last_joint_position = [P_1_proximal_joint;  ...
+             P_2_distal_joint; ...
+             P_3_distal_joint;];
+last_end_position = [P_2_proximal_base; P_3_proximal_base];
+
 tic
 while pos_error > threshold
     iteration_index = iteration_index + 1;
@@ -204,6 +211,28 @@ while pos_error > threshold
     %% 计算误差
     pos_error = norm(P_2_proximal_base-target_2) + norm(P_3_proximal_base-target_3);
     error_s(iteration_index) = pos_error;
+
+    %% added
+%     if(iteration_index>10)
+%         current_joint_position = [P_1_proximal_joint;  ...
+%              P_2_distal_joint; ...
+%              P_3_distal_joint;];
+%         current_end_position = [P_2_proximal_base; P_3_proximal_base];
+%         dp = current_joint_position-last_joint_position;
+%         dx = current_end_position-last_end_position;
+%         J=BadBroydenJacobian(dp,dx,J);
+%         if(iteration_index>15)
+%             dx_ = -[P_2_proximal_base - target_2; ...
+%                 P_3_proximal_base - target_3];
+%             dp = J*dx_;
+%             P_1_proximal_joint = P_1_proximal_joint+dp(1:3);
+%             P_2_distal_joint = P_2_distal_joint+dp(4:6);
+%             P_3_distal_joint = P_3_distal_joint+dp(7:9);
+%             broyden_number = broyden_number + 1;
+%         end
+%         last_joint_position = current_joint_position;
+%         last_end_position = current_end_position;
+%     end
 end
 running_time=toc;
 

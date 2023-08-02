@@ -10,7 +10,7 @@ hold on;grid on;axis equal;
 xlabel("x");ylabel("y");zlabel("z");
 title("fabrik delta");
 view([0 0]);
-is_plot = 0;
+is_plot = 1;
 %% delta 机器人
 q = [300 300 300];%输入
 [p0, p1, p2] = setQ(q);

@@ -167,8 +167,8 @@ s5 = S(1:3, n0+n1+nr+n2:n0+n1+nr+n2+ng);
         Lgt = norm(s5(1:3,2)-s5(1:3,1))*1.33;
         drawGripper(init_pose*Tend,radius_Lr,Lgt,color);
         % darw coordinates
-        plotCoord_keith(init_pose,1);
-        plotCoord_keith(init_pose*Tend,1);
+        plotCoord_keith(init_pose,1,discrete_element);
+        plotCoord_keith(init_pose*Tend,1,discrete_element);
         
         
     end
@@ -179,8 +179,8 @@ s5 = S(1:3, n0+n1+nr+n2:n0+n1+nr+n2+ng);
         plot3(s3(1,:),s3(2,:),s3(3,:),LineWidth=1,Color='black');
         plot3(s4(1,:),s4(2,:),s4(3,:),LineWidth=1,Color='#3b4');
         plot3(s5(1,:),s5(2,:),s5(3,:),LineWidth=1,Color='b');
-        plotCoord_keith(init_pose,1);
-        plotCoord_keith(init_pose*Tend,1);
+        plotCoord_keith(init_pose,1,discrete_element);
+        plotCoord_keith(init_pose*Tend,1,discrete_element);
     end
 end
 
