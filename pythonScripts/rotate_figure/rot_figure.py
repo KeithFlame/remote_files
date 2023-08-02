@@ -40,10 +40,11 @@ def rotate_bound2(image, angle):    #https://www.jb51.net/article/144471.htm
     return cv2.warpAffine(image, M, (newW, newH), borderValue=(255, 255, 255))
 
 
-image = cv2.imread('./DJWJXIABEIJING.png')
+image = cv2.imread('./ZHSJQ_down.png')
 # img = rotate_bound1(image, 90)
-img2 = rotate_bound2(image, 53)
-# cv2.imshow('ww1', img)
+img2 = rotate_bound2(image, -6.5)
+cv2.imshow('ww1', image)
 cv2.imshow('ww2', img2)
 cv2.waitKey()
-cv2.imwrite('./DJWJXIABEIJING_down.png',img2)
+
+# cv2.imwrite('./ZHSJQ_down2.png',img2)
