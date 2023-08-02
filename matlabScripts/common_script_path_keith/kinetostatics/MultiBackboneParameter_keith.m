@@ -144,6 +144,9 @@ classdef MultiBackboneParameter_keith
             obj.K1 = SL(1);
             obj.K2 = SL(2);           
         end
+        function obj = resetK1(obj,SL)
+            obj.K1 = SL;
+        end
         function obj = resetZeta(obj,SL)
             obj.zeta = SL;
         end
