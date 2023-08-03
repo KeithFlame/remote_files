@@ -6,9 +6,10 @@ function [Tend, S] = FKco_2segs_bending_keith(qa, MBP, FM, discrete_element)
 % This is a function to calculate the pose of {g} in {b} for a 2-seg continuum
 % manipulator Based on the Cosserat rod theory.
 %
-% input1: qa (6 X 1 vector, for 6 DoFs)
+% input1: qa (6 X 1 vector, for 6 DoFs) (rad, mm)
 % input2: multi-backbone manipulator parameter MBP
-% input3: FM (external concentrated/distributed force/moment, 12 X 1 vector)
+% input3: FM (external concentrated/distributed force/moment, 12 X 1
+% vector) (N, Nm)
 % input4: discrete_element (the size of the smallest element of integration, 
 % also used in plotting)
 %
@@ -20,16 +21,13 @@ function [Tend, S] = FKco_2segs_bending_keith(qa, MBP, FM, discrete_element)
 % Ver. 1.0
 % Date: 14.02.2022
 
-%clc;clear;
-%% ===<<Bottom-to-Up Cosserat model, Two Segments>>=== %%
-%%====================List of funs and vars====================%%
+%% Bottom-to-Up Cosserat model, Two Segments
 % (i)Functions:
 % shootingOpt-shooting method nested in an optimization framework
 % forShooting-guess-residue shooting shell for forward kinematics
 % odeCosserat1-(external) universal cosserat integration kernal
 % calcCurvature- calculate the curvature at every point given the curve
-% calcActuation- calculate the actuation lengths using constant curvature
-%model for unloaded shape.
+% model for unloaded shape.
 % (ii)Variables:
 % MBP-mechanical parameter struct of the robot
 % qa-actuation lengths (phi and d can be included)
@@ -37,7 +35,7 @@ function [Tend, S] = FKco_2segs_bending_keith(qa, MBP, FM, discrete_element)
 % fe, le-distributed load
 %%-------------------------------------------------------------%%
 
-%% ===Input Specifications=== %%
+%% Input Specifications
 qa(2:end) = qa(2:end)/1000;
 
 if (nargin == 2)
@@ -60,7 +58,7 @@ else
     MBP.L1o = qa(2);
 end
 
-%% ====Execute=== %%
+%% Execution
 [~,t1,t2,y1,y2]=shootingOpt(qa,Fe,Me,fe,le,MBP);
 
 p=y2(end,1:3)';R=[y2(end,4:6);y2(end,7:9);y2(end,10:12)]';
@@ -73,7 +71,7 @@ p0 = [y1(:,1:3);y2(:,1:3)];
 S = [p0*1000 t0'];
 end
 
-%% ===Model Functions=== %%
+%% Model Functions
 function [Guess,t1,t2,y1,y2]=shootingOpt(qa,Fe,Me,fe,le,MBP)
     dGuess=eye(10)*1e-5;
     lambda=5e-10; % Jacobian damping
@@ -137,13 +135,13 @@ qe2=(MBP.Lstem+MBP.L1+MBP.L2+MBP.Lr)*[v(3,3) v(3,4)]'; % elongation seg2
 
 Rsd=zeros(10,1);
 Rsd(1:3)=Fe-yL2(13:15); % boundary conditions
-Rsd(4:6)=Me-yL2(16:18)-cross(R1*[0 0 MBP.Lr]',yL2(13:15))- 2*( cross(R2*MBP.r21,R2*MBP.Ke2*v(:,3))+ ...
+Rsd(4:6)=Me-yL2(16:18) - 2*( cross(R2*MBP.r21,R2*MBP.Ke2*v(:,3))+ ...
     cross(R2*MBP.r22,R2*MBP.Ke2*v(:,4))) - cross(R2*[0 0 MBP.Lg]',yL2(13:15));
 Rsd(7:8) =yL1(19:20)-(qa(3:4)+qe1); % path length
 Rsd(9:10)=yL2(19:20)-(qa(5:6)+qe2);
 end
 
-%% ===Other Functions=== %%
+%% Other Functions
 function [u]=calcCurvature(y1,y2,t1,t2,MBP)
 u_=[0 0 0]';
 size1=size(y1(:,1:3));size2=size(y2(:,1:3));

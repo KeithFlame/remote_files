@@ -122,8 +122,17 @@ classdef MultiBackboneParameter_keith
             obj.Ka=zeros(6,6);
         end
         function obj = resetCalibrationPara(obj, SL)
-            % name:  L1 Lr L2 Lg zeta K1  K2   gamma1 Lstem
-            % SL = [100 10 20 15 0.2   5  0.6   pi/40   600];
+            % name:  L1 Lr L2 Lg zeta K1  K2   gamma1 Lstem gamma3
+            % SL = [100 10 20 15 0.2   5  0.6   pi/40   600 3];
+            len_SL = length(SL);
+            try
+                assert(len_SL==10);
+            catch
+                warning(['Problem occurred because length of SL is %d and LESS THAN 10.\n',...
+                    'And 10 calibrated variable are L1, Lr, L2, Lg, zeta, K1, K2, ',...
+                    'gamma1, Lstem, and gamma3, respectively.\n'],len_SL);
+                return;
+            end 
             obj.L1 = SL(1) * 1e-3;
             obj.Lr = SL(2) * 1e-3;
             obj.L2 = SL(3) * 1e-3;
@@ -133,6 +142,7 @@ classdef MultiBackboneParameter_keith
             obj.K2 = SL(7);
             obj.gamma1 = SL(8);
             obj.Lstem = SL(9) * 1e-3;
+            obj.gamma3 = SL(10);
         end
         function obj = resetL1r2g(obj,SL)
             obj.L1 = SL(1) * 1e-3;
@@ -169,15 +179,15 @@ classdef MultiBackboneParameter_keith
             obj.Ell(1:2,1:2)=diag([1 1])*(obj.L1+obj.Lstem);
             obj.Ell(3:4,3:4)=diag([1 1])*(obj.L2+obj.Lr+obj.L1+obj.Lstem);
             
-            obj.THETA(1:3,1:4)=-obj.A1*obj.E*obj.Q1;
+            obj.THETA(1:3,1:4)=-obj.A1*2*obj.E*obj.Q1;
             obj.THETA(1:3,3:4)=-obj.A1*obj.E*obj.Q2*0;
-            obj.THETA(4:6,3:4)=-obj.A2*obj.E*obj.Q2;
+            obj.THETA(4:6,3:4)=-obj.A2*2*obj.E*obj.Q2;
             
             obj.Ka(1:3,1:3)=4*obj.Kb1+16*obj.Kb2+obj.K1*obj.Kb1;
             obj.Ka(1:3,4:6)=-16*obj.Kb2-obj.K2*obj.Kb1;
             obj.Ka(4:6,4:6)=16*obj.Kb2+obj.K2*obj.Kb1;
             
-            obj.Gc=obj.dGamma-obj.Ell*pinv(obj.THETA)/2*obj.Ka;
+            obj.Gc=obj.dGamma-obj.Ell*pinv(obj.THETA)*obj.Ka;
         end
         function obj = refreshLso(obj,l)
             l = l * 1e-3;

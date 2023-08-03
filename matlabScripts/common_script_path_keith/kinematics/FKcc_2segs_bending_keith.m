@@ -6,12 +6,13 @@ function [Tend,S]=FKcc_2segs_bending_keith(psi, SL,discrete_element)
 % This is a function to calculate the pose of {g} in {b} for a 2-seg continuum
 % manipulator with the constant curvature assumption.
 %
-% input1: psi (6 X 1 vector, phi L theta1 delta1 theta2 delta2)
-% input2: structural length SL (4 X 1 vector, L1 Lr L2 Lg)
-%                             or (8 X 1 vector additional gamma1 gamma2 gamma3 zeta)
-% output1: Tend (4 X 4 matrix)
+% input1: psi (6 X 1 vector, phi L theta1 delta1 theta2 delta2) (rad, mm)
+% input2: structural length SL (4 X 1 vector, L1 Lr L2 Lg) (mm)
+%                             or (10 X 1 vector additional zeta K1 K2
+%                             gamma1 Lstem gamma3) (rad, mm, or dimensionless)
+% output1: Tend (4 X 4 matrix) (mm)
 % output2: S (discrete points on the central curve, N X 4 matrix, last column
-%             denotes the curvature on relative point)
+%             denotes the curvature on relative point) (mm, 1/mm)
 %
 % Author: Keith W.
 % Ver. 1.0
@@ -21,10 +22,22 @@ if(nargin == 2)
     discrete_element = 1;
 end
 L1=SL(1);Lr=SL(2);L2=SL(3);Lg=SL(4);
-if(max(size(SL))<5)
+len_SL = length(SL);
+if(len_SL<5)
     gamma1 = 0;gamma3 = 0;zeta = 0.2;
+%     K1 = 0; K2 = 0; Lstem =500;
+elseif(len_SL<8)
+    zeta = SL(5);
+    gamma1 = 0;
+    gamma3 = 0;
+elseif(len_SL<10)
+    zeta = SL(5);
+    gamma1 = SL(8);
+    gamma3 = 0;
 else
-    gamma1 = SL(5);gamma3 = 0;zeta = SL(8);
+    zeta = SL(5);
+    gamma1 = SL(8);
+    gamma3 = SL(10);    
 end
 n1 = ceil(L1/discrete_element);
 n2 = ceil(L2/discrete_element);
