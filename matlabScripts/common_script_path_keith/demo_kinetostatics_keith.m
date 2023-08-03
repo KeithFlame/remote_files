@@ -5,11 +5,12 @@
 % Date 08.02.2023
 
 %% base parameter
-% name:  L1 Lr L2 Lg zeta K1  K2   gamma1 Lstem gamma3 (rad, mm, or dimensionless)
+% structural length:  L1 Lr L2 Lg zeta K1  K2   gamma1 Lstem gamma3 (rad,
+% mm, or dimensionless) 
 SL = [100 10 20 15 0.2]';
 % psi:  phi L theta1 delta1 theta2 delta2 (rad, mm)
 psi1 = [1 150 2 2 -2 -2]';
-% psi:  phi L q11 q12 q21 q22 (rad, mm)
+% actuation:  phi L q11 q12 q21 q22 (rad, mm)
 q2 = [1 150 4 4 -4 4]';
 MBP = MultiBackboneParameter_keith;
 
