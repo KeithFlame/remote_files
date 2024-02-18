@@ -78,13 +78,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\libs\opencv\include\;$(ProjectDir)..\..\libs\opencv\include\opencv2\;$(ProjectDir)..\..\libs\eigen-3.4.0;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\include\opencv\;$(ProjectDir)..\..\include\opencv\opencv2\;$(ProjectDir)..\..\include\eigen-3.4.0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\libs\opencv\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\libs\opencv\include\;$(ProjectDir)..\..\libs\opencv\include\opencv2\;$(ProjectDir)..\..\libs\eigen-3.4.0;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\include\opencv\;$(ProjectDir)..\..\include\opencv\opencv2\;$(ProjectDir)..\..\include\eigen-3.4.0;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\libs\opencv\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -154,6 +154,7 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="test2.cpp" />
     <ClCompile Include="test3.cpp" />
+    <ClCompile Include="test4.cpp" />
     <ClCompile Include="test_camera.cpp" />
     <ClCompile Include="two_segment_multi_backbone_continuum_robot.cpp" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClInclude Include="forward_kinematics_cosserat_parallel_continuum_robot.h" />
     <ClInclude Include="Jacobian_Broyden.h" />
     <ClInclude Include="math_extentions_keith.h" />
+    <ClInclude Include="timer.h" />
     <ClInclude Include="two_segment_multi_backbone_continuum_robot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -4,7 +4,8 @@ using namespace std;
 using namespace cv;
 //工程目录下的temp文件夹里，与.sln同级的temp文件
 string writePath = "./pic1/";
-int main(int argc, char** argv) {
+int __main(int argc, char** argv) {
+	return 0;
 	VideoCapture capture(0);
 	std::cout << "cap1 loaded,cap2 loading ..." << capture.isOpened() << std::endl;
 	cv::Size size(2592, 1944);
