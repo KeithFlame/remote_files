@@ -8,7 +8,7 @@ else
     disp("»¹Ã»¶¯£¡£¡£¡")
     return;
 end
-SL = [100 10 20 15 0.1 5 0.6 0 600]';
+SL = [100 10 20 15 0.1 5 0.6 0 600 0]';
 LgLdo = [12.5055   25.3269   17.9274    8.4355]';
 ksi=load('ksi.log');
 Guess_fk = load('guess.log');
@@ -53,7 +53,7 @@ if(max(err)<2)
 end
 %% stiff 
 % Guess_sf = [Guess_fk;ksi_ratio];
-
+tic;
 [guess_sf,MBPF,~,~,~,~,y0,y1,y2,y3,ksi2]=shootingStiffOpt_keith(Guess_sf,qa,T,MBPF);
 
 %% inverse kinematics
@@ -64,16 +64,17 @@ end
 
 %% forward kinematics
 qa = qa+setQA(QA-qa);
-[Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3,ee]=shootingFkOpt_keith(Guess_fk,qa,ksi2,MBPF);
-% 
-% % % % % [Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3]=shootingFkOpt_keith(Guess_sf(1:20),qa,ksi2,MBPF);
-% [s1,s2] = setPlotData(y0,y1,y2,y3);
-% figure;axis equal;grid on;xlabel('X');ylabel('Y');zlabel('Z');
-% plotParallelContinuumRobot(s1,s2);
-% view([0 -90])
-% T = eye(4);
-% T(1:3,1)=y3(end,4:6)';T(1:3,2)=y3(end,7:9)';
-% T(1:3,3)=y3(end,10:12)';T(1:3,4)=y3(end,1:3)';
+toc;
+% [Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3,ee]=shootingFkOpt_keith(Guess_fk,qa,ksi2,MBPF);
+
+% % % % [Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3]=shootingFkOpt_keith(Guess_sf(1:20),qa,ksi2,MBPF);
+% % [s1,s2] = setPlotData(y0,y1,y2,y3);
+% % figure;axis equal;grid on;xlabel('X');ylabel('Y');zlabel('Z');
+% % plotParallelContinuumRobot(s1,s2);
+% % view([0 -90])
+% % T = eye(4);
+% % T(1:3,1)=y3(end,4:6)';T(1:3,2)=y3(end,7:9)';
+% % T(1:3,3)=y3(end,10:12)';T(1:3,4)=y3(end,1:3)';
 
 %% write
 % Qac=qa;

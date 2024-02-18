@@ -13,7 +13,7 @@ LgLdo = [12.5055   25.3269   17.9274    8.4355]';
 ksi=load('ksi.log');
 Guess_fk = load('guess.log');
 Guess_inv = load('guess_inv.log');
-Guess_sf = load('guess_sf.log')*100;
+Guess_sf = load('guess_sf.log')*1;
 qa=load('qa.log');
 pose=load('../pose.log')';
 target=load('target.log')';
@@ -53,7 +53,7 @@ if(max(err)<2)
 end
 %% stiff 
 % Guess_sf = [Guess_fk;ksi_ratio];
-
+tic;
 [guess_sf,MBPF,~,~,~,~,y0,y1,y2,y3,ksi2]=shootingStiffOpt_keith(Guess_sf,qa,T,MBPF);
 
 %% inverse kinematics
@@ -61,10 +61,10 @@ end
 % Guess_inv(1:6)=guess_sf(1:6);Guess_inv(9:18)=guess_sf(7:16);Guess_inv(21:24)=guess_sf(17:20);
 
 [guess_inv,MBPF,~,~,~,~,y0,y1,y2,y3,QA,ee]=shootingInvOpt_keith(Guess_inv,target,ksi2,MBPF);
-
+toc;
 %% forward kinematics
 qa = qa+setQA(QA-qa);
-[Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3,ee]=shootingFkOpt_keith(Guess_fk,qa,ksi2,MBPF);
+% [Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3,ee]=shootingFkOpt_keith(Guess_fk,qa,ksi2,MBPF);
 % 
 % % % % % [Guess_fk,MBPF,~,~,~,~,y0,y1,y2,y3]=shootingFkOpt_keith(Guess_sf(1:20),qa,ksi2,MBPF);
 % [s1,s2] = setPlotData(y0,y1,y2,y3);

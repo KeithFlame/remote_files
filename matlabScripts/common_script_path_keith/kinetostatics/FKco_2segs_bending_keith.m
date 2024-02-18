@@ -136,7 +136,7 @@ qe2=(MBP.Lstem+MBP.L1+MBP.L2+MBP.Lr)*[v(3,3) v(3,4)]'; % elongation seg2
 Rsd=zeros(10,1);
 Rsd(1:3)=Fe-yL2(13:15); % boundary conditions
 Rsd(4:6)=Me-yL2(16:18) - 2*( cross(R2*MBP.r21,R2*MBP.Ke2*v(:,3))+ ...
-    cross(R2*MBP.r22,R2*MBP.Ke2*v(:,4))) - cross(R2*[0 0 MBP.Lg]',yL2(13:15));
+    cross(R2*MBP.r22,R2*MBP.Ke2*v(:,4))) - cross(R2*[0 0 -MBP.Lg]',yL2(13:15));
 Rsd(7:8) =yL1(19:20)-(qa(3:4)+qe1); % path length
 Rsd(9:10)=yL2(19:20)-(qa(5:6)+qe2);
 end

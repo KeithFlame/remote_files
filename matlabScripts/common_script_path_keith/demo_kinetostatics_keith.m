@@ -25,7 +25,7 @@ MBP = MBP.refreshLso(q2(2));
 psi2 = Actuation2Psi_keith(q2,SL,MBP);
 [Tcc2,Scc2]=FKcc_2segs_bending_keith(psi2,SL);
 %% plot
-figure(1);hold on;axis equal;grid on;
+figure(1);hold on;axis equal;grid on;view([-25 15])
 PS_2segs_keith(Scc1,SL,Tcc1);
 PS_2segs_keith(Sco1,SL,Tco1);
 PS_2segs_keith(Scc2,SL,Tcc2);

@@ -7,13 +7,15 @@
 %% figure
 figure;
 hold on;grid on;axis equal;
-xlabel("x");ylabel("y");zlabel("z");
-title("fabrik Delta");
+xlabel("x (mm)");ylabel("y (mm)");zlabel("z (mm)");
+view([-40 15]);
+title("FABRIKc Delta");
 set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
-view([0 0]);
+axis([-450 200 -200 150 -400 500])
+% view([0 0]);
 is_plot = 1;
-is_write = 0;
+is_write = 1;
 if(is_write)
     dt = 1/32;
 end
@@ -62,12 +64,13 @@ for j = 1:chain_num
 end
 if(is_write)
     [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-    imwrite(I,map,'test.gif','LoopCount',Inf,'DelayTime',dt);
+    imwrite(I,map,'test_b.gif','LoopCount',Inf,'DelayTime',dt);
 end
 %% residual
 err_p = 1e-3;
 errp = 10;
 err_dis = errp;
+iter = 0;
 %% target
 q = [190 390 490];
 [p0, p1, p2] = setQ(q);
@@ -83,25 +86,25 @@ chain(2,end) = chain(2,end).refreshUnit;
 chain(3,end) = chain(3,end).refreshUnit;
 if(is_plot)
     chain(1,1).updateUnit;
-    if(is_write)
-        [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-        imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-    end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
     chain(2,end).updateUnit;
-    if(is_write)
-        [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-        imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-    end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
     chain(3,end).updateUnit;
-    if(is_write)
-        [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-        imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-    end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
     chain = setForward(chain);
-    if(is_write)
-        [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-        imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-    end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
 end
 
 %% preparation
@@ -123,10 +126,10 @@ for j = 1:chain_num
             for i = 2:(chain_element-2)
                 ju = single_backward(chain(j,:),i,hd,is_plot);
                 chain(j,i) = ju;
-                    if(is_write)
-                        [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                        imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-                    end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             end
             chain(j,chain_element-1).origin_position = chain(j,2).end_position + (chain(j,3).l1 + chain(j,3).l2)...
                     *chain(j,3).e2;
@@ -135,25 +138,25 @@ for j = 1:chain_num
             chain(j,chain_element-1).end_position = -chain(j,2).e1*chain(j,2).l1...
                 +chain(j,chain_element-1).joint_position;
             chain(j,chain_element-1).updateUnit;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             chain = setBackward(chain);
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             continue;
         end
         
         for i = 2:(chain_element-2)
             ju = single_backward(chain(j,:),i,hd,is_plot);
             chain(j,i) = ju;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
         end
         chain(j,chain_element-1).origin_position = chain(j,2).end_position + (chain(j,3).l1 + chain(j,3).l2)...
                 *chain(j,3).e2;
@@ -162,9 +165,9 @@ for j = 1:chain_num
         chain(j,chain_element-1).end_position = -chain(j,2).e1*chain(j,2).l1...
             +chain(j,chain_element-1).joint_position;
         chain(j,chain_element-1).updateUnit;
-        if(is_write)
+        if((is_write&&iter<11)||mod(iter,10)==0)
             [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-            imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
         end
 end
 
@@ -177,10 +180,10 @@ while(errp>err_p)
             for i = (chain_element-1):-1:3
                 ju = single_forward(chain(j,:),i,hd,is_plot);
                 chain(j,i) = ju;
-                if(is_write)
-                    [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                    imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-                end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             end
             chain(j,2).end_position = chain(j,3).origin_position;
             chain(j,2).joint_position = chain(j,4).e1*chain(j,4).l1...
@@ -188,20 +191,20 @@ while(errp>err_p)
             chain(j,2).origin_position = -chain(j,4).e2*chain(j,4).l2...
                 +chain(j,2).joint_position;
             chain(j,2).updateUnit;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             continue;
         end
         chain = setForward(chain);
         for i = (chain_element-1):-1:3
             ju = single_forward(chain(j,:),i,hd,is_plot);
             chain(j,i) = ju;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
         end
         chain(j,2).end_position = chain(j,3).origin_position;
         chain(j,2).joint_position = chain(j,4).e1*chain(j,4).l1...
@@ -209,9 +212,9 @@ while(errp>err_p)
         chain(j,2).origin_position = -chain(j,4).e2*chain(j,4).l2...
             +chain(j,2).joint_position;
         chain(j,2).updateUnit;
-        if(is_write)
+        if((is_write&&iter<11)||mod(iter,10)==0)
             [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-            imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
         end
     end
     
@@ -220,10 +223,10 @@ while(errp>err_p)
             for i = 2:(chain_element-2)
                 ju = single_backward(chain(j,:),i,hd,is_plot);
                 chain(j,i) = ju;
-                if(is_write)
-                    [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                    imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-                end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             end
             chain(j,chain_element-1).origin_position = chain(j,2).end_position + (chain(j,3).l1 + chain(j,3).l2)...
                     *chain(j,3).e2;
@@ -232,10 +235,10 @@ while(errp>err_p)
             chain(j,chain_element-1).end_position = -chain(j,2).e1*chain(j,2).l1...
                 +chain(j,chain_element-1).joint_position;
             chain(j,chain_element-1).updateUnit;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
             chain = setBackward(chain);
             continue;
         end
@@ -243,10 +246,10 @@ while(errp>err_p)
         for i = 2:(chain_element-2)
             ju = single_backward(chain(j,:),i,hd,is_plot);
             chain(j,i) = ju;
-            if(is_write)
-                [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-                imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-            end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
         end
         chain(j,chain_element-1).origin_position = chain(j,2).end_position + (chain(j,3).l1 + chain(j,3).l2)...
                 *chain(j,3).e2;
@@ -255,9 +258,9 @@ while(errp>err_p)
         chain(j,chain_element-1).end_position = -chain(j,2).e1*chain(j,2).l1...
             +chain(j,chain_element-1).joint_position;
         chain(j,chain_element-1).updateUnit;
-        if(is_write)
+        if((is_write&&iter<11)||mod(iter,10)==0)
             [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-            imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
         end
     end
     errp = max([norm(chain(2,end-1).end_position - chain(2,end).origin_position), ...
@@ -270,10 +273,10 @@ if(is_plot)
     set(hd(1),'LineStyle','none');
     set(hd(2),'Marker','none');
 end
-if(is_write)
-    [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
-    imwrite(I,map,'test.gif','WriteMode','append','DelayTime',dt);
-end
+        if((is_write&&iter<11)||mod(iter,10)==0)
+            [I,map] = rgb2ind(frame2im(getframe(gcf)),128);
+            imwrite(I,map,'test_b.gif','WriteMode','append','DelayTime',dt);
+        end
 %% auxillary
 function [p0, p1, p2] = setQ(q)
     q_max = 490;

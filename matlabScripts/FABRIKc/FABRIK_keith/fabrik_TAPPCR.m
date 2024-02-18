@@ -7,18 +7,19 @@
 %% figure
 figure;
 hold on;grid on;axis equal;
-xlabel("x");ylabel("y");zlabel("z");
-title("fabrik TAPPCR");
-set(gca, 'FontSize', 14);
+xlabel("x (mm)");ylabel("y (mm)");zlabel("z (mm)");
+view([-40 15]);
+title("FABRIKc Delta Extend");
+set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
 view([0 90]);
 is_plot = 1;
-is_write = 0;
+is_write = 1;
 if(is_write)
     dt = 1/32;
 end
 %% Tendon-Actuated Planar Parallel Continuum Robot
-q = [45 45 45]*pi/180;%输入
+q = [15 25 35]*pi/180;%输入
 [p0, p1, p2] = setQ(q);
 p3 = p2 - [0 10 0]';
 p4 = p3 - [0 82 0]';
@@ -59,11 +60,11 @@ if(is_write)
     imwrite(I,map,'test.gif','LoopCount',Inf,'DelayTime',dt);
 end
 %% residual
-err_p = 1e-3;
+err_p = 5e-1;
 errp = 10;
 err_dis = errp;
 %% target
-q = [10 50 50] *pi / 180;
+q = [50 50 50] * pi / 180;
 [p0, p1, p2] = setQ(q);
 chain(1,1).origin_position =p0(:,1);chain(1,1).joint_position =p1(:,1);
 chain(1,1).end_position =p2(:,1);

@@ -3,7 +3,7 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
     dGuess(7,7)=1e-3;dGuess(8,8)=1e-3;
     dGuess(19,19)=1e-3;dGuess(20,20)=1e-3;
     lambda=1e-6; % Jacobian damping
-    eps=1e-5; % residue tolerance
+    eps=1e-4; % residue tolerance
     [Rsd,~,~,~,~,~,~,~,~,~,~,Ee]=forInvShooting_keith(Guess,T,ksi,MBP);
     
     J= zeros(18,24);
@@ -13,7 +13,7 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
     cter3 = 1;
     Guess_all = zeros(30,25);
     iter = 0;
-    disp(['->Now,the inverse kinematics itertaion is ',num2str(iter),' times, which residue is ',num2str(norm(Rsd))]);
+%     disp(['->Now,the inverse kinematics itertaion is ',num2str(iter),' times, which residue is ',num2str(norm(Rsd))]);
     while(norm(Rsd)>eps || cter2>eps)    
         for i=1:size(Guess,1) % finite differencing for Jacobian of initial guess
             [Rsd_,~,~,~,~,~,~,~,~,~,~,Ee_]=forInvShooting_keith(Guess+dGuess(:,i),T,ksi,MBP);
@@ -56,7 +56,7 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
             [Rsd,~,~,~,~,~,~,~,~,~,~,Ee]=forInvShooting_keith(Guess,T,ksi,MBP); 
         end
         iter = iter + 1;
-        disp(['->Now,the inverse kinematics itertaion is ',num2str(iter),' times, which residue is ',num2str(norm(Rsd))]);
+%         disp(['->Now,the inverse kinematics itertaion is ',num2str(iter),' times, which residue is ',num2str(norm(Rsd))]);
     
         if(abs(cter2-Ee)<eps)
             cter2 = 0;

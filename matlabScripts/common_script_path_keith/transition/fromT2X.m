@@ -16,9 +16,7 @@ X = zeros(6,1);
 assert(m==4&&n==4);
 X(1:3) = T(1:3,4);
 axang = rotm2axang(T(1:3,1:3));
-
 X(4:6) = axang(1:3)'*axang(4)*180/pi;
-
 
 end
 

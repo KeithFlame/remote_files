@@ -1,0 +1,19 @@
+function [Poses]=forwardCalib(Q,x,Psi_ref)
+[psi1_]=calcPsiFromQ(Q(:,1),Psi_ref(:,1),x);
+[psi2_]=calcPsiFromQ(Q(:,2),Psi_ref(:,2),x);
+[psi3_]=calcPsiFromQ(Q(:,3),Psi_ref(:,3),x);
+[psi4_]=calcPsiFromQ(Q(:,4),Psi_ref(:,4),x);
+[psi5_]=calcPsiFromQ(Q(:,5),Psi_ref(:,5),x);
+seg=[x(3) x(4) x(5) 15]';
+ga=x(1);
+kmp=forward(psi1_,seg,0.15,8,ga);
+Poses(:,:,1)=[kmp.RO_g kmp.PO_g;0 0 0 1];
+kmp=forward(psi2_,seg,0.15,8,ga);
+Poses(:,:,2)=[kmp.RO_g kmp.PO_g;0 0 0 1];
+kmp=forward(psi3_,seg,0.15,8,ga);
+Poses(:,:,3)=[kmp.RO_g kmp.PO_g;0 0 0 1];
+kmp=forward(psi4_,seg,0.15,8,ga);
+Poses(:,:,4)=[kmp.RO_g kmp.PO_g;0 0 0 1];
+kmp=forward(psi5_,seg,0.15,8,ga);
+Poses(:,:,5)=[kmp.RO_g kmp.PO_g;0 0 0 1];
+end

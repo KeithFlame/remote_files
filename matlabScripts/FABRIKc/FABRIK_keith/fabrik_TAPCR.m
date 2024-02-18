@@ -7,13 +7,14 @@
 %% figure
 figure;
 hold on;grid on;axis equal;
-xlabel("x");ylabel("y");zlabel("z");
-title("fabrik TAPCR");
+xlabel("x (mm)");ylabel("y (mm)");zlabel("z (mm)");
+view([20 35]);
+title("FABRIKc Delta Extend");
 set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
-view([0 90]);
+% view([0 90]);
 is_plot = 1;
-is_write = 0;
+is_write = 1;
 if(is_write)
     dt = 1/32;
 end
@@ -59,7 +60,7 @@ if(is_write)
     imwrite(I,map,'test.gif','LoopCount',Inf,'DelayTime',dt);
 end
 %% residual
-err_p = 1e-3;
+err_p = 5e-1;
 errp = 10;
 err_dis =  errp;
 %% target

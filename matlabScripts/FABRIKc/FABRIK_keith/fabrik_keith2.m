@@ -6,14 +6,15 @@
 %% figure
 figure;
 hold on;grid on;axis equal;
-xlabel("x");ylabel("y");zlabel("z");
-title("fabrik 2chain");
+xlabel("x (mm)");ylabel("y (mm)");zlabel("z (mm)");
+view([35 30]);
+title("FABRIKc Delta Extend");
 set(gca, 'FontSize', 18);
 set(gca,'FontName','Times New Roman');
-view([0 0]);
+% view([0 0]);
 is_plot = 1;
 
-is_write = 0;
+is_write = 1;
 if(is_write)
     dt = 1/4;
 end
@@ -26,21 +27,21 @@ joint_unit2 = MotionUnit(P(:,2), (P(:,2) + P(:,3))/2,P(:,3),1);
 joint_unit3 = MotionUnit(P(:,3), (P(:,3) + P(:,4))/2,P(:,4),2);
 joint_unit4 = MotionUnit(P(:,4), (P(:,4) + P(:,5))/2,P(:,5),2);
 joint_unit5 = MotionUnit(P(:,5), (P(:,5) + P(:,6))/2,P(:,6),2);
-% joint_unit6 = MotionUnit(P(:,6), (P(:,6) + P(:,7))/2,P(:,7),3);
-% joint_unit7 = MotionUnit(P(:,7), (P(:,7) + P(:,8))/2,P(:,8),3);
-% joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,P(:,9),2);
-% % joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,(P(:,8) + P(:,9))/2+[50 0 0]',2);
-% joint_unit9 = MotionUnit(P(:,9), (P(:,9) + P(:,10))/2,P(:,10),1);
+joint_unit6 = MotionUnit(P(:,6), (P(:,6) + P(:,7))/2,P(:,7),3);
+joint_unit7 = MotionUnit(P(:,7), (P(:,7) + P(:,8))/2,P(:,8),3);
+joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,P(:,9),2);
+% joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,(P(:,8) + P(:,9))/2+[50 0 0]',2);
+joint_unit9 = MotionUnit(P(:,9), (P(:,9) + P(:,10))/2,P(:,10),1);
 joint_units = [
     joint_unit1
     joint_unit2
     joint_unit3
     joint_unit4
     joint_unit5
-%     joint_unit6
-%     joint_unit7
-%     joint_unit8
-%     joint_unit9
+    joint_unit6
+    joint_unit7
+    joint_unit8
+    joint_unit9
     ];
 block_size = max(size(joint_units));
 for i = 1:block_size
@@ -60,9 +61,9 @@ err_dis =  errp;
 joint_units(1).end_position = [0 0 50]';
 joint_units(1).joint_position = [0 0 0.01]';
 joint_units(1).origin_position = [0 0 0]';
-joint_units(end).end_position = [246.6 0 236.6]'; % [300 200 500]';
-joint_units(end).joint_position = [246.605 0 236.6]'; %[270 200 460]';
-joint_units(end).origin_position = [156.6025 0 236.6]'; %[270 200 410]';
+joint_units(end).end_position = [246.6 400 236.6]'; % [300 200 500]';
+joint_units(end).joint_position = [246.605 400 236.6]'; %[270 200 460]';
+joint_units(end).origin_position = [156.6025 400 236.6]'; %[270 200 410]';
 joint_units(end) = joint_units(end).refreshUnit;
 
 joint_units(1) = joint_units(1).refreshUnit;
