@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--this is a xml test file-->
+<Root>
+    <tool_type>SP0807S</tool_type>
+    <tool_type>SP0807</tool_type>
+    <tool_type>SP0806S</tool_type>
+    <tool_type>SP0806</tool_type>
+    <tool_type>SP0805S</tool_type>
+    <tool_type>SP0805</tool_type>
+    <tool_type>SP0803S</tool_type>
+    <tool_type>SP0803</tool_type>
+</Root>
