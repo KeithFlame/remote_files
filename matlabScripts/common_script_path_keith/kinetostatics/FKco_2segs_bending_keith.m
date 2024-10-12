@@ -117,7 +117,7 @@ y1(end+1,:)=y1(end,:);y1(end,1:3)=y1(end,1:3)+[0 0 1]*MBP.Lr*R1'; % move from 1e
 t1(end+1)=t1(end)+MBP.Lr;
 yL1=y1(end,:)';
 
-y1_=[yL1(1:3);yL1(4:15);cross(R1*[0 0 MBP.Lr]',yL1(13:15)) + yL1(16:18)+2*(cross(R1*MBP.r11,R1*MBP.Ke1*v(:,1))+...
+y1_=[yL1(1:3);yL1(4:15);cross(R1*[0 0 -MBP.Lr]',yL1(13:15)) + yL1(16:18)+2*(cross(R1*MBP.r11,R1*MBP.Ke1*v(:,1))+...
     cross(R1*MBP.r12,R1*MBP.Ke1*v(:,2)));yL1(21:22)]; % ? start of 2nd seg
 
 [t2,y2]=odeCosserat1(y1_,v,2,MBP,fe,le,MBP.discrete_element); % second seg

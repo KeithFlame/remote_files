@@ -47,9 +47,11 @@ elseif(SegIdx == 3)
     N=ceil(l_do/MBP.discrete_element);
     t=linspace(0,l_do,N)';
     mod_SegIdx = 3;
-    Kb = diag(ksi(2:4));
-    Ke = diag([10000,10000,1]*ksi(1));
+    Kb = eye(3)/100;
+    Ke = Ke2;
+    Ke(3,3)=Ke(3,3)*0.01;
     m_ro=ksi(5);
+    f0=[0 0 0]';
     step=l_do/(N-1);
 end
     
@@ -97,23 +99,24 @@ for i=1:N-1
         q=q+q_dot;
     else
         u=Kb\R'*m;
-        vs3 = Ke\R'*n;
+        vs3 = step*(Ke\R'*n+[0 0 1]');
         v_do = vs3(3)*step;
         theta=step*norm(u(1:2));delta=-atan2(u(2),u(1))+pi/2;phi = step * u(3);
         costheta=cos(theta);sintheta=sin(theta);cosdelta=cos(delta);sindelta=sin(delta); % cache
         if(theta~=0)
-            p_dot=R*( (step+v_do)/theta*[cosdelta*(1-costheta) sindelta*(costheta-1) sintheta]' );
+            % p_dot=R*( (step+v_do)/theta*[cosdelta*(1-costheta) sindelta*(costheta-1) sintheta]' );
             R_dot=[cosdelta^2*costheta+sindelta^2 -sindelta*cosdelta*(costheta-1) cosdelta*sintheta;...
                    sindelta*cosdelta*(1-costheta) cosdelta^2+costheta*sindelta^2 -sindelta*sintheta;...
                   -cosdelta*sintheta sindelta*sintheta costheta]*eul2rotm([phi 0 0]);
         else
-            p_dot=R*[0 0 (step+v_do)]';
+            % p_dot=R*[0 0 (step+v_do)]';
             R_dot=eye(3)*eul2rotm([phi 0 0]);
         end
+        p_dot = R*vs3;
         p=p+p_dot;
         R=R*R_dot;
     
-        n_dot=-step*m_ro*[0 0 -1]'*Gm;
+        n_dot=-f0;
         m_dot =-skewMatrix_keith(p_dot)*n;
         n=n+n_dot;
         m=m+m_dot;

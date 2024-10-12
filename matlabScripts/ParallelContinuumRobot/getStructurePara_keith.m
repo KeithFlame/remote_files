@@ -48,8 +48,8 @@ if(is_refreshed == 1|| isempty(sp0))
     
     % needles
     needle.l=0.5;
-    needle.r=8;
-    needle.d=1;
+    needle.r=15;
+    needle.d=3;
     
     % trocar 
     trocar = getTrocar;

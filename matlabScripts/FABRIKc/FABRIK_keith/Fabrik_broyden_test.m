@@ -6,19 +6,19 @@
 %% figure
 is_plot = 0;
 %% motion unit declarations
-P = [0 0 0  0 0 0 0 0
-    0 0 0 0 0 0 0 0
-    -10 0 10 110 120 140 155 175];
+P = [0 0 0  0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0
+    0 100 200 300 400 500 600 700 800 900 1000];
 joint_unit1 = MotionUnit(P(:,1), (P(:,1) + P(:,2))/2,P(:,2),0);
-joint_unit2 = MotionUnit(P(:,2), (P(:,2) + P(:,3))/2,P(:,3),1);
+joint_unit2 = MotionUnit(P(:,2), (P(:,2) + P(:,3))/2,P(:,3),3);
 joint_unit3 = MotionUnit(P(:,3), (P(:,3) + P(:,4))/2,P(:,4),3);
-joint_unit4 = MotionUnit(P(:,4), (P(:,4) + P(:,5))/2,P(:,5),0);
+joint_unit4 = MotionUnit(P(:,4), (P(:,4) + P(:,5))/2,P(:,5),3);
 joint_unit5 = MotionUnit(P(:,5), (P(:,5) + P(:,6))/2,P(:,6),3);
-joint_unit6 = MotionUnit(P(:,6), (P(:,6) + P(:,7))/2,P(:,7),0);
+joint_unit6 = MotionUnit(P(:,6), (P(:,6) + P(:,7))/2,P(:,7),3);
 joint_unit7 = MotionUnit(P(:,7), (P(:,7) + P(:,8))/2,P(:,8),0);
-% joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,P(:,9),2);
-% % joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,(P(:,8) + P(:,9))/2+[50 0 0]',2);
-% joint_unit9 = MotionUnit(P(:,9), (P(:,9) + P(:,10))/2,P(:,10),1);
+joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,P(:,9),2);
+% joint_unit8 = MotionUnit(P(:,8), (P(:,8) + P(:,9))/2,(P(:,8) + P(:,9))/2+[50 0 0]',2);
+joint_unit9 = MotionUnit(P(:,9), (P(:,9) + P(:,10))/2,P(:,10),1);
 joint_units = [
     joint_unit1
     joint_unit2
@@ -48,11 +48,11 @@ last_end_position = joint_units(block_size-1).end_position;
 last_joint_position = [joint_units(2).joint_position; ...
     joint_units(3).joint_position; joint_units(5).joint_position];
 %% target
-tar_set = load('target.log');
-iter_block = zeros(50000,1);
-for ipsi = 1:50000
+% tar_set = load('target.log');
+% iter_block = zeros(50000,1);
+% for ipsi = 1:1
 
-p=tar_set(ipsi,7:9)'; t=tar_set(ipsi,10:12)';
+% p=tar_set(ipsi,7:9)'; t=tar_set(ipsi,10:12)';
 joint_units(end).end_position = 20*t+p; % [300 200 500]';
 joint_units(end).joint_position = 10*t+p; %[270 200 460]';
 joint_units(end).origin_position = p; %[270 200 410]';
@@ -92,5 +92,5 @@ while(errp>err_p)
         break;
     end
 end
-iter_block(ipsi)=iter;
-end
+% iter_block(ipsi)=iter;
+% end

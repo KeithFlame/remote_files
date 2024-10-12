@@ -20,10 +20,12 @@ Z_base = [0;0;1];
 
 %% 输入的导轨驱动量
 global q_1 q_2 q_3;
-q_1 = 190;
-q_2 = 390;
-q_3 = 190;
-
+q_1 = 490;
+q_2 = 190;
+q_3 = 490;
+% q_1 = 190;
+% q_2 = 390;
+% q_3 = 190.407;
 %% 以支链1为root 支链2和支链3为target
 number = 2;
 global root target_2 target_3;
@@ -93,7 +95,7 @@ delta_1_s = zeros(1000,1);
 delta_2_s = zeros(1000,1);
 delta_3_s = zeros(1000,1);
 %% FABRIKc 迭代
-threshold = 2*1e-3;
+threshold = 1e-3;
 iteration_index = 0;
 broyden_number = 1;
 J=[eye(6) eye(6) eye(6)]';
@@ -239,7 +241,7 @@ while pos_error > threshold
     delta_2_s(iteration_index) = delta_2/pi*180;
     delta_3_s(iteration_index) = delta_3/pi*180;
 
-    if(iteration_index>10)
+    if(iteration_index>1000)
         current_joint_position = [P_1_proximal_joint; P_1_distal_joint; ...
             P_2_proximal_joint; P_2_distal_joint; ...
             P_3_proximal_joint; P_3_distal_joint;];
@@ -264,7 +266,7 @@ while pos_error > threshold
     end
 
 end
-% FABRIKc_process_draw();
+FABRIKc_process_draw();
 toc
 %%  后续处理
 pos_moving_platform = 1/3*(P_1_distal_end+P_2_distal_end+P_3_distal_end);
@@ -301,3 +303,57 @@ end
 % plot(delta_3_s(1:iteration_index),'-.','color','r','linewidth',2);
 % legend('{\itθ}_1 and {\itθ}_3','{\itθ}_2','{\itδ}_1','{\itδ}_2','{\itδ}_3');
 % hold off;
+
+
+
+%%
+
+% 生成原始数据
+x = 1:1:length(error_s(1:iteration_index)); % 原始数据点的 x 值
+y = error_s(1:iteration_index); % 原始数据点的 y 值
+
+% 扩展后的数据点的 x 值
+x1 = 1:(length(error_s(1:iteration_index)));
+
+% 使用 interp1 函数进行插值
+y_extended = interp1(x, y, x1, 'spline'); % 使用样条插值
+
+font_size = 30;
+% x1=1:length(error);
+tt=[256.575860235455
+206.635455040622
+161.958362994665
+124.628939409522
+94.7980686810313
+71.6042790721487
+53.8623357975585
+40.4190302356612
+30.2885835304701
+22.6786909952332
+16.9726349210021
+12.6986442446638
+9.49929358731600
+7.10525737697124
+5.31422308726672
+3.97448876665500
+0.185440376188128
+0.182467446479423
+0.179459630821637
+0.0401469423387211
+0.000124544233523784];
+x2=1:length(tt);
+% figure;
+% loglog(1:100,100:-1:1)
+semilogy(1:100,100:-1:1)
+cla;
+
+hold on;
+grid on;
+% loglog(x1, error,'LineWidth', 2);
+% loglog(x2, tt,'LineWidth', 2);
+semilogy(x1, y_extended,'LineWidth', 2)
+semilogy(x2, tt,'LineWidth', 2)
+xlabel("iteration",'FontName', 'Times New Roman', 'FontSize', font_size)
+ylabel("error (mm)",'FontName', 'Times New Roman', 'FontSize', font_size)
+legend('FABRIKc Delta','FM-FABRIKc');
+set(gca, 'FontSize', font_size)

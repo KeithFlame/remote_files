@@ -98,7 +98,10 @@ delta_3_s = zeros(1000,1);
 threshold = 1e-3;
 iteration_index = 0;
 tic
+view([26 40])
 FABRIKc_process_draw();
+figure;
+view([26 40])
 while pos_error > threshold
     iteration_index = iteration_index + 1;
     %% forward reaching phase
@@ -234,17 +237,26 @@ while pos_error > threshold
     delta_1_s(iteration_index) = delta_1/pi*180;
     delta_2_s(iteration_index) = delta_2/pi*180;
     delta_3_s(iteration_index) = delta_3/pi*180;
-%     if mod(iteration_index,2)==1
+    % if mod(iteration_index,79)==1
+    %     FABRIKc_process_draw();
+    % end
+
+    if iteration_index==4
         FABRIKc_process_draw();
-%     end
+    end
+    % if mod(iteration_index,158)==1
+    %     FABRIKc_process_draw();
+    % end
 %     
 %     if iteration_index==30
 %         break;
 %     end
     
-    disp(iteration_index);
+    % disp(iteration_index);
 end
 toc
+figure;view([26 40])
+FABRIKc_process_draw();
 %%  后续处理
 pos_moving_platform = 1/3*(P_1_distal_end+P_2_distal_end+P_3_distal_end);
 delta_1 = -atan2(P_1_proximal_base(2)-P_1_distal_base(2),P_1_proximal_base(1)-P_1_distal_base(1));

@@ -390,7 +390,8 @@ function psi_l=limitRange(psi, joint_limit)
     elseif(psi(3)>joint_limit(6))
         psi_l(3)=joint_limit(6);
     end
-    if(psi(3)/psi(2)>joint_limit(6)/joint_limit(4))
+    if(psi(3)/psi(2)>joint_limit(6)/50)     % joint_limit(6)/50 means: to 
+        % calculate maximum curvature. (half of L1)
         psi_l(3)=joint_limit(6)/joint_limit(4)*psi(2);
     end
     while(psi_l(4)<joint_limit(7)||psi_l(4)>joint_limit(8))

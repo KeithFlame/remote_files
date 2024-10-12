@@ -23,8 +23,10 @@ end
 L1=SL(1);Lr=SL(2);L2=SL(3);Lg=SL(4);
 if(max(size(SL))<5)
     gamma1 = 0;gamma3 = 0;
+elseif(size(SL)<6)
+    gamma1 = 0;gamma3 = 0;
 else
-    gamma1 = SL(5);gamma3 = SL(7);
+    gamma1 = SL(6);gamma3 = SL(7);
 end
 n1 = ceil(L1/discrete_element);
 n2 = ceil(L2/discrete_element);

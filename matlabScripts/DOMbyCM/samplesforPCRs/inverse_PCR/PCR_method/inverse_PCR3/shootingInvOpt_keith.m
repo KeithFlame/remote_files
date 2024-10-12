@@ -5,7 +5,6 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
     lambda=1e-6; % Jacobian damping
     eps=1e-6; % residue tolerance
     [Rsd,~,~,~,~,~,~,~,~,~,~,Ee]=forInvShooting_keith(Guess,T,ksi,MBP);
-    
     J= zeros(18,24);
     e_err = zeros(24,1);
     g_err = zeros(24,1);
@@ -18,6 +17,7 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
         for i=1:size(Guess,1) % finite differencing for Jacobian of initial guess
             [Rsd_,~,~,~,~,~,~,~,~,~,~,Ee_]=forInvShooting_keith(Guess+dGuess(:,i),T,ksi,MBP);
             J(:,i)=(Rsd_-Rsd)/norm(dGuess(:,i));
+            % (Rsd_-Rsd)'/norm(dGuess(:,i))
             e_err(i)=(Ee-Ee_)/norm(dGuess(:,i));
         end
         dt=0.1;
@@ -45,7 +45,7 @@ function [Guess,MBP,t0,t1,t2,t3,y0,y1,y2,y3,QA,Ee]=shootingInvOpt_keith(Guess,T,
         Guess_last = Guess;
         
 %         Guess=Guess-eye(24)/(J'*J+lambda*eye(24))*J'*(Rsd)*dt; % update guess
-        Guess=Guess-(G_*(Rsd)-dt2*E_*g_err)*dt; % update guess
+        Guess=Guess-(G_*(Rsd)-dt2*E_*g_err); % update guess
         [Rsd,~,~,~,~,~,~,~,~,~,QA,Ee]=forInvShooting_keith(Guess,T,ksi,MBP); % number IVP of equal to number of guessed values
         if(max(abs(QA([3:6 9:12])))>10e-3)
             dt = find(abs(QA([3:6 9:12]))>10e-3);

@@ -230,12 +230,18 @@ classdef MotionUnit
                         obj.lateral_ratio*obj.l2/2);
                 end
 
-                P_lateral_origin = [obj.origin_position obj.origin_direction_position];
+                % P_lateral_origin = [obj.origin_position obj.origin_direction_position];
+                P_lateral_origin = [[ 0 0 0]' [0 0 0.01]'];
+                color3 = [1 1 1];
                 pj2 = plot3(P_lateral_origin(1,:), ...
-                    P_lateral_origin(2,:), P_lateral_origin(3,:), 'Color', color2);
-                P_lateral_origin = [obj.end_position obj.end_direction_position];
+                    P_lateral_origin(2,:), P_lateral_origin(3,:), 'Color', color3);
+                % P_lateral_origin = [obj.end_position obj.end_direction_position];
+                P_lateral_origin = [[ 0 0 0]' [0 0 0.01]'];
                 pj3 = plot3(P_lateral_origin(1,:), ...
-                    P_lateral_origin(2,:), P_lateral_origin(3,:), 'Color', color2);
+                    P_lateral_origin(2,:), P_lateral_origin(3,:), 'Color', color3);
+                % % 设置透明度
+                % alpha(pj2, 0.9); % 红色线条透明度为0.5
+                % alpha(pj3, 0.9); % 蓝色线条透明度为0.5
                 if(obj.joint_type == 3 && obj.theta >1e-6)
                     pl = plot3(P(1,:),P(2,:),P(3,:),'Color',color1,LineStyle='-.');
                     pl.Color(4) = 0.7;
@@ -256,6 +262,7 @@ classdef MotionUnit
                 end
 
                 obj.hd = [pl, pj1, pj2, pj3, pa];
+                obj.hd = [pl, pj1, pj2, pj3, pa];
             end
         end
         
@@ -268,12 +275,12 @@ classdef MotionUnit
                 else
                     set(obj.hd(2),'XData',P(1,2),'YData',P(2,2),'ZData',P(3,2));
                 end
-                P_lateral_origin = [obj.origin_position obj.origin_direction_position];
-                set(obj.hd(3), 'XData', P_lateral_origin(1,:), ...
-                    'YData', P_lateral_origin(2,:), 'ZData',P_lateral_origin(3,:));
-                P_lateral_origin = [obj.end_position obj.end_direction_position];
-                set(obj.hd(4), 'XData', P_lateral_origin(1,:), ...
-                    'YData', P_lateral_origin(2,:), 'ZData',P_lateral_origin(3,:));
+                % P_lateral_origin = [obj.origin_position obj.origin_direction_position];
+                % set(obj.hd(3), 'XData', P_lateral_origin(1,:), ...
+                %     'YData', P_lateral_origin(2,:), 'ZData',P_lateral_origin(3,:));
+                % P_lateral_origin = [obj.end_position obj.end_direction_position];
+                % set(obj.hd(4), 'XData', P_lateral_origin(1,:), ...
+                %     'YData', P_lateral_origin(2,:), 'ZData',P_lateral_origin(3,:));
                 if(obj.joint_type == 3)
                     set(obj.hd(1),'LineStyle','none');
                     if(abs(obj.theta) < 1e-7)

@@ -1,6 +1,27 @@
-SL = [120 29.5 19.6 5.71]';
-psi = [-0.653735, 101.013199,0.706698,0.233023,1.966693,-2.796794]';
-[T,S]=FKcc_2segs_bending_keith(psi,SL);
-figure(1);axis equal; grid on;
-hold on;
-PS_2segs_keith(S,SL,T);
+% alpha = 1:0.1:179;
+
+beta = [90:0.1:179]';
+block_size = length(beta);
+L = 100;
+step = 2*L/(block_size-1);
+d = 0:step:2*L;
+d2 = 2 * L;
+alpha = 180-atand(d2./d);
+
+A = L./alpha.*tand(alpha);
+B = L./beta.*tand(beta);
+
+f = d.*A.*(1-cosd(alpha))+A.*B.*(sind(alpha)-sind(beta))-d.*B.*sind(beta);
+
+fig1 = f>0;
+
+% 
+% d=0;
+% A = L./alpha.*tand(alpha);
+% B = L./beta.*tand(beta);
+% 
+% f = d*A.*(1-cosd(alpha))+A.*B.*(sind(alpha)-sind(beta))-d.*B.*sind(beta);
+% 
+% fig2 = f>0;
+% 
+% fig3 = fig1-fig2;

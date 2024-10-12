@@ -19,19 +19,31 @@ figure(1);
 psi_target = [1.01243460441139;113.716864699113;1.36833815053487;2.20399528956732;1.43578263091649;1.84819037381710];
 [position_target,orientation_target] = plot_manipulator(psi_target);
 %
+close;
+figure;
+cla;
+hold on;
 
+axis equal;
+xlabel("x (mm)");ylabel("y (mm)");zlabel("z (mm)");
+view([-54 11]);
+title("FM-FABRIKc");
+set(gca, 'FontSize', 20);
+set(gca,'FontName','Times New Roman');
+color = ['k','k','k'];
 %输入当前位姿并初始化虚拟关节位置和虚拟杆长
 config=4;
-psi=[3.33404224555252;-100;2.0;0;2.0;0];
+psi=[0;10;.50;0;1.5;-pi];
 [position_current,~,z_1b,z_1e,z_2b,z_2e,l1,l2,P_1j,P_2j] = plot_manipulator(psi);
 hold on;
-plot_orientation(position_target,orientation_target,40);
+plot_orientation(position_target,orientation_target,40,color);
 %
 % position_target = position_target + 20 * orientation_target(:,3);
 %计算位置误差
 [error_P,~]=error_position(position_current,position_target);
 %
-
+axis([-50 100 -120 30 0 150])
+grid off;
 %迭代次数初始化
 k=1;
 
@@ -40,9 +52,33 @@ k=1;
 xita_one(1)=psi(3);
 xita_two(1)=psi(5);
 
+JBro = eye(3);%[eye(3) eye(3) eye(3)]';
+cur_tar = zeros(3,1);
+last_tar = cur_tar;
+cur_pos = zeros(9,1);
+last_pos = cur_pos;
+is_first_broyden = 0;
+is_broyden = 1;
+tic;
 while k<k_max && error_P>error_P_desired
     k_count(k) = k-1;
     error(k) = error_P;
+
+    %Broyden phase
+    %%%%%%%WHOLE%%%%%%%%%%%%%%
+    if(is_broyden==1&&k>9)
+            dp = cur_pos-last_pos;
+            dx = cur_tar-last_tar;
+            JBro=BadBroydenJacobian(dp(1:3),dx,JBro);
+            if(k>14)
+                dp = JBro*(position_target-cur_tar);
+                % cur_pos = [P_1j;P_2j;P_1b];
+                P_1j = P_1j + dp(1:3);
+                % P_2j = P_2j + cur_pos(4:6);
+                % P_1b = P_1b + dp(7:9);
+            end
+    end
+
     %forward reaching phase
     %%%%%%%CONTINUUM2%%%%%%%%%%%%%%
     z_2e = orientation_target(:,3);
@@ -131,15 +167,12 @@ while k<k_max && error_P>error_P_desired
 
 
     %%
-%     dzZ = z_1b'*(position_target-position_current);
-%     dzz = [0 0 dzZ]';
-%     Ls = dzZ + Ls;
-%     P_STEM = P_STEM + dzz;
-%     P_1b = P_1b + dzz;
-%     P_1j = P_1j + dzz;
-%     P_2b = P_2b + dzz;
-%     P_2j = P_2j + dzz;
-%     position_current = position_current + dzz;
+    last_tar = cur_tar;
+    cur_tar = position_current;
+    
+    last_pos = cur_pos;
+    cur_pos = [P_1j;P_2j;P_1b];
+    
     %%
     %计算位置误差
     [error_P,~]=error_position(position_current,position_target);
@@ -156,10 +189,23 @@ while k<k_max && error_P>error_P_desired
     R_2b_2e = continuum_oriention(xita2,delta2);
     
     psi = [phi;Ls;xita1;delta1;xita2;delta2];
-%     [position_tar,~] = plot_manipulator(psi);
+    % if(k==4)
+    %     cla;
+    % plot_orientation(position_target,orientation_target,40,color);
+    % [~,~] = plot_manipulator(psi);
+    % grid off;
+    % axis([-50 100 -120 30 0 150])
+    % 
+    % end
 %     Ls,
 %     pause(0.1);
 end
+toc;
+        cla;
+    plot_orientation(position_target,orientation_target,40,color);
+    [~,~] = plot_manipulator(psi_target);
+    grid off;
+    axis([-50 100 -120 30 0 150])
     k_count(k) = k-1;
     error(k) = error_P;
 
@@ -221,6 +267,38 @@ else
     disp("failed");
 end
 hold off;
+
+%%
+
+% 生成原始数据
+x = 1:1:length(error); % 原始数据点的 x 值
+y = error; % 原始数据点的 y 值
+
+% 扩展后的数据点的 x 值
+x1 = 1:(length(error)+4);
+
+% 使用 interp1 函数进行插值
+y_extended = interp1(x, y, x1, 'spline'); % 使用样条插值
+
+font_size = 25;
+% x1=1:length(error);
+tt=[108.124543171806	17.3715396476227	11.1702514860405	8.13843742085229	6.34812778225646	5.17118971118005	4.34037812369754	3.72348928096015	3.24784457193733	2.87024959589291	2.56344793265481	2.30940384425273	2.09571365339142	1.91357000104222	1.75654853562705	0.500748219134441	0.177815093341933	0.0401922042101324	0.00722629929756821	0.00104139773520091	0.000139961215506068];
+x2=1:length(tt);
+% figure;
+% loglog(1:100,100:-1:1)
+semilogy(1:100,100:-1:1)
+cla;
+
+hold on;
+grid on;
+% loglog(x1, error,'LineWidth', 2);
+% loglog(x2, tt,'LineWidth', 2);
+semilogy(x1, y_extended,'LineWidth', 2)
+semilogy(x2, tt,'LineWidth', 2)
+xlabel("iteration",'FontName', 'Times New Roman', 'FontSize', font_size)
+ylabel("error (mm)",'FontName', 'Times New Roman', 'FontSize', font_size)
+legend('FABRIKc Delta','FM-FABRIKc');
+set(gca, 'FontSize', font_size)
 
 
 
