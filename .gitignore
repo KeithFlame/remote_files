@@ -394,3 +394,10 @@ FodyWeavers.xsd
 *.mat
 cppScripts/libs/ceres/
 cppScripts/libs/ceres_release/
+*.jpg
+*.png
+*.tif
+*.tiff
+*.mp4
+*.html
+*.raw

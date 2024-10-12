@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\libs\opencv\include;$(ProjectDir)..\..\libs\opencv\include\opencv2;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\include\opencv\;$(ProjectDir)..\..\include\opencv\opencv2;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\libs\opencv\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
