@@ -51,7 +51,7 @@ std::string Number2HexStr(uint32_t mData) {
 //    return 0;
 //}
 
-int main() {
+int _______main() {
     // ÊäÈëµÄ×Ö·û´®
     //// ÊäÈëµÄ×Ö·û´®
     //std::string hexString = "24 34 31 30 36 34 31 33";

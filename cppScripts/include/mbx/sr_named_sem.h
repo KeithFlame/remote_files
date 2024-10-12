@@ -1,0 +1,39 @@
+/*****************************************************************************/
+//                                                                                             
+//             Copyright (c) SURGERII. All rights reserved                  
+//                                                                                           
+/*****************************************************************************/
+//                                                                                         
+// File name:named_sem.h              Version: 1.0                           
+//                                                                                            
+/*****************************************************************************/
+//                                                                                          
+// Author: Dai Liang      Date:2020/10/31 10:17:04         
+//                                                                                         
+/*****************************************************************************/
+//                                                                                         
+// Description:                                                            
+//                                                                       
+//                                                                      
+//                                                                        
+/*****************************************************************************/
+#ifndef _5C768828_C2D2_4152_8DC2_AB8A2FCB19C0_H_
+#define _5C768828_C2D2_4152_8DC2_AB8A2FCB19C0_H_
+
+#include "sr_globaldefine.h"
+namespace sr
+{
+struct sem_t
+{
+	int  val;
+};
+
+int sem_init(sem_t* sem, S32 val);
+sem_t* sem_open(const char* name, bool is_create = false, int val = 0);
+int sem_timedwait(sem_t* sem, U32 block_ms = sr::NO_TIME_OUT);
+int sem_wait(sem_t* sem);
+int sem_post(sem_t* sem);
+
+}
+
+#endif // _5C768828_C2D2_4152_8DC2_AB8A2FCB19C0_H_

@@ -37,7 +37,7 @@ void circle_gen(){
 }
 
 int angle_test(std::string mode = "test"){
-    line2Dup::Detector detector(32, {2, 4});  // 32 features is not precise enough; {4,8}
+    line2Dup::Detector detector(32, {2, 4});  // 32 features are not precise enough; {4,8}
 
 	//    mode = "none";
     if(mode == "train"){

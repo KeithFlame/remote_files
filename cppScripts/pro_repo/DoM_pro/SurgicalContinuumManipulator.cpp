@@ -2,18 +2,19 @@
 
 #include "SurgicalContinuumManipulator.h"
 #include "math_extensions.h"
-#include "function_in_DOM.h"
 
-SurgicalContinuumManipulator::SurgicalContinuumManipulator():
-	  E(40e9)
-	, mu(0.33)
+//#include <iostream>
+
+SurgicalContinuumManipulator::SurgicalContinuumManipulator() :
+	E(20e9)
+	, mu(0.25)
 	, d1(0.00095)
 	, d2(0.0004)
-	, Lstem(0.6)
-	, L1(0.1)
+	, Lstem(0.5)
+	, L1(0.0992)
 	, Lr(0.01)
-	, L2(0.02)
-	, Lg(0.015)
+	, L2(0.0194)
+	, Lg(0.016)
 	, Ldo(0.02)
 	, rho1(2.5e-3)
 	, rho2(2.7e-3)
@@ -21,12 +22,13 @@ SurgicalContinuumManipulator::SurgicalContinuumManipulator():
 	, delta_t2(-Keith::PI_4)
 	, K1(5)
 	, K2(0.6)
-	, zeta(0.2)
+	, zeta(0.1)
 	, gamma1(0)
 	, gamma2(0)
 	, gamma3(0)
 	, L1o(0.1)
 	, Lso(0.04)
+	, Lcnla(0.0e-3)
 	, discrete_element(1e-3)
 	, Tgt(Eigen::Matrix4d::Identity())
 {
@@ -39,11 +41,11 @@ SurgicalContinuumManipulator::SurgicalContinuumManipulator():
 	Kb2 = Eigen::DiagonalMatrix<double, 3>(E * I2, E * I2, 2 * G * I2);
 	Ke1 = Eigen::DiagonalMatrix<double, 3>(G * A1, G * A1, E * A1);
 	Ke2 = Eigen::DiagonalMatrix<double, 3>(G * A2, G * A2, E * A2);
-	
+
 	r11 = Eigen::Vector3d{ cos(delta_t1), sin(delta_t1), 0 }*rho1;
 	r12 = Eigen::Vector3d{ cos(delta_t1 + Keith::PI_2), sin(delta_t1 + Keith::PI_2), 0 }*rho1;
-	r21 = Eigen::Vector3d{ cos(delta_t2), sin(delta_t2), 0 }*rho1;
-	r22 = Eigen::Vector3d{ cos(delta_t2 + Keith::PI_2), sin(delta_t2 + Keith::PI_2), 0 }*rho1;
+	r21 = Eigen::Vector3d{ cos(delta_t2), sin(delta_t2), 0 }*rho2;
+	r22 = Eigen::Vector3d{ cos(delta_t2 + Keith::PI_2), sin(delta_t2 + Keith::PI_2), 0 }*rho2;
 	Eigen::Vector3d e3 = Eigen::Vector3d{ 0, 0, 1 };
 	Q1.col(0) = Keith::skew_matrix(r11) * e3;
 	Q1.col(1) = Keith::skew_matrix(r12) * e3;
@@ -51,16 +53,19 @@ SurgicalContinuumManipulator::SurgicalContinuumManipulator():
 	Q1.col(3) = Keith::skew_matrix(r22) * e3;
 	Q2.col(0) = Keith::skew_matrix(r21) * e3;
 	Q2.col(1) = Keith::skew_matrix(r22) * e3;
+	Q1.row(2) = Eigen::Vector4d::Zero();
+	Q2.row(2) = Eigen::Vector2d::Zero();
 	Gc = Eigen::Matrix46d::Zero();
 
 
 }
 SurgicalContinuumManipulator::SurgicalContinuumManipulator(Eigen::Vector2d MP,
 	Eigen::Vector7d SP, Eigen::Vector10d FP) :
-	  L1o(0.1)
+	L1o(0.1)
 	, Lso(0.04)
-	, discrete_element(1e-3)
+	, discrete_element(2e-3)
 	, Tgt(Eigen::Matrix4d::Identity())
+	, Lcnla(218e-3)
 {
 	E = MP(0);
 	mu = MP(1);
@@ -95,15 +100,17 @@ SurgicalContinuumManipulator::SurgicalContinuumManipulator(Eigen::Vector2d MP,
 
 	r11 = Eigen::Vector3d{ cos(delta_t1), sin(delta_t1), 0 }*rho1;
 	r12 = Eigen::Vector3d{ cos(delta_t1 + Keith::PI_2), sin(delta_t1 + Keith::PI_2), 0 }*rho1;
-	r21 = Eigen::Vector3d{ cos(delta_t2), sin(delta_t2), 0 }*rho1;
-	r22 = Eigen::Vector3d{ cos(delta_t2 + Keith::PI_2), sin(delta_t2 + Keith::PI_2), 0 }*rho1;
-	Eigen::Vector3d e3 = Eigen::Vector3d{0, 0, 1 };
+	r21 = Eigen::Vector3d{ cos(delta_t2), sin(delta_t2), 0 }*rho2;
+	r22 = Eigen::Vector3d{ cos(delta_t2 + Keith::PI_2), sin(delta_t2 + Keith::PI_2), 0 }*rho2;
+	Eigen::Vector3d e3 = Eigen::Vector3d{ 0, 0, 1 };
 	Q1.col(0) = Keith::skew_matrix(r11) * e3;
 	Q1.col(1) = Keith::skew_matrix(r12) * e3;
 	Q1.col(2) = Keith::skew_matrix(r21) * e3;
 	Q1.col(3) = Keith::skew_matrix(r22) * e3;
 	Q2.col(0) = Keith::skew_matrix(r21) * e3;
 	Q2.col(1) = Keith::skew_matrix(r22) * e3;
+	Q1.row(2) = Eigen::Vector4d::Zero();
+	Q2.row(2) = Eigen::Vector2d::Zero();
 	Gc = Eigen::Matrix46d::Zero();
 }
 
@@ -190,6 +197,11 @@ void SurgicalContinuumManipulator::setLso(double feeding_length)
 	calcMatrices();
 }
 
+void SurgicalContinuumManipulator::setDiscreteElement(double discrete_element)
+{
+	this->discrete_element = discrete_element * 1e-3;
+}
+
 void SurgicalContinuumManipulator::setBackboneDiameter(double d1, double d2)
 {
 	this->d1 = d1 * 1e-3;
@@ -213,6 +225,7 @@ Eigen::Vector4d SurgicalContinuumManipulator::getL1r2g()
 {
 	Eigen::Vector4d SL;
 	SL << L1, Lr, L2, Lg;
+	SL = SL * 1e3;
 	return SL;
 }
 
@@ -286,6 +299,15 @@ double SurgicalContinuumManipulator::getL1o()
 	return L1o * 1e3;
 }
 
+double SurgicalContinuumManipulator::getLcnla() {
+	return Lcnla * 1e3;
+}
+
+double SurgicalContinuumManipulator::getDiscreteElement()
+{
+	return discrete_element * 1e3;
+}
+
 double SurgicalContinuumManipulator::getSeg1BackboneDiamter()
 {
 	return d1 * 1e3;
@@ -304,6 +326,12 @@ double SurgicalContinuumManipulator::getSeg1PitchCircleRadius()
 double SurgicalContinuumManipulator::getSeg2PitchCircleRadius()
 {
 	return rho2 * 1e3;
+}
+
+Eigen::Vector3d SurgicalContinuumManipulator::getL12Zeta() {
+	Eigen::Vector3d vec;
+	vec << L1 * 1e3, L2 * 1e3, zeta;
+	return vec;
 }
 
 Eigen::Vector3d SurgicalContinuumManipulator::getR11()
@@ -358,23 +386,31 @@ Eigen::Matrix3d SurgicalContinuumManipulator::getKe2()
 
 Eigen::Matrix46d SurgicalContinuumManipulator::calcMatrices()
 {
-	Eigen::Matrix46d dGamma;
-	Eigen::Matrix4d Ell;
-	Eigen::MatrixXd Ka(6, 6), THETA(6, 4);
+	Eigen::Matrix46d dGamma = Eigen::Matrix46d::Identity();
+	Eigen::Matrix4d Ell = Eigen::Matrix4d::Identity();
+	Eigen::MatrixXd THETA(6, 4);
+	Eigen::Matrix6d Ka = Eigen::Matrix6d::Identity();
+
 	dGamma.topLeftCorner(4, 3) = (L1o + Lso * zeta) * Q1.transpose();
 	dGamma.bottomRightCorner(2, 3) = L2 * Q2.transpose();
 
-	Ell.topLeftCorner(2, 2) = Eigen::Matrix2d::Identity() * (L1 + Lstem);
-	Ell.bottomRightCorner(2, 2) = Eigen::Matrix2d::Identity() * (L1 + Lstem + Lr + L2);
 
-	THETA.topLeftCorner(3, 4) = -2 * Ke1(3, 3) * Q1;
+	Ell.topLeftCorner(2, 2) = Eigen::Matrix2d::Identity() * (L1 + Lstem);
+	Ell.bottomRightCorner(2, 2) = Eigen::Matrix2d::Identity() * (L1 + Lstem + Lr + L2 + Lcnla);
+
+	THETA.topLeftCorner(3, 4) = -Ke1(2, 2) * Q1;
 	THETA.topRightCorner(3, 2) = Eigen::Matrix32d::Zero();
-	THETA.bottomRightCorner(3, 2) = -2 * Ke2(3, 3) * Q2;
+	THETA.bottomLeftCorner(3, 2) = Eigen::Matrix32d::Zero();
+	THETA.bottomRightCorner(3, 2) = -Ke2(2, 2) * Q2;
 
 	Ka.topLeftCorner(3, 3) = 4 * Kb1 + 16 * Kb2 + K1 * Kb1;
-	Ka.topLeftCorner(3, 3) = -16 * Kb2 - K2 * Kb1;
-	Ka.topLeftCorner(3, 3) = 16 * Kb2 + K2 * Kb1;
-	
-	Gc = dGamma - Ell * Keith::pinv(THETA) * Ka;
+	Ka.topRightCorner(3, 3) = -16 * Kb2 - K2 * Kb1;
+	Ka.bottomRightCorner(3, 3) = 16 * Kb2 + K2 * Kb1;
+
+	Gc = dGamma - Ell * Keith::pinv(THETA) / 2 * Ka;
+	return Gc;
+}
+
+Eigen::Matrix46d SurgicalContinuumManipulator::getGc() {
 	return Gc;
 }

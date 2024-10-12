@@ -1,4 +1,4 @@
-#include "function_in_DOM.h"
+#include "math_extensions.h"
 
 Eigen::Matrix3d Keith::skew_matrix(Eigen::Vector3d vec)
 {
@@ -47,14 +47,4 @@ Eigen::Matrix4d Keith::fromQuat2T(Eigen::Vector7d vec)
 	res.topLeftCorner(3, 3) = quat.toRotationMatrix();
 	res.topRightCorner(3, 1) = vec.head(3);
 	return res;
-}
-
-Eigen::Vector12d Keith::shootingStiffOpt_keith(Eigen::Vector32d& Guess_sf, Eigen::Vector12d qa, Eigen::Matrix4d Tc, SurgicalContinuumManipulator& MBP1, SurgicalContinuumManipulator& MBP2, Eigen::Vector2d err)
-{
-	Eigen::Vector32d dGuess(Eigen::Vector32d::Zero());
-	double lamda = 1e-6;
-	double thre = 1e-4;
-
-
-	return Eigen::Vector12d();
 }

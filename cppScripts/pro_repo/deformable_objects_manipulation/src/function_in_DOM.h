@@ -5,7 +5,10 @@
 #include "SurgicalContinuumManipulator.h"
 
 namespace Keith {
-
+	Eigen::Matrix3d skew_matrix(Eigen::Vector3d vec);
+	Eigen::Vector3d invSkewMatrix_keith(Eigen::Matrix3d mat1, Eigen::Matrix3d mat2);
+	Eigen::MatrixXd pinv(const Eigen::MatrixXd inMatrix);
+	Eigen::Matrix4d fromQuat2T(Eigen::Vector7d vec);
 	Eigen::Vector12d shootingStiffOpt_keith(Eigen::Vector34d& Guess_sf,
 		Eigen::Vector12d qa, Eigen::Matrix4d Tc, SurgicalContinuumManipulator& MBP1,
 		SurgicalContinuumManipulator& MBP2, Eigen::Vector2d err);
