@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2975b28f-8e87-45b1-b555-f64e493bf673}</ProjectGuid>
-    <RootNamespace>deformableobjectsmanipulation</RootNamespace>
+    <ProjectGuid>{601106c1-ebda-42b1-ba1c-2bb39ac833fb}</ProjectGuid>
+    <RootNamespace>kinetostatics</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -78,11 +78,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)../../libs/eigen-3.4.0/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)../../libs/eigen-3.4.0/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -118,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include/eigen-3.4.0/;./test/;./include/;./src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,6 +131,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)../../include/eigen-3.4.0/;./test/;./include/;./src/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,18 +141,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="auxilliary_function.h" />
-    <ClInclude Include="eigen_extensions.h" />
-    <ClInclude Include="function_in_DOM.h" />
-    <ClInclude Include="math_extensions.h" />
-    <ClInclude Include="SurgicalContinuumManipulator.h" />
-    <ClInclude Include="timer.h" />
+    <ClCompile Include="src\continuum_segment.cpp" />
+    <ClCompile Include="src\coupled_actuation.cpp" />
+    <ClCompile Include="src\difference_function.cpp" />
+    <ClCompile Include="src\math_extensions.cpp" />
+    <ClCompile Include="src\SurgicalContinuumManipulator.cpp" />
+    <ClCompile Include="src\two_segment_tool.cpp" />
+    <ClCompile Include="test\test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="function_in_DOM.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="math_extensions.cpp" />
-    <ClCompile Include="SurgicalContinuumManipulator.cpp" />
+    <ClInclude Include="include\auxiliary_function.h" />
+    <ClInclude Include="include\constant_definition.h" />
+    <ClInclude Include="include\continuum_segment.h" />
+    <ClInclude Include="include\coupled_actuation.h" />
+    <ClInclude Include="include\difference_function.h" />
+    <ClInclude Include="include\eigen_extensions.h" />
+    <ClInclude Include="include\math_extensions.h" />
+    <ClInclude Include="include\space_variables.h" />
+    <ClInclude Include="include\SurgicalContinuumManipulator.h" />
+    <ClInclude Include="include\two_segment_tool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

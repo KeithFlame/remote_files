@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--this is a xml test file-->
+<Root>
+    <feeding_mm>280</feeding_mm>
+    <phi_degree>45</phi_degree>
+    <theta1_degree>30.1965374</theta1_degree>
+    <delta1_degree>29.3526278</delta1_degree>
+    <feeding_mm>280</feeding_mm>
+    <phi_degree>45</phi_degree>
+    <theta1_degree>20.9412636</theta1_degree>
+    <delta1_degree>62.9916675</delta1_degree>
+	<feeding_mm>280</feeding_mm>
+    <phi_degree>45</phi_degree>
+    <theta1_degree>18.4010553</theta1_degree>
+    <delta1_degree>163.6124529</delta1_degree>
+</Root>

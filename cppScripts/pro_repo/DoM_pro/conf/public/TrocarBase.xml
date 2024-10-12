@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--this is a xml test file
+<Root>
+    <X_mm>0</X_mm>
+    <Y_mm>0</Y_mm>
+    <Z_mm>0</Z_mm>
+    <ax_degree>0</ax_degree>
+    <ay_degree>0</ay_degree>
+    <az_degree>0</az_degree>
+	<X_mm>-20</X_mm>
+    <Y_mm>10</Y_mm>
+    <Z_mm>0</Z_mm>
+    <ax_degree>0</ax_degree>
+    <ay_degree>0</ay_degree>
+    <az_degree>0</az_degree>
+	<X_mm>20</X_mm>
+    <Y_mm>10</Y_mm>
+    <Z_mm>0</Z_mm>
+    <ax_degree>0</ax_degree>
+    <ay_degree>0</ay_degree>
+    <az_degree>0</az_degree>
+</Root>
+-->
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!--this is a xml test file-->
+<Root>
+    <X_mm>14.4645</X_mm>
+    <Y_mm>138.2476</Y_mm>
+    <Z_mm>115.0449</Z_mm>
+    <ax_degree>74.5250</ax_degree>
+    <ay_degree>64.8799</ay_degree>
+    <az_degree>-61.4371</az_degree>
+	<X_mm>-8.3722</X_mm>
+    <Y_mm>93.5008</Y_mm>
+    <Z_mm>94.6479</Z_mm>
+    <ax_degree>4.0445</ax_degree>
+    <ay_degree>-128.7461</ay_degree>
+    <az_degree>122.6381</az_degree>
+	<X_mm>2.2524</X_mm>
+    <Y_mm>94.1411</Y_mm>
+    <Z_mm>95.5365</Z_mm>
+    <ax_degree>7.0916</ax_degree>
+    <ay_degree>129.4563</ay_degree>
+    <az_degree>-120.7152</az_degree>
+</Root>
