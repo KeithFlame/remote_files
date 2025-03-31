@@ -19,7 +19,7 @@ CameraManipulation::CameraManipulation(QWidget* parent) : QMainWindow(parent),
 devices_num(0){
 	ui.setupUi(this);
 
-	/*°´¼üÊ¹ÄÜ³õÊ¼»¯*/
+	/*ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ü³ï¿½Ê¼ï¿½ï¿½*/
 	ui.bntEnumDevices->setEnabled(true);
 	ui.bntCloseDevices->setEnabled(false);
 	ui.bntOpenDevices->setEnabled(false);
@@ -30,20 +30,20 @@ devices_num(0){
 	ui.bntSoftwareOnce->setEnabled(false);
 	ui.bntSave_JPG->setEnabled(false);
 
-	// Ïß³Ì¶ÔÏóÊµÀý»¯
-	m_thread_leftcamera = new CameraThread;  //×óÏà»úÏß³Ì¶ÔÏó
-	m_thread_rightcamera = new CameraThread; //ÓÒÏà»úÏß³Ì¶ÔÏó
+	// ï¿½ß³Ì¶ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
+	m_thread_leftcamera = new CameraThread;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½
+	m_thread_rightcamera = new CameraThread; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½
 
-	// Í¼ÏñÖ¸ÕëÊµÀý»¯
-	image_L = new cv::Mat();    // Í¼ÏñÖ¸ÕëÊµÀý»¯
-	image_R = new cv::Mat();    // Í¼ÏñÖ¸ÕëÊµÀý»¯ 
+	// Í¼ï¿½ï¿½Ö¸ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
+	image_L = new cv::Mat();    // Í¼ï¿½ï¿½Ö¸ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½
+	image_R = new cv::Mat();    // Í¼ï¿½ï¿½Ö¸ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ 
 
-	// Ê±ÖÓ
+	// Ê±ï¿½ï¿½
 	display_timer = new QTimer(this);
 
-	// ¼ì²â³õÊ¼»¯
+	// ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 	marker_detection = new MarkerDetection();
-	// ³õÊ¼»¯±äÁ¿
+	// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	devices_num = 0;
 	m_nTriggerMode = TRIGGER_ON;
 	m_bStartGrabbing = START_GRABBING_ON;
@@ -53,17 +53,17 @@ devices_num(0){
 	for (unsigned int i = 0; i < MAX_DEVICE_NUM; i++)
 	{
 		m_stereocamera[i] = new CMvCamera;
-		// Ïà»ú¶ÔÏó³õÊ¼»¯
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 		m_stereocamera[i]->m_pBufForDriver = NULL;
 		m_stereocamera[i]->m_nBufSizeForDriver = 0;
 		m_stereocamera[i]->m_nBufSizeForSaveImage = 0;
 	}
 
-	// Ïà»ú³õÊ¼»¯
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
 	connect(ui.bntEnumDevices, SIGNAL(clicked()), this, SLOT(OnBnClickedEnumButton()));
 	connect(ui.bntOpenDevices, SIGNAL(clicked()), this, SLOT(OnBnClickedOpenButton()));
 	connect(ui.bntCloseDevices, SIGNAL(clicked()), this, SLOT(OnBnClickedCloseButton()));
-	// Í¼Ïñ²É¼¯
+	// Í¼ï¿½ï¿½É¼ï¿½
 	connect(ui.rbnt_Continue_Mode, SIGNAL(clicked()), this, SLOT(OnBnClickedContinusModeRadio()));
 	connect(ui.rbnt_SoftTigger_Mode, SIGNAL(clicked()), this, SLOT(OnBnClickedTriggerModeRadio()));
 	connect(ui.bntStartGrabbing, SIGNAL(clicked()), this, SLOT(OnBnClickedStartGrabbingButton()));
@@ -72,16 +72,16 @@ devices_num(0){
 
 	connect(ui.bntSave_JPG, SIGNAL(clicked()), this, SLOT(OnBnClickedSaveJpgButton()));
 
-	// Í¼ÏñÏÔÊ¾
+	// Í¼ï¿½ï¿½ï¿½ï¿½Ê¾
 	connect(display_timer, SIGNAL(timeout()), this, SLOT(displayImage()));
 
 
-	// Ê¶±ð¿Ø¼þ
+	// Ê¶ï¿½ï¿½Ø¼ï¿½
 	connect(ui.bntCornerRecongnization,SIGNAL(clicked()),this,SLOT(OnBnClickedStartCornerRecongnization()));
 	connect(ui.bntPoseRecongnization, SIGNAL(clicked()), this, SLOT(OnBnClickedStartPoseRecongnization()));
 	connect(ui.bntGlobalRecongnization, SIGNAL(clicked()), this, SLOT(OnBnClickedStartGlobalRecongnization()));
 
-	// Êý¾Ý³õÊ¼»¯
+	// ï¿½ï¿½ï¿½Ý³ï¿½Ê¼ï¿½ï¿½
 	std::fill(all_tool_type, all_tool_type + MAX_TOOL_TYPE_NUM, "0");
 	readAllToolType();
 	readCameraParams();
@@ -99,21 +99,21 @@ devices_num(0){
 }
 
 
-/*************************************************** ¶¨Òå²Ûº¯Êý *************************************************** */
-// ch:°´ÏÂ²éÕÒÉè±¸°´Å¥:Ã¶¾Ù | en:Click Find Device button:Enumeration 
+/*************************************************** ï¿½ï¿½ï¿½ï¿½Ûºï¿½ï¿½ï¿½ *************************************************** */
+// ch:ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Å¥:Ã¶ï¿½ï¿½ | en:Click Find Device button:Enumeration 
 void CameraManipulation::OnBnClickedEnumButton(){
-	memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));    // ch:³õÊ¼»¯Éè±¸ÐÅÏ¢ÁÐ±í  
+	memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));    // ch:ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ï¢ï¿½Ð±ï¿½  
 	int nRet = MV_OK;
-	nRet = CMvCamera::EnumDevices(MV_USB_DEVICE, &m_stDevList);             // ch:Ã¶¾Ù×ÓÍøÄÚËùÓÐÉè±¸,Ïà»úÉè±¸ÊýÁ¿
+	nRet = CMvCamera::EnumDevices(MV_USB_DEVICE, &m_stDevList);             // ch:Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸,ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 
 	devices_num = m_stDevList.nDeviceNum;
 	if (devices_num > 0)
 	{
-		ui.bntOpenDevices->setEnabled(true);// Éè±¸Êý´óÓÚ0£¬Ê¹ÄÜ´ò¿ªÉè±¸°´¼ü
+		ui.bntOpenDevices->setEnabled(true);// ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ê¹ï¿½Ü´ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 	}
 }
 
-// ´ò¿ªÏà»ú,¿ªÆôÏà»ú
+// ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void CameraManipulation::OpenDevices(){
 	int nRet = MV_OK;
 	std::string left_or_right = (char *)m_stDevList.pDeviceInfo[0]->SpecialInfo.stUsb3VInfo.chUserDefinedName;
@@ -140,7 +140,7 @@ void CameraManipulation::OpenDevices(){
 }
 
 void CameraManipulation::OnBnClickedOpenButton(){
-	// Ê¹ÄÜ "¿ªÊ¼²É¼¯" °´¼ü
+	// Ê¹ï¿½ï¿½ "ï¿½ï¿½Ê¼ï¿½É¼ï¿½" ï¿½ï¿½ï¿½ï¿½
 	ui.bntOpenDevices->setEnabled(false);
 	ui.bntCloseDevices->setEnabled(true);
 	ui.rbnt_Continue_Mode->setEnabled(true);
@@ -150,9 +150,9 @@ void CameraManipulation::OnBnClickedOpenButton(){
 	OpenDevices();
 }
 
-// ch:¹Ø±ÕÉè±¸ | en:Close Device
+// ch:ï¿½Ø±ï¿½ï¿½è±¸ | en:Close Device
 void CameraManipulation::CloseDevices(){
-	// ¹Ø±ÕÏß³Ì¡¢Ïà»ú
+	// ï¿½Ø±ï¿½ï¿½ß³Ì¡ï¿½ï¿½ï¿½ï¿½
 	if (m_thread_leftcamera->isRunning())
 	{
 		m_thread_leftcamera->requestInterruption();
@@ -171,69 +171,69 @@ void CameraManipulation::CloseDevices(){
 	m_stereocamera[1]->Close();
 	
 
-	// ch:¹Ø±ÕÖ®ºóÔÙÃ¶¾ÙÒ»±é | en:Enumerate after close
-	memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));    // ch:³õÊ¼»¯Éè±¸ÐÅÏ¢ÁÐ±í  
+	// ch:ï¿½Ø±ï¿½Ö®ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½Ò»ï¿½ï¿½ | en:Enumerate after close
+	memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));    // ch:ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Ï¢ï¿½Ð±ï¿½  
 	int devices_num = MV_OK;
-	devices_num = CMvCamera::EnumDevices(MV_USB_DEVICE, &m_stDevList);           // ch:Ã¶¾Ù×ÓÍøÄÚËùÓÐÉè±¸,Ïà»úÉè±¸ÊýÁ¿
+	devices_num = CMvCamera::EnumDevices(MV_USB_DEVICE, &m_stDevList);           // ch:Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸,ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 }
 
-// ch:°´ÏÂ¹Ø±ÕÉè±¸°´Å¥£º¹Ø±ÕÉè±¸ ,°üº¬Ïú»Ù¾ä±ú| en:Click Close button: Close Device
+// ch:ï¿½ï¿½ï¿½Â¹Ø±ï¿½ï¿½è±¸ï¿½ï¿½Å¥ï¿½ï¿½ï¿½Ø±ï¿½ï¿½è±¸ ,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¾ï¿½ï¿½| en:Click Close button: Close Device
 void CameraManipulation::OnBnClickedCloseButton(){
 	ui.bntOpenDevices->setEnabled(true);
 	ui.bntCloseDevices->setEnabled(false);
-	// Í¼Ïñ²É¼¯¿Ø¼þ
+	// Í¼ï¿½ï¿½É¼ï¿½ï¿½Ø¼ï¿½
 	ui.rbnt_Continue_Mode->setEnabled(false);
 	ui.rbnt_SoftTigger_Mode->setEnabled(false);
 	ui.bntStartGrabbing->setEnabled(false);
 	ui.bntStopGrabbing->setEnabled(false);
-	// ±£´æÍ¼Ïñ¿Ø¼þ
+	// ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ø¼ï¿½
 	ui.bntSave_JPG->setEnabled(false);
-	// ¹Ø±ÕÉè±¸£¬Ïú»ÙÏß³Ì
+	// ï¿½Ø±ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½
 	CloseDevices();
 }
 
-// ¿ªÊ¼Á¬Ðø²É¼¯Í¼Ïñ
+// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½Í¼ï¿½ï¿½
 void CameraManipulation::OnBnClickedStartGrabbingButton(){
-	m_bContinueStarted = 1; // Îª´¥·¢Ä£Ê½±ê¼ÇÒ»ÏÂ£¬ÇÐ»»´¥·¢Ä£Ê½Ê±ÏÈÖ´ÐÐÍ£Ö¹²É¼¯Í¼Ïñº¯Êý
+	m_bContinueStarted = 1; // Îªï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½Ò»ï¿½Â£ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½Ê±ï¿½ï¿½Ö´ï¿½ï¿½Í£Ö¹ï¿½É¼ï¿½Í¼ï¿½ï¿½ï¿½ï¿½
 
-	// Í¼Ïñ²É¼¯¿Ø¼þ
+	// Í¼ï¿½ï¿½É¼ï¿½ï¿½Ø¼ï¿½
 	ui.bntStartGrabbing->setEnabled(false);
 	ui.bntStopGrabbing->setEnabled(true);
-	// ±£´æÍ¼Ïñ¿Ø¼þ
+	// ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ø¼ï¿½
 	ui.bntSave_JPG->setEnabled(true);
 
 	int camera_Index = 0;
 
-	// ÏÈÅÐ¶ÏÊ²Ã´Ä£Ê½£¬ÔÙÅÐ¶ÏÊÇ·ñÕýÔÚ²É¼¯
+	// ï¿½ï¿½ï¿½Ð¶ï¿½Ê²Ã´Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Ú²É¼ï¿½
 	if (m_nTriggerMode == TRIGGER_ON){
-		// ch:¿ªÊ¼²É¼¯Ö®ºó²Å´´½¨workthreadÏß³Ì | en:Create workthread after start grabbing
+		// ch:ï¿½ï¿½Ê¼ï¿½É¼ï¿½Ö®ï¿½ï¿½Å´ï¿½ï¿½ï¿½workthreadï¿½ß³ï¿½ | en:Create workthread after start grabbing
 		for (unsigned int i = 0; i < m_stDevList.nDeviceNum; i++){
-			//¿ªÆôÏà»ú²É¼¯
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½
 			m_stereocamera[i]->StartGrabbing();
 
 			camera_Index = i;
 			if (camera_Index == 0){
-				m_thread_leftcamera->getCameraPtr(m_stereocamera[0]); //Ïß³Ì»ñÈ¡×óÏà»úÖ¸Õë
-				m_thread_leftcamera->getImagePtr(image_L);  //Ïß³Ì»ñÈ¡×óÍ¼ÏñÖ¸Õë
-				m_thread_leftcamera->setCameraSymbol(0); //²»¼ì²â½Çµã ==0
+				m_thread_leftcamera->getCameraPtr(m_stereocamera[0]); //ï¿½ß³Ì»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+				m_thread_leftcamera->getImagePtr(image_L);  //ï¿½ß³Ì»ï¿½È¡ï¿½ï¿½Í¼ï¿½ï¿½Ö¸ï¿½ï¿½
+				m_thread_leftcamera->setCameraSymbol(0); //ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ ==0
 
 				if (!m_thread_leftcamera->isRunning()){
 					m_thread_leftcamera->start();
 					m_stereocamera[0]->softTrigger();
-					m_stereocamera[0]->ReadBuffer(*image_L);//¶ÁÈ¡Mat¸ñÊ½µÄÍ¼Ïñ
+					m_stereocamera[0]->ReadBuffer(*image_L);//ï¿½ï¿½È¡Matï¿½ï¿½Ê½ï¿½ï¿½Í¼ï¿½ï¿½
 				}
 
 			}
 
 			if (camera_Index == 1){
-				m_thread_rightcamera->getCameraPtr(m_stereocamera[1]); //Ïß³Ì»ñÈ¡ÓÒÏà»úÖ¸Õë
-				m_thread_rightcamera->getImagePtr(image_R);   //Ïß³Ì»ñÈ¡ÓÒÍ¼ÏñÖ¸Õë
-				m_thread_rightcamera->setCameraSymbol(0); //ÓÒÏà»ú Index==1
+				m_thread_rightcamera->getCameraPtr(m_stereocamera[1]); //ï¿½ß³Ì»ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
+				m_thread_rightcamera->getImagePtr(image_R);   //ï¿½ß³Ì»ï¿½È¡ï¿½ï¿½Í¼ï¿½ï¿½Ö¸ï¿½ï¿½
+				m_thread_rightcamera->setCameraSymbol(0); //ï¿½ï¿½ï¿½ï¿½ï¿½ Index==1
 
 				if (!m_thread_rightcamera->isRunning()){
 					m_thread_rightcamera->start();
 					m_stereocamera[1]->softTrigger();
-					m_stereocamera[1]->ReadBuffer(*image_R);//¶ÁÈ¡Mat¸ñÊ½µÄÍ¼Ïñ
+					m_stereocamera[1]->ReadBuffer(*image_R);//ï¿½ï¿½È¡Matï¿½ï¿½Ê½ï¿½ï¿½Í¼ï¿½ï¿½
 				}
 			}
 		}
@@ -241,13 +241,13 @@ void CameraManipulation::OnBnClickedStartGrabbingButton(){
 	}
 }
 
-// ch:°´ÏÂ½áÊø²É¼¯°´Å¥ | en:Click Stop button
+// ch:ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½Å¥ | en:Click Stop button
 void CameraManipulation::OnBnClickedStopGrabbingButton()
 {
 	ui.bntStartGrabbing->setEnabled(true);
 	ui.bntStopGrabbing->setEnabled(false);
 	for (unsigned int i = 0; i < m_stDevList.nDeviceNum; i++){
-		//¹Ø±ÕÏà»ú
+		//ï¿½Ø±ï¿½ï¿½ï¿½ï¿½
 		if (m_thread_leftcamera->isRunning()){
 			m_stereocamera[0]->StopGrabbing();
 			m_thread_leftcamera->requestInterruption();
@@ -326,10 +326,10 @@ void CameraManipulation::displayLeftImage(const Mat * imagePrt, int cameraIndex)
 	cv::Mat rgb;
 	cv::cvtColor(*imagePrt, rgb, CV_BGR2RGB);
 
-	//ÅÐ¶ÏÊÇºÚ°×¡¢²ÊÉ«Í¼Ïñ
+	//ï¿½Ð¶ï¿½ï¿½ÇºÚ°×¡ï¿½ï¿½ï¿½É«Í¼ï¿½ï¿½
 	QImage QmyImage_L = QImage((const unsigned char*)(rgb.data), rgb.cols, rgb.rows, QImage::Format_RGB888);
 	QmyImage_L = (QmyImage_L).scaled(ui.label_camera_display->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-	//ÏÔÊ¾Í¼Ïñ
+	//ï¿½ï¿½Ê¾Í¼ï¿½ï¿½
 	ui.label_camera_display->setPixmap(QPixmap::fromImage(QmyImage_L));
 }
 
@@ -340,22 +340,22 @@ void CameraManipulation::displayRightImage(const Mat * imagePrt, int cameraIndex
 
 	QImage 	QmyImage_R = QImage((const unsigned char*)(rgb.data), rgb.cols, rgb.rows, QImage::Format_RGB888);
 	QmyImage_R = (QmyImage_R).scaled(ui.label_camera_display_right->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-	//ÏÔÊ¾Í¼Ïñ
+	//ï¿½ï¿½Ê¾Í¼ï¿½ï¿½
 	ui.label_camera_display_right->setPixmap(QPixmap::fromImage(QmyImage_R));
 }
 
 
-// ch:°´ÏÂÁ¬ÐøÄ£Ê½°´Å¥ | en:Click Continues button
+// ch:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½Å¥ | en:Click Continues button
 void CameraManipulation::OnBnClickedContinusModeRadio(){
 	ui.bntStartGrabbing->setEnabled(true);
 	m_nTriggerMode = TRIGGER_ON;
 }
 
-// ch:°´ÏÂ´¥·¢Ä£Ê½°´Å¥ | en:Click Trigger Mode button
+// ch:ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½Å¥ | en:Click Trigger Mode button
 void CameraManipulation::OnBnClickedTriggerModeRadio(){
-	// ´ÓÁ¬Ðø²É¼¯Ä£Ê½ÒÑ¾­ÕýÔÚ²É¼¯µÄ×´Ì¬ÇÐ»»¹ýÀ´
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½Ä£Ê½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ú²É¼ï¿½ï¿½ï¿½×´Ì¬ï¿½Ð»ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (m_bContinueStarted == 1) {
-		OnBnClickedStopGrabbingButton();//ÏÈÖ´ÐÐÍ£Ö¹²É¼¯
+		OnBnClickedStopGrabbingButton();//ï¿½ï¿½Ö´ï¿½ï¿½Í£Ö¹ï¿½É¼ï¿½
 	}
 
 	ui.bntStartGrabbing->setEnabled(false);
@@ -367,23 +367,23 @@ void CameraManipulation::OnBnClickedTriggerModeRadio(){
 	}
 }
 
-// ch:°´ÏÂÈí´¥·¢Ò»´Î°´Å¥ | en:Click Execute button
+// ch:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î°ï¿½Å¥ | en:Click Execute button
 void CameraManipulation::OnBnClickedSoftwareOnceButton(){
-	// ±£´æÍ¼Ïñ¿Ø¼þ
+	// ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ø¼ï¿½
 	ui.bntSave_JPG->setEnabled(true);
 
 	if (m_nTriggerMode == TRIGGER_OFF){
 		int nRet = MV_OK;
 		for (unsigned int i = 0; i < m_stDevList.nDeviceNum; i++){
-			//¿ªÆôÏà»ú²É¼¯
+			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½
 			m_stereocamera[i]->StartGrabbing();
 
 			if (i == 0){
 				nRet = m_stereocamera[i]->CommandExecute("TriggerSoftware");
 				m_stereocamera[i]->ReadBuffer(*image_L);
-				displayLeftImage(image_L, i);//×óÏà»úÍ¼Ïñ
+				displayLeftImage(image_L, i);//ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
 			}
-			if (i == 1){			//¿ªÆôÏà»ú²É¼¯
+			if (i == 1){			//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½
 				nRet = m_stereocamera[i]->CommandExecute("TriggerSoftware");
 				m_stereocamera[i]->ReadBuffer(*image_R);
 				displayRightImage(image_R, i);
@@ -405,7 +405,7 @@ void CameraManipulation::OnBnClickedStartGlobalRecongnization(){
 	is_global_detection = !is_global_detection;
 }
 
-// ch:°´ÏÂ±£´æjpgÍ¼Æ¬°´Å¥ | en:Click Save JPG button
+// ch:ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½jpgÍ¼Æ¬ï¿½ï¿½Å¥ | en:Click Save JPG button
 void CameraManipulation::OnBnClickedSaveJpgButton(){
 	m_nSaveImageType = MV_Image_Jpeg;
 	std::string file_path = ui.pathEdit->text().toStdString();
@@ -413,45 +413,45 @@ void CameraManipulation::OnBnClickedSaveJpgButton(){
 	SaveImage();
 }
 
-// ch:±£´æÍ¼Æ¬ | en:Save Image
+// ch:ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ | en:Save Image
 void CameraManipulation::SaveImage(){
-	// ch:»ñÈ¡1ÕÅÍ¼ | en:Get one frame
+	// ch:ï¿½ï¿½È¡1ï¿½ï¿½Í¼ | en:Get one frame
 	static unsigned int frame_num = 1;
 	MV_FRAME_OUT_INFO_EX stImageInfo = { 0 };
 	memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT_INFO_EX));
 	unsigned int nDataLen = 0;
 	int nRet = MV_OK;
 	for (int i = 0; i < devices_num; i++){
-		// ch:½öÔÚµÚÒ»´Î±£´æÍ¼ÏñÊ±ÉêÇë»º´æ£¬ÔÚ CloseDevice Ê±ÊÍ·Å
+		// ch:ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½Î±ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ë»ºï¿½æ£¬ï¿½ï¿½ CloseDevice Ê±ï¿½Í·ï¿½
 		// en:Request buffer first time save image, release after CloseDevice
 		if (NULL == m_stereocamera[i]->m_pBufForDriver){
 			unsigned int nRecvBufSize = 0;
 			unsigned int nRet = m_stereocamera[i]->GetIntValue("PayloadSize", &nRecvBufSize);
 
-			m_stereocamera[i]->m_nBufSizeForDriver = nRecvBufSize;  // Ò»Ö¡Êý¾Ý´óÐ¡
+			m_stereocamera[i]->m_nBufSizeForDriver = nRecvBufSize;  // Ò»Ö¡ï¿½ï¿½ï¿½Ý´ï¿½Ð¡
 			m_stereocamera[i]->m_pBufForDriver = (unsigned char*)malloc(m_stereocamera[i]->m_nBufSizeForDriver);
 		}
 
 		nRet = m_stereocamera[i]->GetOneFrameTimeout(m_stereocamera[i]->m_pBufForDriver, &nDataLen, m_stereocamera[i]->m_nBufSizeForDriver, &stImageInfo, 1000);
 		if (MV_OK == nRet){
-			// ch:½öÔÚµÚÒ»´Î±£´æÍ¼ÏñÊ±ÉêÇë»º´æ£¬ÔÚ CloseDevice Ê±ÊÍ·Å
+			// ch:ï¿½ï¿½ï¿½Úµï¿½Ò»ï¿½Î±ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ë»ºï¿½æ£¬ï¿½ï¿½ CloseDevice Ê±ï¿½Í·ï¿½
 			// en:Request buffer first time save image, release after CloseDevice
 			if (NULL == m_stereocamera[i]->m_pBufForSaveImage){
-				// ch:BMPÍ¼Æ¬´óÐ¡£ºwidth * height * 3 + 2048(Ô¤ÁôBMPÍ·´óÐ¡)
+				// ch:BMPÍ¼Æ¬ï¿½ï¿½Ð¡ï¿½ï¿½width * height * 3 + 2048(Ô¤ï¿½ï¿½BMPÍ·ï¿½ï¿½Ð¡)
 				// en:BMP image size: width * height * 3 + 2048 (Reserved BMP header size)
 				m_stereocamera[i]->m_nBufSizeForSaveImage = stImageInfo.nWidth * stImageInfo.nHeight * 3 + 2048;
 			}
-			// ch:ÉèÖÃ¶ÔÓ¦µÄÏà»ú²ÎÊý | en:Set camera parameter
+			// ch:ï¿½ï¿½ï¿½Ã¶ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | en:Set camera parameter
 			MV_SAVE_IMAGE_PARAM_EX stParam = { 0 };
-			stParam.enImageType = m_nSaveImageType; // ch:ÐèÒª±£´æµÄÍ¼ÏñÀàÐÍ | en:Image format to save;
-			stParam.enPixelType = stImageInfo.enPixelType;  // Ïà»ú¶ÔÓ¦µÄÏñËØ¸ñÊ½ | en:Pixel format
-			stParam.nBufferSize = m_stereocamera[i]->m_nBufSizeForSaveImage;  // ´æ´¢½ÚµãµÄ´óÐ¡ | en:Buffer node size
-			stParam.nWidth = stImageInfo.nWidth;         // Ïà»ú¶ÔÓ¦µÄ¿í | en:Width
-			stParam.nHeight = stImageInfo.nHeight;          // Ïà»ú¶ÔÓ¦µÄ¸ß | en:Height
+			stParam.enImageType = m_nSaveImageType; // ch:ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | en:Image format to save;
+			stParam.enPixelType = stImageInfo.enPixelType;  // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½Ê½ | en:Pixel format
+			stParam.nBufferSize = m_stereocamera[i]->m_nBufSizeForSaveImage;  // ï¿½æ´¢ï¿½Úµï¿½Ä´ï¿½Ð¡ | en:Buffer node size
+			stParam.nWidth = stImageInfo.nWidth;         // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä¿ï¿½ | en:Width
+			stParam.nHeight = stImageInfo.nHeight;          // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä¸ï¿½ | en:Height
 			stParam.nDataLen = stImageInfo.nFrameLen;
 			stParam.pData = m_stereocamera[i]->m_pBufForDriver;
 			stParam.pImageBuffer = m_stereocamera[i]->m_pBufForSaveImage;
-			stParam.nJpgQuality = 90;       // ch:jpg±àÂë£¬½öÔÚ±£´æJpgÍ¼ÏñÊ±ÓÐÐ§¡£±£´æBMPÊ±SDKÄÚºöÂÔ¸Ã²ÎÊý
+			stParam.nJpgQuality = 90;       // ch:jpgï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½JpgÍ¼ï¿½ï¿½Ê±ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½BMPÊ±SDKï¿½Úºï¿½ï¿½Ô¸Ã²ï¿½ï¿½ï¿½
 
 			nRet = m_stereocamera[i]->SaveImage(&stParam);
 
@@ -472,18 +472,18 @@ void CameraManipulation::SaveImage(){
 }
 
 bool CameraManipulation::isExists(std::string file_path){
-	std::string dir = "./"+ file_path; //ÎÄ¼þ¼ÐÂ·¾¶
-	if (access(dir.c_str(), 0) == -1) { //ÅÐ¶Ï¸ÃÎÄ¼þ¼ÐÊÇ·ñ´æÔÚ
+	std::string dir = "./"+ file_path; //ï¿½Ä¼ï¿½ï¿½ï¿½Â·ï¿½ï¿½
+	if (access(dir.c_str(), 0) == -1) { //ï¿½Ð¶Ï¸ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 #ifdef WIN32
-		int flag = mkdir(dir.c_str());  //Windows´´½¨ÎÄ¼þ¼Ð
+		int flag = mkdir(dir.c_str());  //Windowsï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 #else
-		int flag = mkdir(dir.c_str(), S_IRWXU);  //Linux´´½¨ÎÄ¼þ¼Ð
+		int flag = mkdir(dir.c_str(), S_IRWXU);  //Linuxï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 #endif
-		if (flag == 0) {  //´´½¨³É¹¦
+		if (flag == 0) {  //ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½
 			//std::cout << "Create directory successfully." << std::endl;
 			return true;
 		}
-		else { //´´½¨Ê§°Ü
+		else { //ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 			//std::cout << "Fail to create directory." << std::endl;
 			//throw std::exception();
 			return false;

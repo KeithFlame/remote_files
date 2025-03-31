@@ -1,5 +1,5 @@
 
-test_name = 't1';
+test_name = 'trial_6_3';
 % 获取当前路径
 currentPath = pwd;
 
@@ -48,15 +48,27 @@ end
 
 cur_path_2=[currentPath,'\pic_factory\',test_name];
 
-%% plot cur_pose
+%% plot cur_pose 绘制当前坐标 从main->after
 
 python_path = 'F:\code_git\pythonScripts\endsAndOdds\plotCoord2.py ';
 pythonScriptPath = [python_path,cur_path_2];
 system(['python ', pythonScriptPath]);
 
 
+%% plot target 绘制目标点 从after->after
 
-%% plot cur_tar
+python_path = 'F:\code_git\pythonScripts\endsAndOdds\plot_target.py ';
+pythonScriptPath = [python_path,cur_path_2];
+system(['python ', pythonScriptPath]);
+
+
+%% plot cur_trajectory 绘制运动轨迹 从after->final
+
+python_path = 'F:\code_git\pythonScripts\endsAndOdds\plot_cur.py ';
+pythonScriptPath = [python_path,cur_path_2];
+system(['python ', pythonScriptPath]);
+
+%% plot cur_tar 绘制实时目标 从after->final
 
 python_path = 'F:\code_git\pythonScripts\endsAndOdds\plot_cur_tar.py ';
 pythonScriptPath = [python_path,cur_path_2];

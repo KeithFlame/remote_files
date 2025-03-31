@@ -83,8 +83,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)..\..\libs\opencv\include\;$(ProjectDir)..\..\libs\eigen-3.4.0\;$(ProjectDir)..\..\libs\ceres_release\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(ProjectDir)..\..\libsceres_release\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\include\opencv\;$(ProjectDir)..\..\include\eigen-3.4.0\;$(ProjectDir)..\..\libs\ceres_release\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)..\..\libs\opencv\lib\;$(ProjectDir)..\..\libs\ceres_release\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -842,7 +842,7 @@ cv::Mat test_hdr(ImageExposureTime cap1, ImageExposureTime cap2)
 }
 
 
-//¼ì²â¾ØÐÎ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 static double angle(cv::Point pt1, cv::Point pt2, cv::Point pt0)
 {
     double dx1 = pt1.x - pt0.x;
@@ -863,7 +863,7 @@ double square_size(std::vector<cv::Point> square)
 
 }
 
-//µÚÒ»¸ö²ÎÊýÊÇ´«ÈëµÄÔ­Ê¼Í¼Ïñ£¬µÚ¶þÊÇÊä³öµÄÍ¼Ïñ¡£
+//ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½Ô­Ê¼Í¼ï¿½ñ£¬µÚ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
 void findSquares(const cv::Mat& image, cv::Mat& out, std::vector<std::vector<cv::Point>>& squares, int min_area=10000, int max_area=100000)
 {
     int thresh = 50, N = 5;
@@ -874,29 +874,29 @@ void findSquares(const cv::Mat& image, cv::Mat& out, std::vector<std::vector<cv:
     src = image.clone();
     out = image.clone();
     gray_one = cv::Mat(src.size(), CV_8U);
-    //ÂË²¨ÔöÇ¿±ßÔµ¼ì²â
+    //ï¿½Ë²ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Ôµï¿½ï¿½ï¿½
     cv::medianBlur(src, dst, 9);
 
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
 
-    //ÔÚÍ¼ÏñµÄÃ¿¸öÑÕÉ«Í¨µÀÖÐ²éÕÒ¾ØÐÎ
+    //ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½É«Í¨ï¿½ï¿½ï¿½Ð²ï¿½ï¿½Ò¾ï¿½ï¿½ï¿½
     for (int c = 0; c < image.channels(); c++)
     {
         int ch[] = { c, 0 };
 
-        //Í¨µÀ·ÖÀë
+        //Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         cv::mixChannels(&dst, 1, &gray_one, 1, ch, 1);
 
-        // ³¢ÊÔ¼¸¸öãÐÖµ
+        // ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
         for (int l = 0; l < N; l++)
         {
-            // ÓÃcanny()ÌáÈ¡±ßÔµ
+            // ï¿½ï¿½canny()ï¿½ï¿½È¡ï¿½ï¿½Ôµ
             if (l == 0)
             {
-                //¼ì²â±ßÔµ
+                //ï¿½ï¿½ï¿½ï¿½Ôµ
                 Canny(gray_one, gray, 5, thresh, 5);
-                //ÅòÃ›
+                //ï¿½ï¿½Ã›
                 dilate(gray, gray, cv::Mat(), cv::Point(-1, -1));
             }
             else
@@ -904,18 +904,18 @@ void findSquares(const cv::Mat& image, cv::Mat& out, std::vector<std::vector<cv:
                 gray = gray_one >= (l + 1) * 255 / N;
             }
 
-            // ÂÖÀª²éÕÒ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             cv::findContours(gray, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
 
             std::vector<cv::Point> approx;
 
-            // ¼ì²âËùÕÒµ½µÄÂÖÀª
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             for (size_t i = 0; i < contours.size(); i++)
             {
-                //Ê¹ÓÃÍ¼ÏñÂÖÀªµã½øÐÐ¶à±ßÐÎÄâºÏ
+                //Ê¹ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 approxPolyDP(cv::Mat(contours[i]), approx, cv::arcLength(cv::Mat(contours[i]), true) * 0.02, true);
 
-                //¼ÆËãÂÖÀªÃæ»ýºó£¬µÃµ½¾ØÐÎ4¸ö¶¥µã
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬µÃµï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if (approx.size() == 4 && fabs(cv::contourArea(cv::Mat(approx))) < max_area && fabs(cv::contourArea(cv::Mat(approx))) > min_area && cv::isContourConvex(cv::Mat(approx)))
                 {
                     //std::cout << cv::contourArea(cv::Mat(approx)) << std::endl;
@@ -924,7 +924,7 @@ void findSquares(const cv::Mat& image, cv::Mat& out, std::vector<std::vector<cv:
 
                     for (int j = 2; j < 5; j++)
                     {
-                        // ÇóÂÖÀª±ßÔµÖ®¼ä½Ç¶ÈµÄ×î´óÓàÏÒ
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔµÖ®ï¿½ï¿½Ç¶Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         double cosine = fabs(angle(approx[j % 4], approx[j - 2], approx[j - 1]));
                         maxCosine = MAX(maxCosine, cosine);
                     }
@@ -1624,7 +1624,7 @@ void capture_video()
         //std::cout << current_time_interval << std::endl;
         if (current_time_interval > 1.f)
         {
-            //×¢µô¸ÃÐÐ¼´¿ÉÊµÏÖÊÖ¶¯¿ØÖÆ
+            //×¢ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
             //isGetFrame = true;
             current_time_interval = 0.f;
             Fps.start();

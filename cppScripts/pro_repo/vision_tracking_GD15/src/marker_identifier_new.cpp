@@ -406,16 +406,16 @@ static bool findCircles_new_sub(const std::vector<cv::Point>& cR, const cv::Mat&
 	}
 	//cv::imshow("imageSrc", img_roi);
 
-	//È¥³ý¹ýÐ¡ÇøÓò£¬³õÊ¼»¯ÑÕÉ«±í
+	//È¥ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ò£¬³ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
 	//std::vector<cv::Vec3b> colors(num);
 	//colors[0] = cv::Vec3b(0, 0, 0); // background pixels remain black.
 	//for (int i = 1; i < num; i++) {
 	//	colors[i] = cv::Vec3b(rand() % 256, rand() % 256, rand() % 256);
-	//	//È¥³ýÃæ»ýÐ¡ÓÚ100µÄÁ¬Í¨Óò
+	//	//È¥ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½100ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
 	//	if (stats.at<int>(i, cv::CC_STAT_AREA) < 100)
 	//		colors[i] = cv::Vec3b(0, 0, 0); // small regions are painted with black too.
 	//}
-	//°´ÕÕlabelÖµ£¬¶Ô²»Í¬µÄÁ¬Í¨Óò½øÐÐ×ÅÉ«
+	//ï¿½ï¿½ï¿½ï¿½labelÖµï¿½ï¿½ï¿½Ô²ï¿½Í¬ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
 	//cv::Mat img_color = cv::Mat::zeros(img_roi.size(), CV_8UC3);
 	//for (int y = 0; y < img_color.rows; y++)
 	//	for (int x = 0; x < img_color.cols; x++)
@@ -425,11 +425,11 @@ static bool findCircles_new_sub(const std::vector<cv::Point>& cR, const cv::Mat&
 	//		img_color.at<cv::Vec3b>(y, x) = colors[label];
 	//	}
 
-	//Í³¼Æ½µÔëºóµÄÁ¬Í¨ÇøÓò
+	//Í³ï¿½Æ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½
 	//cv::cvtColor(img_color, img_gray, cv::COLOR_BGR2GRAY);
 	//threshold(img_gray, img_gray, 1, 255, cv::THRESH_BINARY);
 	//n = cv::connectedComponentsWithStats(img_gray, labels, stats, centroids);
-	//sprintf_s(title, "¹ýÂËÐ¡Ä¿±êºóµÄÁ¬Í¨ÇøÓòÊýÁ¿£º%d\n", n);
+	//sprintf_s(title, "ï¿½ï¿½ï¿½ï¿½Ð¡Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½%d\n", n);
 	//num_connect = title;
 	//imshow("", img_color);
 
@@ -477,7 +477,7 @@ static bool findCircles_new_sub(const std::vector<cv::Point>& cR, const cv::Mat&
 
 	//cv::Mat img_color = cv::Mat::zeros(image.size(), CV_8UC3);
 	//for (int i = 0; i < temp_result.size(); i++) {
-	//	cv::circle(img_color, temp_result[i], 15, cv::Scalar(0, 255, 120), -1);//»­µã£¬ÆäÊµ¾ÍÊÇÊµÐÄÔ²
+	//	cv::circle(img_color, temp_result[i], 15, cv::Scalar(0, 255, 120), -1);//ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ô²
 	//}
 	////////////cv::resize(img_color, img_color, cv::Size(), 0.125,0.125);
 	//cv::imshow("imageSrc1", img_color(cv::Rect(temp_minx, temp_miny, temp_maxx - temp_minx,
@@ -1271,7 +1271,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 	if (pointsIn.size() != 8) {
 		return false;
 	}
-	//Ñ°ÕÒ±ß½çËÄ¸öµã
+	//Ñ°ï¿½Ò±ß½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
 	std::vector<std::pair<float,int>> min_dis;
 	min_dis.resize(4);
 	cv::Point2f p_tem;
@@ -1303,7 +1303,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 		}
 	}
 
-	//·ÖÀë±ß½Ç4µãºÍÊ£Óà4µã
+	//ï¿½ï¿½ï¿½ï¿½ß½ï¿½4ï¿½ï¿½ï¿½Ê£ï¿½ï¿½4ï¿½ï¿½
 	std::vector<cv::Point2f> corner_4, surplus_4;
 	corner_4.emplace_back(pointsIn[min_dis[0].second]);
 	corner_4.emplace_back(pointsIn[min_dis[1].second]);
@@ -1322,7 +1322,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 		}
 	}
 
-	//Ñ°ÕÒÈ·¶¨×ø±êÏµµÄµÚ5¸öµã¡ª¡ªÔ­µã
+	//Ñ°ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Äµï¿½5ï¿½ï¿½ï¿½ã¡ªï¿½ï¿½Ô­ï¿½ï¿½
 	cv::Point2f P5;
 	
 	std::pair<float, int> pair1, pair2, cter1;
@@ -1343,7 +1343,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 	}
 	P5 = surplus_4[cter1.second];
 
-	//È·¶¨±ß½ÇËÄµãË³Ðò
+	//È·ï¿½ï¿½ï¿½ß½ï¿½ï¿½Äµï¿½Ë³ï¿½ï¿½
 	cv::Point2f P1, P2, P3, P4;
 	Eigen::Vector4i P4_order;
 	switch (pair1.second)
@@ -1374,7 +1374,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 	P3 = pointsIn[min_dis[P4_order[2]].second];
 	P4 = pointsIn[min_dis[P4_order[3]].second];
 	
-	//Ê¶±ðÊ£ÓàµÄ3¸öµã,
+	//Ê¶ï¿½ï¿½Ê£ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½,
 	std::vector<cv::Point2f> surplus_3;
 	for (size_t i = 0;i<surplus_4.size();i++)
 		if (i == cter1.second)
@@ -1384,7 +1384,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 		{
 			surplus_3.emplace_back(surplus_4[i]);
 		}
-	// Ê£ÓàµÄ3¸öµã¿ÉÄÜ³öÏÖµÄÎ»ÖÃÓÐ9¸ö£¬Ò»¹²ÓÐ20¸öÅÐ±ðµã£¬ÆäÖÐÄÚ²¿ÓÐ12¸ö£¬·Ö±ðÎª
+	// Ê£ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü³ï¿½ï¿½Öµï¿½Î»ï¿½ï¿½ï¿½ï¿½9ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½Ð±ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½12ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Îª
 	std::vector<cv::Point2f> cter_for_3;
 	p_tem = -1.75f / 5.5f * (P5 - P4) + 9.f / 11.f * (P2 + P3 - P1 - P4) / 2.f + P5;
 	cter_for_3.emplace_back(p_tem);
@@ -1411,7 +1411,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 	p_tem = 1.75f / 5.5f * (P5 - P4) + 3.f / 11.f * (P2 + P3 - P1 - P4) / 2.f + P5;
 	cter_for_3.emplace_back(p_tem);
 
-	// ÔÚ20¸öÅÐ¾ÝÖÐ£¬ÆäÖÐÍâ²¿ÓÐ8¸ö£¬·Ö±ðÎª±ß½Ç4µãÒÔ¼°ÏàÁÚ±ß½ÇµãµÄÖÐÐÄµã
+	// ï¿½ï¿½20ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Îªï¿½ß½ï¿½4ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½Ú±ß½Çµï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
 	std::vector<int> ID;
 	// for Position 
 	
@@ -1471,7 +1471,7 @@ bool distinguish8PointsV2(const std::vector<cv::Point2f>& pointsIn,
 		return false;
 	}
 
-	// ÌáÈ¡±àºÅ
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½
 	cv::Point2f P6, P7, P8;
 
 	if (ID[0]>ID[1]&&ID[1]>ID[2])

@@ -1,91 +1,81 @@
-p0=load("temp/data_40_40_2.log");
+p0=load("F:\code_git\matlabScripts\paper2\data_process\pic_factory\trial_5/cur_data_2.log");
+
+pr=p0(:,1:7);
 p=p0(:,1:3);
 r=p0(:,4:7);
-block_size = size(p,1);
+block_size = size(p0,1);
 ang_err=zeros(block_size,1);
+ang_err2=zeros(block_size,1);
 r0=[  
-    0.0505    0.0094   -0.9987
-    0.9972    0.0540    0.0510
-    0.0544   -0.9985   -0.0067];
+   -0.0329   -0.0829   -0.9960
+    0.9994   -0.0173   -0.0316
+   -0.0147   -0.9964    0.0834
+    ];
+v=r0(:,1);
+quat0=r(70,:);
 T_cur=zeros(4,4,block_size);
-for i = 1:block_size
-    ri=r(i,:);
-    Ri=quat2rotm(ri);
-    axang=rotm2axang(r0'*Ri);
-    if(i>157)
-        ang_err(i)=axang(4)*180/pi;
-    end
-    T_cur(:,:,i)=[Ri p(i,:)';[0 0 0 1]];
-end
+window_size = 5;
+p(:,1) = smoothdata(p(:,1), 'movmean', window_size);
+p(:,2) = smoothdata(p(:,2), 'movmean', window_size);
+p(:,3) = smoothdata(p(:,3), 'movmean', window_size);
+position = p;
+%% get tar_orientation
+% x=[1.6029    0.0143   -1.4871]';
+% [y1,y2,y3,y4]=fmincon('get_min_ang',x);
 
-%%
-window_size = 7;
-smoothed_x = smoothdata(p(:,1), 'movmean', window_size);
-smoothed_y = smoothdata(p(:,2), 'movmean', window_size);
-smoothed_z = smoothdata(p(:,3), 'movmean', window_size);
-p=[smoothed_x smoothed_y smoothed_z];
+%% get tar_position
+
+x = rand(9,1);
+x =x+ [-3.1097   15.7548   37.8010   52.6679   41.5699   24.8859   21.8915   83.9668    0.3897]';
+[y1,y2,y3,y4]=fmincon('get_min_position',x);
 
 figure;
-hold on;
-grid on;
-axis equal;
-xlabel("x (mm)");
-ylabel("y (mm)");
-zlabel("z (mm)");
-plot3(p(:,1),p(:,2),p(:,3),'r-');
+hold on; axis equal;
+plot3(position(:,1),position(:,2),position(:,3),'r.');
 
-% p1=[6 -20 89];p2=[-14 -20 89];
-p1=[7.75 15.5 90];p2=[-11 17 90];
-e1=(p2-p1)/norm(p2-p1);
-p10=p1;
-x=[p1(1) p2(1)];y=[p1(2) p2(2)];z=[p1(3) p2(3)];
-line(x, y,z, 'Color', 'blue', 'LineWidth', 2);
+R = eul2rotm(y1(1:3)');
+width = y1(4);
+height = y1(5);
+P1 = y1(6:8);
+P2 = P1 - R(:,1)*width;
+P3 = P2 + R(:,2)*height;
+P4 = P3 + R(:,1)*width;
+P_tar = [P1 P2 P3 P4 P1]';
+plot3(P_tar(:,1),P_tar(:,2),P_tar(:,3),'b-');
+xlabel('x (mm)')
+ylabel('y (mm)')
+zlabel('z (mm)')
 
-% p1=[-14 -20 89];p2=[-12 17 89];
-p1=[-11 17 90];p2=[-14.5 -19.5 87];
-e2=(p2-p1)/norm(p2-p1);
-p20=p1;
-x=[p1(1) p2(1)];y=[p1(2) p2(2)];z=[p1(3) p2(3)];
-line(x, y,z, 'Color', 'blue', 'LineWidth', 2);
+%%
 
-% p1=[-12 17 89];p2=[27 14 90];
-p1=[-14.5 -19.5 87];p2=[24 -23 87];
-e3=(p2-p1)/norm(p2-p1);
-p30=p1;
-x=[p1(1) p2(1)];y=[p1(2) p2(2)];z=[p1(3) p2(3)];
-line(x, y,z, 'Color', 'blue', 'LineWidth', 2);
+folderPath = 'F:\code_git\matlabScripts\paper2\data_process\pic_factory\trial_51\test_9888\';%after_pic
+videoFileName = 'output';
+imagesToVideo(folderPath, videoFileName);
+function imagesToVideo(folderPath, videoFileName)
+    % 输入参数：
+    % folderPath - 包含图片的文件夹路径
+    % videoFileName - 输出视频文件的名称（包括扩展名，如 'output.avi'）
 
-% p1=[27 14 90];p2=[23.5 -22 89];
-p1=[24 -23 87];p2=[27.5 14 90];
-e4=(p2-p1)/norm(p2-p1);
-p40=p1;
-x=[p1(1) p2(1)];y=[p1(2) p2(2)];z=[p1(3) p2(3)];
-line(x, y,z, 'Color', 'blue', 'LineWidth', 2);
-
-% p1=[23.5 -22 89];p2=[6 -20 89];
-p1=[27.5 14 90];p2=[7.75 15.5 90];
-e5=(p2-p1)/norm(p2-p1);
-p50=p1;
-x=[p1(1) p2(1)];y=[p1(2) p2(2)];z=[p1(3) p2(3)];
-line(x, y,z, 'Color', 'blue', 'LineWidth', 2);
-
-pos_err = zeros(block_size,1);
-for i =157:230
-    pos_err(i)=point_to_line_distance(p(i,:),p10,e1);
+    % 获取文件夹中的所有图像文件
+    imageFiles = dir(fullfile(folderPath, '*.jpg')); % 可根据需要修改文件类型
+    % 如果图像格式不同，可以添加其他格式，如 '*.png', '*.jpeg' 等
+    
+    % 创建视频写入对象
+    videoWriter = VideoWriter(videoFileName);
+    videoWriter.FrameRate = 26; % 设置帧率
+    open(videoWriter);
+    
+    % 循环读取每张图片并写入视频
+    for i = 1:length(imageFiles)
+        % 读取图像
+        img = imread(fullfile(folderPath, imageFiles(i).name));
+        
+        % 写入视频帧
+        writeVideo(videoWriter, img);
+    end
+    
+    % 关闭视频写入对象
+    close(videoWriter);
+    
+    fprintf('视频已保存到: %s\n', videoFileName);
 end
-for i =231:415
-    pos_err(i)=point_to_line_distance(p(i,:),p20,e2);
-end
-for i =416:572
-    pos_err(i)=point_to_line_distance(p(i,:),p30,e3);
-end
-for i =573:684
-    pos_err(i)=point_to_line_distance(p(i,:),p40,e4);
-end
-for i =685:810
-    pos_err(i)=point_to_line_distance(p(i,:),p50,e5);
-end
-
-
-x=[0 0 0]';
-[y1,y2,y3,y4]=fmincon('get_min_ang',x);

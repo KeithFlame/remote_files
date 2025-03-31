@@ -16,7 +16,7 @@ public:
 protected:
 
     void keyPressEvent(QKeyEvent* ev); //键盘按下事件
-    void keyReleaseEvent(QKeyEvent* ev); //键盘按下事件
+    void keyReleaseEvent(QKeyEvent* ev); //键盘释放事件
 
 public:
     bool w_clicked, a_clicked, s_clicked, d_clicked;

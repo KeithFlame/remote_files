@@ -37,61 +37,61 @@ private:
 	QTimer* display_timer;
 	tinyxml2::XMLDocument conf_read;
 
-	CMvCamera* m_stereocamera[MAX_DEVICE_NUM];         // Ïà»úÖ¸Õë¶ÔÏó
-	MV_CC_DEVICE_INFO_LIST m_stDevList;              // Éè±¸ÐÅÏ¢ÁÐ±í½á¹¹Ìå±äÁ¿£¬ÓÃÀ´´æ´¢Éè±¸ÁÐ±í
-	cv::Mat* image_L = new cv::Mat();              //ÓÃÓÚ±£´æ×óÏà»úÍ¼ÏñµÄÍ¼ÏñÖ¸Õë¶ÔÏó
-	cv::Mat* image_R = new cv::Mat();              //ÓÃÓÚ±£´æÓÒÏà»úÓÐÍ¼ÏñµÄÍ¼ÏñÖ¸Õë¶ÔÏó
-	int devices_num;//Éè±¸ÊýÁ¿
+	CMvCamera* m_stereocamera[MAX_DEVICE_NUM];         // ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	MV_CC_DEVICE_INFO_LIST m_stDevList;              // ï¿½è±¸ï¿½ï¿½Ï¢ï¿½Ð±ï¿½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢ï¿½è±¸ï¿½Ð±ï¿½
+	cv::Mat* image_L = new cv::Mat();              //ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	cv::Mat* image_R = new cv::Mat();              //ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½
+	int devices_num;//ï¿½è±¸ï¿½ï¿½ï¿½ï¿½
 	MarkerDetection* marker_detection;
 	MEASUREMENT_SYSTEM_PARAMS measurement_system_params;
 	std::string all_tool_type[MAX_TOOL_TYPE_NUM] = {""};
 
 	/*ch:×´Ì¬ | en:Status*/
-	bool  m_bOpenDevice;                        // ch:ÊÇ·ñ´ò¿ªÉè±¸ | en:Whether to open device
-	bool  m_bStartGrabbing;                     // ch:ÊÇ·ñ¿ªÊ¼×¥Í¼ | en:Whether to start grabbing
-	int   m_nTriggerMode;                       // ch:´¥·¢Ä£Ê½ | en:Trigger Mode
-	int   m_bContinueStarted;                      // ¿ªÆô¹ýÁ¬Ðø²É¼¯Í¼Ïñ
-	MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:±£´æÍ¼Ïñ¸ñÊ½ | en:Save Image Type
+	bool  m_bOpenDevice;                        // ch:ï¿½Ç·ï¿½ï¿½ï¿½è±¸ | en:Whether to open device
+	bool  m_bStartGrabbing;                     // ch:ï¿½Ç·ï¿½Ê¼×¥Í¼ | en:Whether to start grabbing
+	int   m_nTriggerMode;                       // ch:ï¿½ï¿½ï¿½ï¿½Ä£Ê½ | en:Trigger Mode
+	int   m_bContinueStarted;                      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½Í¼ï¿½ï¿½
+	MV_SAVE_IAMGE_TYPE   m_nSaveImageType;      // ch:ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Ê½ | en:Save Image Type
 
-	// µÚ¶þÖ»±ÛÐèÒª³õÊ¼»¯µÄ±äÁ¿
+	// ï¿½Ú¶ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Ê¼ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 	unsigned short marker_id = 0;
 	bool is_detection = false;
 	bool is_recongnization = false;
 	bool is_global_detection = true;
 	std::string current_tool_type = "";
 
-/* ²Ûº¯ÊýÉùÃ÷*/
+/* ï¿½Ûºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 private slots:
 
-	void OnBnClickedEnumButton();              // ch:°´ÏÂ²éÕÒÉè±¸°´Å¥:Ã¶¾Ù  
-	void OnBnClickedOpenButton();               // ch:´ò¿ªÉè±¸ | en:Open device
-	void OnBnClickedCloseButton();              // ch:¹Ø±ÕÉè±¸ | en:Close Devices
+	void OnBnClickedEnumButton();              // ch:ï¿½ï¿½ï¿½Â²ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½Å¥:Ã¶ï¿½ï¿½  
+	void OnBnClickedOpenButton();               // ch:ï¿½ï¿½ï¿½è±¸ | en:Open device
+	void OnBnClickedCloseButton();              // ch:ï¿½Ø±ï¿½ï¿½è±¸ | en:Close Devices
 
-	void displayImage();                        // ch:Qlable ÏÔÊ¾Í¼Ïñ
+	void displayImage();                        // ch:Qlable ï¿½ï¿½Ê¾Í¼ï¿½ï¿½
 	void displayLeftImage(const cv::Mat* imagePrt, int cameraIndex);
 	void displayRightImage(const cv::Mat* imagePrt, int cameraIndex);
 
 
-	/*ch:Í¼Ïñ²É¼¯ | en:Image Acquisition*/
-	void OnBnClickedContinusModeRadio();        // ch:Á¬ÐøÄ£Ê½ | en:Continus Mode
-	void OnBnClickedTriggerModeRadio();         // ch:´¥·¢Ä£Ê½ | en:Trigger Mode
-	void OnBnClickedStartGrabbingButton();      // ch:¿ªÊ¼²É¼¯ | en:Start Grabbing
-	void OnBnClickedStopGrabbingButton();       // ch:½áÊø²É¼¯ | en:Stop Grabbing
-	void OnBnClickedSoftwareOnceButton();       // ch:Èí´¥·¢Ò»´Î | en:Software Trigger Execute Once
+	/*ch:Í¼ï¿½ï¿½É¼ï¿½ | en:Image Acquisition*/
+	void OnBnClickedContinusModeRadio();        // ch:ï¿½ï¿½ï¿½ï¿½Ä£Ê½ | en:Continus Mode
+	void OnBnClickedTriggerModeRadio();         // ch:ï¿½ï¿½ï¿½ï¿½Ä£Ê½ | en:Trigger Mode
+	void OnBnClickedStartGrabbingButton();      // ch:ï¿½ï¿½Ê¼ï¿½É¼ï¿½ | en:Start Grabbing
+	void OnBnClickedStopGrabbingButton();       // ch:ï¿½ï¿½ï¿½ï¿½ï¿½É¼ï¿½ | en:Stop Grabbing
+	void OnBnClickedSoftwareOnceButton();       // ch:ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ | en:Software Trigger Execute Once
 
 
 	void OnBnClickedStartCornerRecongnization();
 	void OnBnClickedStartPoseRecongnization();
 	void OnBnClickedStartGlobalRecongnization();
 
-	/*ch:Í¼Ïñ±£´æ | en:Image Save*/
-	void OnBnClickedSaveJpgButton();            // ch:±£´æjpg | en:Save jpg
-	/*ch:Í¼Æ¬±£´æ | en:Save Image*/
-	void SaveImage();                     // ch:±£´æÍ¼Æ¬ | en:Save Image
+	/*ch:Í¼ï¿½ñ±£´ï¿½ | en:Image Save*/
+	void OnBnClickedSaveJpgButton();            // ch:ï¿½ï¿½ï¿½ï¿½jpg | en:Save jpg
+	/*ch:Í¼Æ¬ï¿½ï¿½ï¿½ï¿½ | en:Save Image*/
+	void SaveImage();                     // ch:ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ | en:Save Image
 
 private:
-	void OpenDevices();                    // ch:´ò¿ªÉè±¸ | en:Open device
-	void CloseDevices();                   // ch:¹Ø±ÕÉè±¸ | en:Close Device
+	void OpenDevices();                    // ch:ï¿½ï¿½ï¿½è±¸ | en:Open device
+	void CloseDevices();                   // ch:ï¿½Ø±ï¿½ï¿½è±¸ | en:Close Device
 	bool isExists(std::string);
 	void showResult(cv::Mat& leftSrc, cv::Mat& rightSrc,
 		const Eigen::Matrix4d& Tcam_marker, const std::vector<PATTERN_CONTAINER>& left_marker_decal,
@@ -100,7 +100,7 @@ private:
 	bool alignCameras(STEREO_CAMERA_INITIAL_PARAMS initial_camera);
 
 	Eigen::Matrix3d getRotation(double,double,double);
-	// ÅäÖÃÎÄ¼þ¶ÁÈ¡
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½È¡
 	bool readConnectionInfo();
 	bool readAllToolType();
 	bool readToolParams();
@@ -110,8 +110,8 @@ private:
 	bool readOtherinfo();
 
 public:
-	//MyThread* myThread; //Ïß³Ì¶ÔÏó
-	CameraThread* m_thread_leftcamera = NULL;  //×óÏà»úÏß³Ì¶ÔÏó
-	CameraThread* m_thread_rightcamera = NULL; //ÓÒÏà»úÏß³Ì¶ÔÏó
+	//MyThread* myThread; //ï¿½ß³Ì¶ï¿½ï¿½ï¿½
+	CameraThread* m_thread_leftcamera = NULL;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½
+	CameraThread* m_thread_rightcamera = NULL; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¶ï¿½ï¿½ï¿½
 };
 

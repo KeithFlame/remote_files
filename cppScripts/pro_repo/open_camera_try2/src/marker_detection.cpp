@@ -58,7 +58,7 @@ bool MarkerDetection::getPoseFromFrames(const bool is_global, std::vector<PATTER
 	rot_inits.push_back(rotm_2);
 	trans_inits.push_back(trans_2);
 	
-	// ×îÖÕÓÅ»¯
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Å»ï¿½
 	optInTwoImagesNonePlane(leftPoints2d, leftPoints3d, rightPoints2d, rightPoints3d,
 		rot_inits, trans_inits, A_eig, t, R_res, t_res, cost);
 
@@ -108,10 +108,10 @@ bool MarkerDetection::checkRepetitivePattern(std::vector<PATTERN_CONTAINER>& lef
 
 void MarkerDetection::calcAnalyticPosebyIPPE(const Corners& corners_2D, const std::vector<Eigen::Vector3d>& points_3D,
 	Eigen::Matrix3d& matrixTemp1, Eigen::Vector3d& vectTemp1, Eigen::Matrix3d& matrixTemp2, Eigen::Vector3d& vectTemp2){
-	std::vector<cv::Point3f> object3DPoints;//´æ´¢ËÄ¸öµãµÄÊÀ½ç×ø±ê
-	std::vector<cv::Point2f> image2DPoints;//´æ´¢ËÄ¸öµãµÄÍ¼Ïñ×ø±ê
-	cv::Mat camera_matrix;//ÄÚ²ÎÊý¾ØÕó
-	cv::Mat distortion_coefficients;//»û±äÏµÊý
+	std::vector<cv::Point3f> object3DPoints;//ï¿½æ´¢ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	std::vector<cv::Point2f> image2DPoints;//ï¿½æ´¢ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	cv::Mat camera_matrix;//ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	cv::Mat distortion_coefficients;//ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½
 	Eigen::Matrix3d A_cam = measurement_params.camera.rectified_camera_params.A_cam;
 	camera_matrix = cv::Mat(3, 3, CV_64FC1, cv::Scalar::all(0));
 	camera_matrix.ptr<double>(0)[0] = A_cam(0, 0);
@@ -121,10 +121,10 @@ void MarkerDetection::calcAnalyticPosebyIPPE(const Corners& corners_2D, const st
 	camera_matrix.ptr<double>(2)[2] = 1.0f;
 	distortion_coefficients = cv::Mat(5, 1, CV_64FC1, cv::Scalar::all(0));
 
-	//ÉèÖÃÌØÕ÷µãµÄÊÀ½ç×ø±ê,Í¼Ïñ×ø±ê
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	for (int i = 0; i < points_3D.size(); i++)
 	{
-		//ÈýÎ¬×ø±êµÄµ¥Î»ÊÇºÁÃ×
+		//ï¿½ï¿½Î¬ï¿½ï¿½ï¿½ï¿½Äµï¿½Î»ï¿½Çºï¿½ï¿½ï¿½
 		object3DPoints.push_back(cv::Point3f(points_3D.at(i)(0), points_3D.at(i)(1), 0));
 		image2DPoints.push_back(corners_2D.at(i));
 	}
@@ -137,7 +137,7 @@ void MarkerDetection::calcAnalyticPosebyIPPE(const Corners& corners_2D, const st
 	planePoseSolver.solveGeneric(object3DPoints, image2DPoints, camera_matrix, distortion_coefficients, 
 		rvec1, tvec1, err1, rvec2, tvec2, err2);
 
-	/*******************ÌáÈ¡Ðý×ª¾ØÕó*********************/
+	/*******************ï¿½ï¿½È¡ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½*********************/
 	cv::Mat RoteM1, TransM1;
 	double rm1[9];
 	RoteM1 = cv::Mat(3, 3, CV_64FC1, rm1);

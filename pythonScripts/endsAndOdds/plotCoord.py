@@ -8,7 +8,7 @@ import sys
 
 scale = 1
 
-K_left_new = np.mat([
+K_left_new = np.asmatrix([
     # [1.10391821e+03*scale, 0, 1.00871394e+03*scale, 0],
     # [0, 1.11844299e+03*scale, 5.46786487e+02*scale, 0],
     # [0, 0, 1, 0]
@@ -59,7 +59,7 @@ def draw_cor(image, trans, quat, offset=0, K=K_left_new):
     if trans[2] <= 0:
         return image
 
-    point = np.mat([
+    point = np.asmatrix([
         [trans[0]],
         [trans[1]],
         [trans[2]]

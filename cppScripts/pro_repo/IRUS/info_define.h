@@ -1,0 +1,29 @@
+#pragma once
+enum class InfoSymbol {
+	INFO_NORMAL = 0,
+	INFO_SUCCESS = 1,
+	INFO_WARNING = 2,
+	INFO_ERROR = 3,
+};
+
+enum class Problem {
+	FORWRAD_PROBLEM = 0,
+	INVERSE_PROBLEM = 1,
+};
+
+enum class Solver {
+	NONE_SOLVER = 0,
+	FORWARD_KINEMATICS = 1,
+	INVERSE_KINEMATICS = 2,
+	FORWARD_KINETOSTATICS = 3,
+	INVERSE_KINETOSTATICS = 4,
+};
+
+typedef enum
+{
+	STOP_GETTING_POSE = 0,
+	START_GETTING_POSE = 1,
+	CONNECT_SECOND_PROGRAMME = 2,
+	CHANGE_SPACE_LIMIT_CAMERA = 3,
+	CHANGE_NORMAL_CAMERA = 4
+}SecondProgrammeSignalType;

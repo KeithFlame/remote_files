@@ -8,7 +8,7 @@ import sys
 
 scale = 1
 
-K_left_new = np.mat([
+K_left_new = np.asmatrix([
     # [1.10391821e+03*scale, 0, 1.00871394e+03*scale, 0],
     # [0, 1.11844299e+03*scale, 5.46786487e+02*scale, 0],
     # [0, 0, 1, 0]
@@ -61,7 +61,7 @@ def draw_cor(image, trans, color, offset=0, K=K_left_new):
     len1=len(trans)
     t = np.zeros([len1, 2])
     for i in range(len1):
-        point = np.mat([
+        point = np.asmatrix([
                 [trans[i][0]],
                 [trans[i][1]],
                 [trans[i][2]]
@@ -74,6 +74,15 @@ def draw_cor(image, trans, color, offset=0, K=K_left_new):
     wid = 4
     if color == 1:
         clo = (0,0,255)
+        wid = 8
+        '''Draw the base point'''
+        # if len1>1 :
+        # print("",len1)
+        # print("",t)
+        if len1>0 :
+            cv.circle(image, (int(t[len1-1][0]),int(t[len1-1][1])), 5, clo, 3)
+    elif color == 2:
+        clo = (200,200,200)
         wid = 8
     else:
         clo = (255,0,0)
@@ -103,8 +112,7 @@ def draw_cor(image, trans, color, offset=0, K=K_left_new):
     # for axis in sort:
     #     draw_line(image, point, axis[0], axis[1], offset, K=K)
 
-    # '''Draw the base point'''
-    # cv.circle(image, (int(u - offset * scale), int(v)), 3, (255, 255, 255), -1)
+
     return image
 
 def get_line(index, raw_data):
@@ -119,11 +127,14 @@ def get_trans(index, raw_data):
 
 def get_quat(index, raw_data):
     data = get_line(index, raw_data)
+    # print("",data)
     quat = [float(data[4]), float(data[5]), float(data[6]), float(data[3])]
     return quat
 
 def read_log(file_name):
     count = count_nonempty_lines(file_name)
+    print("count: ", count)
+    # print("", file_name)
     q = np.zeros([count, 4])
     t = np.zeros([count, 3])
 
@@ -141,12 +152,13 @@ def count_nonempty_lines(file_path):
                 count += 1
     return count
     
-def draw_pred_cor(img_path, output_path, pose_est_file, target_file):
+def draw_pred_cor(img_path, output_path, pose_est_file, target_file,cur_target_file):
     files = os.listdir(img_path)
     q, t = read_log(pose_est_file)
     qt,tt = read_log(target_file)
+    qtt,ttt = read_log(cur_target_file)
     # print("qt:\n",qt)
-    print("tt:\n",tt)
+    # print("tt:\n",tt)
     iter= 0 
     for filename in files:
         if not filename.endswith('.jpg'):
@@ -155,8 +167,10 @@ def draw_pred_cor(img_path, output_path, pose_est_file, target_file):
         index = int(filename[1:4])
         image = cv.cvtColor(cv.imread(img_path + filename), cv.COLOR_BGR2RGB)
         print('Read img', img_path + filename)
-        img_with_pose = draw_cor(image, t[0:(index - first_frame_id)][:], 2, K=K_left_new)
-        img_with_pose = draw_cor(img_with_pose, tt, 1, K=K_left_new)
+        img_with_pose = draw_cor(image, tt, 2, K=K_left_new)
+        img_with_pose = draw_cor(img_with_pose, ttt[0:(index - first_frame_id)][:], 1, K=K_left_new)
+        img_with_pose = draw_cor(img_with_pose, t[0:(index - first_frame_id)][:], 3, K=K_left_new)
+        
         
         cv.imwrite(output_path + filename, cv.cvtColor(img_with_pose, cv.COLOR_RGB2BGR))
         print('Write img', output_path + filename)
@@ -186,7 +200,8 @@ if __name__ == '__main__':
     arg = args[0]
     img_path = arg+"/after_pic/"
     output_path = arg+"/final_pic/"
-    current_data = arg+"/cur_data.log"
+    current_data = arg+"/cur_data_3.log"
     target_data = arg+"/tar_data.log"
+    cur_target_data = arg+"/cur_tar_data.log"
     
-    draw_pred_cor(img_path, output_path, current_data, target_data)
+    draw_pred_cor(img_path, output_path, current_data, target_data, cur_target_data)

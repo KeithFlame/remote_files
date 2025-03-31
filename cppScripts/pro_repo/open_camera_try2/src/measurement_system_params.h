@@ -6,85 +6,85 @@
 #define MAX_MARKER_SIZE            8
 using Corner = cv::Point_<float>;
 
-//Ë«Ä¿Ïà»úÔ­Ê¼ÄÚÍâ²ÎÊý
+//Ë«Ä¿ï¿½ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct _STEREO_CAMERA_INITIAL_PARAMS_
 {
-	Eigen::Matrix3d left_camera_intrinsic;										// ×óÏà»úÄÚ²Î
-	Eigen::Matrix3d right_camera_intrinsic;										// ÓÒÏà»úÄÚ²Î
-	Eigen::Vector4d left_camera_distortion;										// ×óÏà»ú»û±ä²ÎÊý
-	Eigen::Vector4d right_camera_distortion;									// ÓÒÏà»ú»û±ä²ÎÊý
-	Eigen::Matrix3d rotation_right2left;										// ×óÏà»ú×ø±êÏµÏÂ£¬ÓÒÏà»úµÄ×ËÌ¬
-	Eigen::Vector3d translation_right_left;										// ×óÏà»ú×ø±êÏµÏÂ£¬ÓÒÏà»úµÄÎ»ÖÃ
-	unsigned int image_width;													// Í¼ÏñµÄsize
-	unsigned int image_height;													// Í¼ÏñµÄsize
+	Eigen::Matrix3d left_camera_intrinsic;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
+	Eigen::Matrix3d right_camera_intrinsic;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
+	Eigen::Vector4d left_camera_distortion;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Eigen::Vector4d right_camera_distortion;									// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Eigen::Matrix3d rotation_right2left;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬
+	Eigen::Vector3d translation_right_left;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+	unsigned int image_width;													// Í¼ï¿½ï¿½ï¿½size
+	unsigned int image_height;													// Í¼ï¿½ï¿½ï¿½size
 }STEREO_CAMERA_INITIAL_PARAMS;
 
-//Ë«Ä¿Ïà»ú¶ÔÆëºóÄÚÍâ²ÎÊý
+//Ë«Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct _RECTIFIED_STEREO_CAMERA_PARAMS_
 {
-	Eigen::Matrix3d rectified_left_camera_rotation;								// ¶ÔÆëºó£¬×óÏà»úµÄÐý×ª
-	Eigen::Matrix3d rectified_right_camera_rotation;							// ¶ÔÆëºó£¬ÓÒÏà»úµÄÐý×ª
-	Eigen::Matrix3d A_cam;														// Ïà»úµÄ¹²ÓÃÄÚ²Î
-	double b_dis;																// ¶ÔÆëºó£¬ÔÚÏà»ú×ø±êÏµÏÂ£¬ÓÒÏà»úÓë×óÏà»úµÄ¾àÀë£¬Ò»°ãÎª¸ºÊý
-	unsigned int image_width;													// Í¼ÏñµÄsize
-	unsigned int image_height;													// Í¼ÏñµÄsize
+	Eigen::Matrix3d rectified_left_camera_rotation;								// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
+	Eigen::Matrix3d rectified_right_camera_rotation;							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ª
+	Eigen::Matrix3d A_cam;														// ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
+	double b_dis;																// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ë£¬Ò»ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
+	unsigned int image_width;													// Í¼ï¿½ï¿½ï¿½size
+	unsigned int image_height;													// Í¼ï¿½ï¿½ï¿½size
 }RECTIFIED_STEREO_CAMERA_PARAMS;
 
-// Ïà»ú²ÎÊý
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct _STEREO_CAMERA_PARAMS_
 {
-	STEREO_CAMERA_INITIAL_PARAMS initial_camera_params;							// Ïà»úÔ­Ê¼²ÎÊý
-	RECTIFIED_STEREO_CAMERA_PARAMS rectified_camera_params;						// Ïà»ú´¦Àíºó²ÎÊý
+	STEREO_CAMERA_INITIAL_PARAMS initial_camera_params;							// ï¿½ï¿½ï¿½Ô­Ê¼ï¿½ï¿½ï¿½ï¿½
+	RECTIFIED_STEREO_CAMERA_PARAMS rectified_camera_params;						// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }STEREO_CAMERA_PARAMS;
 
-//markerÌùÖ½°Ë¸öµã×ø±ê¶¨Òå
+//markerï¿½ï¿½Ö½ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê¶¨ï¿½ï¿½
 typedef struct _PHISICAL_MARKER_DECAL_POSE_
 {
-	Corner position[MAX_MARKER_SIZE];											// ÔÚÌùÖ½±íÃæ£¬°Ë¸öµãµÄÎ»ÖÃ
-	unsigned short marker_decal_id;												// Õâ¸öÌùÖ½µÄ´úºÅ
+	Corner position[MAX_MARKER_SIZE];											// ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½æ£¬ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+	unsigned short marker_decal_id;												// ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ä´ï¿½ï¿½ï¿½
 }PHISICAL_MARKER_DECAL_POSE;
 
-//markerÌùÖ½°Ë¸öµã×ø±ê¶¨Òå
+//markerï¿½ï¿½Ö½ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê¶¨ï¿½ï¿½
 typedef struct _PATTERN_CONTAINER_
 {
-	cv::Point2f figure_coordinations[MAX_MARKER_SIZE];							// ÔÚÌùÖ½±íÃæ£¬°Ë¸öµãµÄÎ»ÖÃ
-	unsigned short marker_pixel_id;												// Õâ¸öÌùÖ½µÄ´úºÅ
+	cv::Point2f figure_coordinations[MAX_MARKER_SIZE];							// ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½æ£¬ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+	unsigned short marker_pixel_id;												// ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ä´ï¿½ï¿½ï¿½
 }PATTERN_CONTAINER;
 
-//markerµÄ¶¨Òå
+//markerï¿½Ä¶ï¿½ï¿½ï¿½
 typedef struct _PHISICAL_MARKER_POSE_
 {
-	PHISICAL_MARKER_DECAL_POSE pose[MAX_MARKER_SIZE];							// ÔÚmarker±íÃæ£¬°Ë¸öÌùÖ½£»ÔÚÌùÖ½±íÃæ£¬°Ë¸öµãµÄÎ»ÖÃ
-	Eigen::Matrix4d matrixALL[MAX_MARKER_SIZE];									// ÔÚmarker×ø±êÏµÏÂ£¬Ã¿¸öÌùÖ½µÄ×ø±ê
-	unsigned short marker_decal_id[MAX_MARKER_SIZE];							// ËùÓÐÌùÖ½µÄ´úºÅ
-	unsigned short marker_id;													// markerµÄID
+	PHISICAL_MARKER_DECAL_POSE pose[MAX_MARKER_SIZE];							// ï¿½ï¿½markerï¿½ï¿½ï¿½æ£¬ï¿½Ë¸ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½æ£¬ï¿½Ë¸ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+	Eigen::Matrix4d matrixALL[MAX_MARKER_SIZE];									// ï¿½ï¿½markerï¿½ï¿½ï¿½ï¿½Ïµï¿½Â£ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	unsigned short marker_decal_id[MAX_MARKER_SIZE];							// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½Ä´ï¿½ï¿½ï¿½
+	unsigned short marker_id;													// markerï¿½ï¿½ID
 }PHISICAL_MARKER_POSE;
 
-// ²âÁ¿ROIÔö³¤ËÙ¶È
+// ï¿½ï¿½ï¿½ï¿½ROIï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
 typedef struct _MEASUREMENT_ROI_INCREMENTAL_
 {
-	double founded_ratio;														// ·¢ÏÖmarkerÊ±µÄROIÔö³¤ÂÊ
-	double unfounded_ratio;														// Î´·¢ÏÖmarkerÊ±ROIÔö³¤ÂÊ
+	double founded_ratio;														// ï¿½ï¿½ï¿½ï¿½markerÊ±ï¿½ï¿½ROIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double unfounded_ratio;														// Î´ï¿½ï¿½ï¿½ï¿½markerÊ±ROIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }MEASUREMENT_ROI_INCREMENTAL;
 
-// Í¼ÏñËõ·Å
+// Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct _FIGURE_SCALE_RATIO_
 {
-	double regular_ratio;														// Õý³£Ëõ·Å
-	double angle_test_ratio;													// ÕÅ¿ª½Ç¶È±ê¶¨Ê±µÄËõ·Å
+	double regular_ratio;														// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double angle_test_ratio;													// ï¿½Å¿ï¿½ï¿½Ç¶È±ê¶¨Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }FIGURE_SCALE_RATIO;
 
-// ÆäËû¸¨Öú±äÁ¿
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 typedef struct _OTHER_ACCESSERY_
 {
-	MEASUREMENT_ROI_INCREMENTAL roi_incremental_ratio;							// roiÔö³¤ÂÊ
-	FIGURE_SCALE_RATIO figure_scale;											// Í¼ÏñÏÔÊ¾Ëõ·Å
+	MEASUREMENT_ROI_INCREMENTAL roi_incremental_ratio;							// roiï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	FIGURE_SCALE_RATIO figure_scale;											// Í¼ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 }OTHER_ACCESSERY;
 
-// ²âÁ¿ÏµÍ³²ÎÊý
+// ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½
 typedef struct _MEASUREMENT_SYSTEM_PARAMS_
 {
-	STEREO_CAMERA_PARAMS camera;												// Ïà»ú²ÎÊý
-	PHISICAL_MARKER_POSE marker;												// marker²ÎÊý
-	OTHER_ACCESSERY other_params;												// ÆäËû¸¨Öú±äÁ¿
+	STEREO_CAMERA_PARAMS camera;												// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	PHISICAL_MARKER_POSE marker;												// markerï¿½ï¿½ï¿½ï¿½
+	OTHER_ACCESSERY other_params;												// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 }MEASUREMENT_SYSTEM_PARAMS;

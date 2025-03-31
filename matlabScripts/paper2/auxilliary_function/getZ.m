@@ -1,4 +1,4 @@
-function [direction,origin] = getZ(P)
+function [direction,origin] = getZ(Lg, start, P)
 %% 计算平均值（拟合的直线必过所有坐标的算数平均值）
 xyz0(1)=mean(P(:,1));
 xyz0(2)=mean(P(:,2));
@@ -15,7 +15,7 @@ end
 P2=P;
 for i = 1:size(P,1)
     % P2(i,:)=P(i,:)-direction'*(45+20+10+19.4+5*i);
-        P2(i,:)=P(i,:)-direction'*(45+10+19.4+12+5*i);
+        P2(i,:)=P(i,:)-direction'*(start+10+19.4+Lg+5*(i-1));
 
 end
 

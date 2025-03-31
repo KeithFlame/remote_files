@@ -8,7 +8,7 @@ import sys
 
 scale = 1
 
-K_left_new = np.mat([
+K_left_new = np.asmatrix([
     # [1.10391821e+03*scale, 0, 1.00871394e+03*scale, 0],
     # [0, 1.11844299e+03*scale, 5.46786487e+02*scale, 0],
     # [0, 0, 1, 0]
@@ -59,7 +59,7 @@ def draw_cor(image, trans, quat, offset=0, K=K_left_new):
     if trans[2] <= 0:
         return image
 
-    point = np.mat([
+    point = np.asmatrix([
         [trans[0]],
         [trans[1]],
         [trans[2]]
@@ -68,9 +68,9 @@ def draw_cor(image, trans, quat, offset=0, K=K_left_new):
     u, v = space_cor_to_image_cor(point, K)
     
     R = np.array(quat2R(quat))
-    point_x = point + 20 * np.matmul(R, np.mat([[1], [0], [0]]))
-    point_y = point + 20 * np.matmul(R, np.mat([[0], [1], [0]]))
-    point_z = point + 20 * np.matmul(R, np.mat([[0], [0], [1]]))
+    point_x = point + 20 * np.matmul(R, np.asmatrix([[1], [0], [0]]))
+    point_y = point + 20 * np.matmul(R, np.asmatrix([[0], [1], [0]]))
+    point_z = point + 20 * np.matmul(R, np.asmatrix([[0], [0], [1]]))
 
     distance = {
         (255, 0, 0): point_x,
@@ -126,8 +126,8 @@ def draw_pred_cor(img_path, output_path, pose_est_file, target_file):
     files = os.listdir(img_path)
     q, t = read_log(pose_est_file)
     # qt,tt = read_log(target_file)
-    # print("qt:\n",qt)
-    # print("tt:\n",tt)
+    # print("q:\n",q)
+    # print("t:\n",t)
     for filename in files:
         if not filename.endswith('.jpg'):
             continue
@@ -162,7 +162,7 @@ if __name__ == '__main__':
     arg = args[0]
     img_path = arg+"/main_pic/"
     output_path = arg+"/after_pic/"
-    current_data = arg+"/cur_data.log"
+    current_data = arg+"/cur_data_3.log"
     target_data = arg+"/tar_data.log"
     
     draw_pred_cor(img_path, output_path, current_data, target_data)

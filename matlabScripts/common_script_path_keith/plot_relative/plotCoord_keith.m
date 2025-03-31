@@ -1,9 +1,14 @@
 function hd=plotCoord_keith(T,length,discrete_element)
 if nargin==1
     length=1;
+    discrete_element = 1;
 end
-    arrowLen=length*10*discrete_element;
-    lineWidth=length;
+if nargin==2
+    length=1;
+    discrete_element = 1;
+end
+    arrowLen=length;
+    lineWidth=discrete_element;
     R=T(1:3,1:3);
     P=T(1:3,4);
     px = R*[arrowLen 0 0]'+P;

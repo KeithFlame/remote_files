@@ -1,33 +1,38 @@
 #include "line2Dup.h"
 #include <memory>
 #include <iostream>
+#include <filesystem>
+
 #include <assert.h>
 #include <chrono>
 #include <opencv2/dnn.hpp>
 #include <opencv2\imgproc\types_c.h>
+
+namespace fs = std::filesystem;
+
 //using namespace std;
 //using namespace cv;
 
-//class Timer
-//{
-//public:
-//    Timer() : beg_(clock_::now()) {}
-//    void reset() { beg_ = clock_::now(); }
-//    double elapsed() const {
-//        return std::chrono::duration_cast<second_>
-//            (clock_::now() - beg_).count(); }
-//    void out(std::string message = ""){
-//        double t = elapsed();
-//        std::cout << message << "  elasped time:" << t << "s" << std::endl;
-//        reset();
-//    }
-//private:
-//    typedef std::chrono::high_resolution_clock clock_;
-//    typedef std::chrono::duration<double, std::ratio<1> > second_;
-//    std::chrono::time_point<clock_> beg_;
-//};
+class Timer
+{
+public:
+    Timer() : beg_(clock_::now()) {}
+    void reset() { beg_ = clock_::now(); }
+    double elapsed() const {
+        return std::chrono::duration_cast<second_>
+            (clock_::now() - beg_).count(); }
+    void out(std::string message = ""){
+        double t = elapsed();
+        std::cout << message << "  elasped time:" << t << "s" << std::endl;
+        reset();
+    }
+private:
+    typedef std::chrono::high_resolution_clock clock_;
+    typedef std::chrono::duration<double, std::ratio<1> > second_;
+    std::chrono::time_point<clock_> beg_;
+};
 
-static std::string prefix = "./test_img/dhzzzq/";
+static std::string prefix = "./test_img/sjzq20241012/";
 
 void circle_gen(){
 	cv::Mat bg = cv::Mat(800, 800, CV_8UC3, { 0, 0, 0 });
@@ -37,7 +42,7 @@ void circle_gen(){
 }
 
 int angle_test(std::string mode = "test"){
-    line2Dup::Detector detector(32, {2, 4});  // 32 features are not precise enough; {4,8}
+    line2Dup::Detector detector(128, {2, 4});  // 32 features are not precise enough; {4,8}
 
 	//    mode = "none";
     if(mode == "train"){
@@ -50,7 +55,7 @@ int angle_test(std::string mode = "test"){
 				std::cerr << "image path wrong!" << std::endl;
 
 			// if type == needleHolder or shear, then resize the img.
-			cv::resize(img, img, cv::Size(), 2.0, 2.0);
+			//cv::resize(img, img, cv::Size(), 2.0, 2.0);
 
 			cv::Mat mask = cv::Mat(img.size(), CV_8UC1, { 255 });
 
@@ -63,7 +68,7 @@ int angle_test(std::string mode = "test"){
 
 			shape_based_matching::shapeInfo shapes(padded_img, padded_mask);
 			shapes.angle_range = {0, 360};
-			shapes.angle_step = 1;
+			shapes.angle_step = 0.1;
 			shapes.produce_infos();
 			//std::vector<shape_based_matching::shapeInfo::shape_and_info> infos_have_templ;  // shape info is not necessary
 			for(auto& info: shapes.infos){
@@ -86,8 +91,8 @@ int angle_test(std::string mode = "test"){
 
 		//cv::Mat test_img = cv::imread(prefix + "dualGrapper/test5.png");
 
-		cv::Mat test_img = cv::imread("F:/code_git/pythonScripts/rotate_figure/pic/DHZZZQ.png");
-		cv::resize(test_img, test_img, cv::Size(), 2.0, 2.0);
+		cv::Mat test_img = cv::imread("G:/pic/open_angle/test/result/015_-1.398394_0.jpg");
+		//cv::resize(test_img, test_img, cv::Size(), 2.0, 2.0);
        /* int padding = 250;
         cv::Mat padded_img = cv::Mat(test_img.rows + 2*padding,
                                      test_img.cols + 2*padding, test_img.type(), cv::Scalar::all(0));
@@ -171,7 +176,135 @@ int angle_test(std::string mode = "test"){
     }
 }
 
+void ang_test()
+{
+	line2Dup::Detector detector(128, { 2, 4 });  // 32 features are not precise enough; {4,8}
+	std::vector<std::string> class_ids{ "up", "down" };
+	detector.readClasses(class_ids, prefix + "%s_templ.yaml");
+	
+	//cv::Mat test_img = cv::imread("G:/pic/open_angle/test/result/015_-1.398394_0.jpg");
+	std::string directoryPath = "G:/pic/open_angle/test/result"; // 替换为您的目录路径
+	for (const auto& entry : fs::directory_iterator(directoryPath)) {
+		if (entry.is_regular_file()) {
+			std::string filePath = entry.path().string();
+			// 检查文件扩展名
+			if (filePath.ends_with(".jpg") || filePath.ends_with(".jpeg") ||
+				filePath.ends_with(".png") || filePath.ends_with(".bmp")) {
+				// 使用OpenCV打开图像
+				cv::Mat test_img = cv::imread(filePath);
+
+				if (test_img.empty()) {
+					std::cerr << "Could not open or find the image: " << filePath << std::endl;
+					continue;
+				}
+
+				// 主操作
+				int stride = 16;
+				int n = test_img.rows / stride;  // padded_img
+				int m = test_img.cols / stride;  // padded_img
+				cv::Rect roi(0, 0, stride * m, stride * n);
+				cv::Mat img = test_img(roi).clone();  // padded_img
+				assert(img.isContinuous());
+				float k_angle=0;
+				//cvtColor(img, img, CV_BGR2GRAY);
+
+				//std::cout << "test img size: " << img.rows * img.cols << std::endl;
+
+				//Timer timer;
+				auto matches = detector.match(img, 36, class_ids);
+				//timer.out();
+
+				if (img.channels() == 1) cvtColor(img, img, CV_GRAY2BGR);
+
+				//std::cout << "matches.size(): " << matches.size() << std::endl;
+				size_t top5 = 5;
+				if (top5 > matches.size()) top5 = matches.size();
+				float rotate_angle = 360;
+				std::vector<int> flags(class_ids.size(), 0);
+				for (size_t i = 0; i < top5; i++) {
+					//std::cout << i << std::endl;
+					auto match = matches[i];
+
+					// we want to find 2 top match
+					std::vector<std::string>::iterator it = find(class_ids.begin(), class_ids.end(), match.class_id);
+					if (flags[distance(class_ids.begin(), it)] == 0) {
+						flags[distance(class_ids.begin(), it)] = 1;
+						auto templ = detector.getTemplates(match.class_id, match.template_id);
+
+						float train_img_half_width = templ[0].width / 2.0f;
+						float train_img_half_heigth = templ[0].height / 2.0f;
+
+						// center x,y of train_img in test img
+						float x = match.x + train_img_half_width;
+						float y = match.y + train_img_half_heigth;
+
+						cv::Vec3b randColor;
+						randColor[0] = rand() % 155 + 100;
+						randColor[1] = rand() % 155 + 100;
+						randColor[2] = rand() % 155 + 100;
+						for (int i = 0; i < templ[0].features.size(); i++) {
+							auto feat = templ[0].features[i];
+							cv::circle(img, { feat.x + match.x, feat.y + match.y }, 3, randColor, -1);
+						}
+
+						//rotate_angle = match.template_id;
+						//cv::putText(img, std::to_string(int(round(match.similarity))) + "; angle: " + std::to_string(rotate_angle),
+						//	cv::Point(match.x + train_img_half_width - 40, match.y - 3), cv::FONT_HERSHEY_PLAIN, 1, randColor);
+
+						//cv::RotatedRect rotatedRectangle({ x, y }, { 2 * train_img_half_width, 2 * train_img_half_heigth }, 0);
+						//std::cout << rotate_angle << std::endl;
+
+						//cv::Point2f vertices[4];
+						//rotatedRectangle.points(vertices);
+						//for (int i = 0; i < 4; i++) {
+						//	int next = (i + 1 == 4) ? 0 : (i + 1);
+						//	line(img, vertices[i], vertices[next], randColor, 2);
+						//}
+						float tem = match.template_id / 10.0;
+						if (tem > 90) {
+							tem = tem - 360.0;
+						}
+						k_angle += tem;
+						
+
+						std::cout << "\nmatch.template_id: " << match.template_id << '\t';
+						std::cout << "match.similarity: " << match.similarity << std::endl;
+					}
+					if (find(flags.begin(), flags.end(), 0) == flags.end())
+						break;
+				}
+
+
+				// 显示图像
+				cv::imshow("Image", img);
+				std::cout << "angle: " << k_angle << std::endl;
+				cv::waitKey(); // 等待用户按键
+			}
+		}
+	}
+
+
+
+   /* int padding = 250;
+	cv::Mat padded_img = cv::Mat(test_img.rows + 2*padding,
+								 test_img.cols + 2*padding, test_img.type(), cv::Scalar::all(0));
+	test_img.copyTo(padded_img(Rect(padding, padding, test_img.cols, test_img.rows)));*/
+
+
+
+	//cv::imshow("result", img);
+	//cv::waitKey(0);
+	//cv::imwrite("result.jpg", img);
+
+	std::cout << "test end" << std::endl;
+	return;
+}
+//}
+
 int main(){
-    int rotate_angle = angle_test("test");
+	Timer timer;
+	int rotate_angle = angle_test("train");
+	timer.out();
+	//ang_test();
     return 0;
 }

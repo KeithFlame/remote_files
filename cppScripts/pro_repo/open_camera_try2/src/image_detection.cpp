@@ -554,7 +554,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 	if (pointsIn.size() != MAX_MARKER_SIZE) {
 		return false;
 	}
-	//Ñ°ÕÒ±ß½çËÄ¸öµã
+	//Ñ°ï¿½Ò±ß½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
 	std::vector<std::pair<float, int>> min_dis;
 	min_dis.resize(4);
 	cv::Point2f p_tem;
@@ -580,7 +580,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 		min_dis[3] = dis_res(pointsIn[min_dis[3].second], min_dis[3].second, cnr_rect[3], pointsIn[j], j);
 	}
 
-	//·ÖÀë±ß½Ç4µãºÍÊ£Óà4µã
+	//ï¿½ï¿½ï¿½ï¿½ß½ï¿½4ï¿½ï¿½ï¿½Ê£ï¿½ï¿½4ï¿½ï¿½
 	std::vector<cv::Point2f> corner_4, surplus_4;
 	corner_4.emplace_back(pointsIn[min_dis[0].second]);
 	corner_4.emplace_back(pointsIn[min_dis[1].second]);
@@ -595,7 +595,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 			surplus_4.emplace_back(pointsIn[i]);
 	}
 
-	//Ñ°ÕÒÈ·¶¨×ø±êÏµµÄµÚ5¸öµã¡ª¡ªÔ­µã
+	//Ñ°ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Äµï¿½5ï¿½ï¿½ï¿½ã¡ªï¿½ï¿½Ô­ï¿½ï¿½
 	cv::Point2f P5;
 	std::pair<float, int> pair1, pair2, cter1;
 	cter1.first = 1000.f;
@@ -613,7 +613,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 	}
 	P5 = surplus_4[cter1.second];
 
-	//È·¶¨±ß½ÇËÄµãË³Ðò
+	//È·ï¿½ï¿½ï¿½ß½ï¿½ï¿½Äµï¿½Ë³ï¿½ï¿½
 	cv::Point2f P1, P2, P3, P4;
 	Eigen::Vector4i P4_order;
 	switch (pair1.second) {
@@ -639,14 +639,14 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 	P3 = pointsIn[min_dis[P4_order[2]].second];
 	P4 = pointsIn[min_dis[P4_order[3]].second];
 
-	//Ê¶±ðÊ£ÓàµÄ3¸öµã,
+	//Ê¶ï¿½ï¿½Ê£ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½,
 	std::vector<cv::Point2f> surplus_3;
 	for (size_t i = 0; i < surplus_4.size(); i++)
 		if (i == cter1.second) {
 		}
 		else
 			surplus_3.emplace_back(surplus_4[i]);
-	// Ê£ÓàµÄ3¸öµã¿ÉÄÜ³öÏÖµÄÎ»ÖÃÓÐ9¸ö£¬Ò»¹²ÓÐ20¸öÅÐ±ðµã£¬ÆäÖÐÄÚ²¿ÓÐ12¸ö£¬·Ö±ðÎª
+	// Ê£ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü³ï¿½ï¿½Öµï¿½Î»ï¿½ï¿½ï¿½ï¿½9ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½20ï¿½ï¿½ï¿½Ð±ï¿½ã£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½12ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Îª
 	std::vector<cv::Point2f> cter_for_3;
 	p_tem = -1.75f / 5.5f * (P5 - P4) + 9.f / 11.f * (P2 + P3 - P1 - P4) / 2.f + P5;
 	cter_for_3.emplace_back(p_tem);
@@ -673,7 +673,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 	p_tem = 1.75f / 5.5f * (P5 - P4) + 3.f / 11.f * (P2 + P3 - P1 - P4) / 2.f + P5;
 	cter_for_3.emplace_back(p_tem);
 
-	// ÔÚ20¸öÅÐ¾ÝÖÐ£¬ÆäÖÐÍâ²¿ÓÐ8¸ö£¬·Ö±ðÎª±ß½Ç4µãÒÔ¼°ÏàÁÚ±ß½ÇµãµÄÖÐÐÄµã
+	// ï¿½ï¿½20ï¿½ï¿½ï¿½Ð¾ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Îªï¿½ß½ï¿½4ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½Ú±ß½Çµï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
 	std::vector<unsigned short> ID;
 	for (size_t i = 0; i < surplus_3.size(); i++) {
 		cv::Point2f P = surplus_3[i];
@@ -718,7 +718,7 @@ bool ImageDetection::distinguish8Points(const std::vector<cv::Point2f>& pointsIn
 	else
 		return false;
 
-	// ÌáÈ¡±àºÅ
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½
 	cv::Point2f P6, P7, P8;
 	unsigned short pattern_id(0);
 	if (ID[0] > ID[1] && ID[1] > ID[2]) {
@@ -775,22 +775,22 @@ bool ImageDetection::IsPointInRect(cv::Point2f P, cv::Point2f A, cv::Point2f B, 
 }
 
 void ImageDetection::sortBubble(std::vector<PATTERN_CONTAINER>& marker_detected) {
-	PATTERN_CONTAINER temp;//ÁÙÊ±±äÁ¿
-	bool flag;//ÊÇ·ñ¼ÌÐø½»»»µÄ±êÖ¾
+	PATTERN_CONTAINER temp;//ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
+	bool flag;//ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½Ö¾
 	int length = marker_detected.size()-1;
 	if (length < 1)
 		return;
-	for (size_t i = 0; i < length; i++) { //±íÊ¾ÌËÊý£¬Ò»¹²ÐèÒªn-1ÌË
+	for (size_t i = 0; i < length; i++) { //ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Òªn-1ï¿½ï¿½
 		for (size_t j = 0; j < length - i; j++) {
-			flag = false;//Ã¿´Î±éÀúÏÈÉèÖÃflagÎªfalse£¬²ÅÄÜÅÐ¶ÏºóÃæÔªËØÊÇ·ñ·¢Éú½»»»
+			flag = false;//Ã¿ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½flagÎªfalseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ïºï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			if (marker_detected[j].marker_pixel_id > marker_detected[j + 1].marker_pixel_id) {
 				temp = marker_detected[j];
 				marker_detected[j] = marker_detected[j + 1];
-				marker_detected[j + 1] = temp;//ÊµÏÖ½»»»£¬°Ñ×î´óµÄÊý·Åµ½×îºóÒ»Î»
-				flag = true;//Ö»Òª·¢Éú½»»»flag¾ÍÉèÖÃÎªtrue
+				marker_detected[j + 1] = temp;//Êµï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½Ò»Î»
+				flag = true;//Ö»Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½flagï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªtrue
 			}
 		}
 		if (!flag)
-			break;//Èç¹ûflagÔÚ±¾ÌËÑ­»·ÖÐÊ¼ÖÕÎªfalse£¬ËµÃ÷ºóÃæÔªËØÒÑ¾­ÓÐÐò£¬Ìø³öÑ­»·¼´¿É
+			break;//ï¿½ï¿½ï¿½flagï¿½Ú±ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Îªfalseï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	}
 }

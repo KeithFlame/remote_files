@@ -1,5 +1,5 @@
 /************************************************************************/
-/* ÒÔC++½Ó¿ÚÎª»ù´¡£¬¶Ô³£ÓÃº¯Êý½øÐÐ¶þ´Î·â×°£¬·½±ãÓÃ»§Ê¹ÓÃ                */
+/* ï¿½ï¿½C++ï¿½Ó¿ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô³ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Î·ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ê¹ï¿½ï¿½                */
 /************************************************************************/
 
 #ifndef _MV_CAMERA_H_
@@ -22,125 +22,125 @@ public:
     CMvCamera();
     ~CMvCamera();
 
-    // ch:»ñÈ¡SDK°æ±¾ºÅ | en:Get SDK Version
+    // ch:ï¿½ï¿½È¡SDKï¿½æ±¾ï¿½ï¿½ | en:Get SDK Version
     static int GetSDKVersion();
 
-    // ch:Ã¶¾ÙÉè±¸ | en:Enumerate Device
+    // ch:Ã¶ï¿½ï¿½ï¿½è±¸ | en:Enumerate Device
     static int EnumDevices(unsigned int nTLayerType, MV_CC_DEVICE_INFO_LIST* pstDevList);
 
-    // ch:ÅÐ¶ÏÉè±¸ÊÇ·ñ¿É´ï | en:Is the device accessible
+    // ch:ï¿½Ð¶ï¿½ï¿½è±¸ï¿½Ç·ï¿½É´ï¿½ | en:Is the device accessible
     static bool IsDeviceAccessible(MV_CC_DEVICE_INFO* pstDevInfo, unsigned int nAccessMode);
 
-    // ch:´ò¿ªÉè±¸ | en:Open Device
+    // ch:ï¿½ï¿½ï¿½è±¸ | en:Open Device
     int Open(MV_CC_DEVICE_INFO* pstDeviceInfo);
 
-    // ch:¹Ø±ÕÉè±¸ | en:Close Device
+    // ch:ï¿½Ø±ï¿½ï¿½è±¸ | en:Close Device
     int Close();
 
-    // ch:ÅÐ¶ÏÏà»úÊÇ·ñ´¦ÓÚÁ¬½Ó×´Ì¬ | en:Is The Device Connected
+    // ch:ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬ | en:Is The Device Connected
     bool IsDeviceConnected();
 
-    // ch:×¢²áÍ¼ÏñÊý¾Ý»Øµ÷ | en:Register Image Data CallBack
+    // ch:×¢ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ý»Øµï¿½ | en:Register Image Data CallBack
     int RegisterImageCallBack(void(__stdcall* cbOutput)(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser), void* pUser);
 
-    // ch:¿ªÆô×¥Í¼ | en:Start Grabbing
+    // ch:ï¿½ï¿½ï¿½ï¿½×¥Í¼ | en:Start Grabbing
     int StartGrabbing();
 
     // ch:Í£Ö¹×¥Í¼ | en:Stop Grabbing
     int StopGrabbing();
 
-    // ch:Ö÷¶¯»ñÈ¡Ò»Ö¡Í¼ÏñÊý¾Ý | en:Get one frame initiatively
+    // ch:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ò»Ö¡Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | en:Get one frame initiatively
     int GetImageBuffer(MV_FRAME_OUT* pFrame, int nMsec);
 
-    // ch:ÊÍ·ÅÍ¼Ïñ»º´æ | en:Free image buffer
+    // ch:ï¿½Í·ï¿½Í¼ï¿½ñ»º´ï¿½ | en:Free image buffer
     int FreeImageBuffer(MV_FRAME_OUT* pFrame);
 
-    // ch:Ö÷¶¯»ñÈ¡Ò»Ö¡Í¼ÏñÊý¾Ý | en:Get one frame initiatively
+    // ch:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ò»Ö¡Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ | en:Get one frame initiatively
     int GetOneFrameTimeout(unsigned char* pData, unsigned int* pnDataLen, unsigned int nDataSize, MV_FRAME_OUT_INFO_EX* pFrameInfo, int nMsec);
 
-    // ch:ÏÔÊ¾Ò»Ö¡Í¼Ïñ | en:Display one frame image
+    // ch:ï¿½ï¿½Ê¾Ò»Ö¡Í¼ï¿½ï¿½ | en:Display one frame image
     int DisplayOneFrame(MV_DISPLAY_FRAME_INFO* pDisplayInfo);
 
-    // ch:ÉèÖÃSDKÄÚ²¿Í¼Ïñ»º´æ½Úµã¸öÊý | en:Set the number of the internal image cache nodes in SDK
+    // ch:ï¿½ï¿½ï¿½ï¿½SDKï¿½Ú²ï¿½Í¼ï¿½ñ»º´ï¿½Úµï¿½ï¿½ï¿½ï¿½ | en:Set the number of the internal image cache nodes in SDK
     int SetImageNodeNum(unsigned int nNum);
 
-    // ch:»ñÈ¡Éè±¸ÐÅÏ¢ | en:Get device information
+    // ch:ï¿½ï¿½È¡ï¿½è±¸ï¿½ï¿½Ï¢ | en:Get device information
     int GetDeviceInfo(MV_CC_DEVICE_INFO* pstDevInfo);
 
-    // ch:»ñÈ¡GEVÏà»úµÄÍ³¼ÆÐÅÏ¢ | en:Get detect info of GEV camera
+    // ch:ï¿½ï¿½È¡GEVï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½ï¿½ï¿½Ï¢ | en:Get detect info of GEV camera
     int GetGevAllMatchInfo(MV_MATCH_INFO_NET_DETECT* pMatchInfoNetDetect);
 
-    // ch:»ñÈ¡U3VÏà»úµÄÍ³¼ÆÐÅÏ¢ | en:Get detect info of U3V camera
+    // ch:ï¿½ï¿½È¡U3Vï¿½ï¿½ï¿½ï¿½ï¿½Í³ï¿½ï¿½ï¿½ï¿½Ï¢ | en:Get detect info of U3V camera
     int GetU3VAllMatchInfo(MV_MATCH_INFO_USB_DETECT* pMatchInfoUSBDetect);
 
-    // ch:»ñÈ¡ºÍÉèÖÃIntÐÍ²ÎÊý£¬Èç WidthºÍHeight£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þ
+    // ch:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Intï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Widthï¿½ï¿½Heightï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½
     // en:Get Int type parameters, such as Width and Height, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     //int GetIntValue(IN const char* strKey, OUT MVCC_INTVALUE_EX* pIntValue);
     int GetIntValue(IN const char* strKey, OUT unsigned int* pnValue);
     int SetIntValue(IN const char* strKey, IN int64_t nValue);
 
-    // ch:»ñÈ¡ºÍÉèÖÃEnumÐÍ²ÎÊý£¬Èç PixelFormat£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þ
+    // ch:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Enumï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ PixelFormatï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½
     // en:Get Enum type parameters, such as PixelFormat, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     int GetEnumValue(IN const char* strKey, OUT MVCC_ENUMVALUE* pEnumValue);
     int SetEnumValue(IN const char* strKey, IN unsigned int nValue);
     int SetEnumValueByString(IN const char* strKey, IN const char* sValue);
 
-    // ch:»ñÈ¡ºÍÉèÖÃFloatÐÍ²ÎÊý£¬Èç ExposureTimeºÍGain£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þ
+    // ch:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Floatï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ExposureTimeï¿½ï¿½Gainï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½
     // en:Get Float type parameters, such as ExposureTime and Gain, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     int GetFloatValue(IN const char* strKey, OUT MVCC_FLOATVALUE* pFloatValue);
     int SetFloatValue(IN const char* strKey, IN float fValue);
 
-    // ch:»ñÈ¡ºÍÉèÖÃBoolÐÍ²ÎÊý£¬Èç ReverseX£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þ
+    // ch:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Boolï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ReverseXï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½
     // en:Get Bool type parameters, such as ReverseX, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     int GetBoolValue(IN const char* strKey, OUT bool* pbValue);
     int SetBoolValue(IN const char* strKey, IN bool bValue);
 
-    // ch:»ñÈ¡ºÍÉèÖÃStringÐÍ²ÎÊý£¬Èç DeviceUserID£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þUserSetSave
+    // ch:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Stringï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ DeviceUserIDï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½UserSetSave
     // en:Get String type parameters, such as DeviceUserID, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     int GetStringValue(IN const char* strKey, MVCC_STRINGVALUE* pStringValue);
     int SetStringValue(IN const char* strKey, IN const char* strValue);
 
-    // ch:Ö´ÐÐÒ»´ÎCommandÐÍÃüÁî£¬Èç UserSetSave£¬ÏêÏ¸ÄÚÈÝ²Î¿¼SDK°²×°Ä¿Â¼ÏÂµÄ MvCameraNode.xlsx ÎÄ¼þ
+    // ch:Ö´ï¿½ï¿½Ò»ï¿½ï¿½Commandï¿½ï¿½ï¿½ï¿½ï¿½î£¬ï¿½ï¿½ UserSetSaveï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½ï¿½Ý²Î¿ï¿½SDKï¿½ï¿½×°Ä¿Â¼ï¿½Âµï¿½ MvCameraNode.xlsx ï¿½Ä¼ï¿½
     // en:Execute Command once, such as UserSetSave, for details please refer to MvCameraNode.xlsx file under SDK installation directory
     int CommandExecute(IN const char* strKey);
 
-    // ch:Ì½²âÍøÂç×î¼Ñ°ü´óÐ¡(Ö»¶ÔGigEÏà»úÓÐÐ§) | en:Detection network optimal package size(It only works for the GigE camera)
+    // ch:Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½ï¿½ï¿½Ð¡(Ö»ï¿½ï¿½GigEï¿½ï¿½ï¿½ï¿½ï¿½Ð§) | en:Detection network optimal package size(It only works for the GigE camera)
     int GetOptimalPacketSize(unsigned int* pOptimalPacketSize);
 
-    // ch:×¢²áÏûÏ¢Òì³£»Øµ÷ | en:Register Message Exception CallBack
+    // ch:×¢ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ì³£ï¿½Øµï¿½ | en:Register Message Exception CallBack
     int RegisterExceptionCallBack(void(__stdcall* cbException)(unsigned int nMsgType, void* pUser), void* pUser);
 
-    // ch:×¢²áµ¥¸öÊÂ¼þ»Øµ÷ | en:Register Event CallBack
+    // ch:×¢ï¿½áµ¥ï¿½ï¿½ï¿½Â¼ï¿½ï¿½Øµï¿½ | en:Register Event CallBack
     int RegisterEventCallBack(const char* pEventName, void(__stdcall* cbEvent)(MV_EVENT_OUT_INFO* pEventInfo, void* pUser), void* pUser);
 
-    // ch:Ç¿ÖÆIP | en:Force IP
+    // ch:Ç¿ï¿½ï¿½IP | en:Force IP
     int ForceIp(unsigned int nIP, unsigned int nSubNetMask, unsigned int nDefaultGateWay);
 
-    // ch:ÅäÖÃIP·½Ê½ | en:IP configuration method
+    // ch:ï¿½ï¿½ï¿½ï¿½IPï¿½ï¿½Ê½ | en:IP configuration method
     int SetIpConfig(unsigned int nType);
 
-    // ch:ÉèÖÃÍøÂç´«ÊäÄ£Ê½ | en:Set Net Transfer Mode
+    // ch:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç´«ï¿½ï¿½Ä£Ê½ | en:Set Net Transfer Mode
     int SetNetTransMode(unsigned int nType);
 
-    // ch:ÏñËØ¸ñÊ½×ª»» | en:Pixel format conversion
+    // ch:ï¿½ï¿½ï¿½Ø¸ï¿½Ê½×ªï¿½ï¿½ | en:Pixel format conversion
     int ConvertPixelType(MV_CC_PIXEL_CONVERT_PARAM* pstCvtParam);
 
-    // ch:±£´æÍ¼Æ¬ | en:save image
+    // ch:ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ | en:save image
     int SaveImage(MV_SAVE_IMAGE_PARAM_EX* pstParam);
 
-    // ch:±£´æÍ¼Æ¬ÎªÎÄ¼þ | en:Save the image as a file
+    // ch:ï¿½ï¿½ï¿½ï¿½Í¼Æ¬Îªï¿½Ä¼ï¿½ | en:Save the image as a file
     int SaveImageToFile(MV_SAVE_IMG_TO_FILE_PARAM* pstParam);
 
-    //ÉèÖÃÊÇ·ñÎª´¥·¢Ä£Ê½
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½ï¿½ï¿½Ä£Ê½
     int setTriggerMode(unsigned int TriggerModeNum);
 
-    //ÉèÖÃ´¥·¢Ô´
+    //ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½Ô´
     int setTriggerSource(unsigned int TriggerSourceNum);
 
-    //Èí´¥·¢
+    //ï¿½ï¿½ï¿½ï¿½ï¿½
     int softTrigger();
 
-    //¶ÁÈ¡buffer
+    //ï¿½ï¿½È¡buffer
     int ReadBuffer(cv::Mat& image);
 
 public:
@@ -148,10 +148,10 @@ public:
     unsigned int     m_nTLayerType;
 
 public:
-    //unsigned char* m_pBufForSaveImage;         // ÓÃÓÚ±£´æÍ¼ÏñµÄ»º´æ
+    //unsigned char* m_pBufForSaveImage;         // ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½Í¼ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
     unsigned int    m_nBufSizeForSaveImage;
 
-    unsigned char* m_pBufForDriver;            // ÓÃÓÚ´ÓÇý¶¯»ñÈ¡Í¼ÏñµÄ»º´æ
+    unsigned char* m_pBufForDriver;            // ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Í¼ï¿½ï¿½Ä»ï¿½ï¿½ï¿½
     unsigned int    m_nBufSizeForDriver;
     unsigned char pDate[40000000];
     unsigned char m_pBufForSaveImage[59887616];

@@ -392,8 +392,8 @@ FodyWeavers.xsd
 *.fig
 *.avi
 *.mat
-cppScripts/libs/ceres/
-cppScripts/libs/ceres_release/
+cppScripts/libs/ceres/**
+cppScripts/libs/ceres_release/**
 *.jpg
 *.png
 *.tif
@@ -401,3 +401,6 @@ cppScripts/libs/ceres_release/
 *.mp4
 *.html
 *.raw
+cppScripts/pro_repo/sofa/**
+cppScripts/pro_repo/metis/**
+
